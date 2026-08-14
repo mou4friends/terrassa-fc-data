@@ -1,0 +1,219 @@
+{
+  "competitions": [
+    {
+      "id": "comp_1786709158400",
+      "name": "Pretemporada",
+      "short": "Pretemporada",
+      "logo": "https://cdn-icons-png.flaticon.com/512/1378/1378583.png"
+    }
+  ],
+  "players": [
+    {
+      "id": 1,
+      "dorsal": 1,
+      "name": "Marcos Pérez",
+      "pos": "Porter",
+      "photo": "",
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 0,
+          "goalsAgainst": 0,
+          "min": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "dorsal": 13,
+      "name": "Álvaro Pacheco",
+      "pos": "Porter",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 3,
+      "dorsal": 2,
+      "name": "Ferran Ruíz",
+      "pos": "Defensa",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 4,
+      "dorsal": 21,
+      "name": "Paulo Auzokoa",
+      "pos": "Defensa",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 5,
+      "dorsal": 4,
+      "name": "Iker Reche",
+      "pos": "Defensa",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 6,
+      "dorsal": 5,
+      "name": "Gabri Clemente",
+      "pos": "Defensa",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 7,
+      "dorsal": 22,
+      "name": "Adrián Beamonte",
+      "pos": "Defensa",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 8,
+      "dorsal": 15,
+      "name": "Fran Moreno",
+      "pos": "Defensa",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 9,
+      "dorsal": 3,
+      "name": "Sem Dirks",
+      "pos": "Defensa",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 10,
+      "dorsal": 18,
+      "name": "Mario Domingo",
+      "pos": "Defensa",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 11,
+      "dorsal": 19,
+      "name": "Aser Palacios",
+      "pos": "Defensa",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 12,
+      "dorsal": 12,
+      "name": "Cristian Mármol",
+      "pos": "Migcampista",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 13,
+      "dorsal": 6,
+      "name": "Ekaitz Molina",
+      "pos": "Migcampista",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 14,
+      "dorsal": 14,
+      "name": "Jaime Barrero",
+      "pos": "Migcampista",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 15,
+      "dorsal": 8,
+      "name": "Sergio Cortés",
+      "pos": "Migcampista",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 16,
+      "dorsal": 16,
+      "name": "Albert Celma",
+      "pos": "Migcampista",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 17,
+      "dorsal": 10,
+      "name": "Sergio Montero",
+      "pos": "Davanter",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 18,
+      "dorsal": 9,
+      "name": "Alberto Gutiérrez",
+      "pos": "Davanter",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 19,
+      "dorsal": 23,
+      "name": "Larry Kelechi",
+      "pos": "Davanter",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 20,
+      "dorsal": 7,
+      "name": "Max Marcet",
+      "pos": "Davanter",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 21,
+      "dorsal": 20,
+      "name": "Nahuel Molina",
+      "pos": "Davanter",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 22,
+      "dorsal": 17,
+      "name": "Marcos Mendes",
+      "pos": "Davanter",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 23,
+      "dorsal": 11,
+      "name": "Dano Lourens",
+      "pos": "Davanter",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 24,
+      "dorsal": 24,
+      "name": "Frodo",
+      "pos": "Davanter",
+      "photo": "",
+      "stats": {}
+    },
+    {
+      "id": 25,
+      "dorsal": 26,
+      "name": "Pau Santanach",
+      "pos": "Davanter",
+      "photo": "",
+      "stats": {}
+    }
+  ],
+  "matches": []
+}

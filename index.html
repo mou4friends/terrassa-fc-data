@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terrassa FC — BI & Estadístiques Oficials</title>
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#C8102E',
+              darkRed: '#990011',
+              navy: '#0F172A',
+              slate: '#1E293B',
+              cardBg: '#182234'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .custom-scroll::-webkit-scrollbar { height: 6px; width: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #0f172a; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-brand-red selection:text-white">
+
+  <!-- CAPÇALERA PRINCIPAL -->
+  <header class="bg-brand-navy border-b border-slate-800 sticky top-0 z-40 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-red flex items-center justify-center font-black text-white text-xl shadow-md border border-red-400/30">
+          T
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">TERRASSA FC</h1>
+            <span class="px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-red-950/80 text-red-400 border border-red-800/60 rounded-full">BI Analytics</span>
+          </div>
+          <p class="text-xs text-slate-400">Panell de Rendiment, Disciplina, Rivals & Actes de Partit</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div id="modeBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-950/60 border border-emerald-800/50 text-emerald-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Mode Públic (Només Lectura)</span>
+        </div>
+
+        <button id="adminBtn" onclick="toggleAdminModal()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+          <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+          <span id="adminBtnText">Panell Admin</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTINGUT PRINCIPAL -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
+
+    <!-- BANNER D'ADMINISTRACIÓ -->
+    <div id="adminNotice" class="hidden p-4 rounded-xl bg-amber-950/50 border border-amber-800/60 flex flex-wrap items-center justify-between gap-3 text-amber-200 text-sm shadow-md">
+      <div class="flex items-center gap-2">
+        <i data-lucide="shield-check" class="w-5 h-5 text-amber-400 shrink-0"></i>
+        <span><strong>Mode Administrador Activat:</strong> Estàs editant les dades de la pestanya activa (<span id="adminActiveCompName" class="font-bold text-amber-300 underline">Totes</span>).</span>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <button onclick="openAddMatchModal()" class="px-3 py-1.5 bg-rose-700 hover:bg-rose-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
+          <i data-lucide="file-text" class="w-4 h-4"></i> + Nova Acta / Partit
+        </button>
+        <button onclick="openAddPlayerModal()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
+          <i data-lucide="user-plus" class="w-4 h-4"></i> Afegir Jugador
+        </button>
+        <button onclick="openManageCompsModal()" class="px-3 py-1.5 bg-indigo-700 hover:bg-indigo-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
+          <i data-lucide="trophy" class="w-4 h-4"></i> Gestionar Tornejos
+        </button>
+        <button onclick="exportDataJSON()" class="px-3 py-1.5 bg-slate-900 hover:bg-black rounded-lg text-xs font-medium border border-slate-700 text-slate-200 flex items-center gap-1.5">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i> Còpia
+        </button>
+        <button onclick="lockAdmin()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold transition">
+          Bloquejar
+        </button>
+      </div>
+    </div>
+
+    <!-- PESTANYES DE COMPETICIONS + PESTANYA D'ACTES I RIVALS -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-2 shadow-lg">
+      <div class="flex items-center justify-between px-3 py-1 border-b border-slate-800/80 mb-2">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-red-500"></i> Seleccionar Vista / Torneig:
+        </span>
+        <span id="activeCompSubtitle" class="text-xs text-slate-400 italic">Veient estadístiques globals acumulades</span>
+      </div>
+      <div id="compTabsContainer" class="flex flex-wrap items-center gap-2"></div>
+    </div>
+
+    <!-- VISTA 1: VISTA PRINCIPAL (COMPETICIONS / TOTAL ACUMULAT) -->
+    <div id="mainStatsView" class="space-y-6">
+
+      <!-- 1. TARGETES KPI RESUM GLOBALS -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between relative overflow-hidden">
+          <div class="flex items-center justify-between text-red-400 mb-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Gols a Favor</span>
+            <i data-lucide="target" class="w-4 h-4"></i>
+          </div>
+          <p id="kpiGoals" class="text-2xl font-black text-white">0</p>
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between relative overflow-hidden">
+          <div class="flex items-center justify-between text-rose-400 mb-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Gols en Contra</span>
+            <i data-lucide="shield-alert" class="w-4 h-4"></i>
+          </div>
+          <p id="kpiGoalsAgainst" class="text-2xl font-black text-rose-400">0</p>
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between relative overflow-hidden">
+          <div class="flex items-center justify-between text-cyan-400 mb-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Dif. de Gols</span>
+            <i data-lucide="scale" class="w-4 h-4"></i>
+          </div>
+          <p id="kpiGoalDiff" class="text-2xl font-black text-white">+0</p>
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between relative overflow-hidden">
+          <div class="flex items-center justify-between text-indigo-400 mb-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Assistències</span>
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </div>
+          <p id="kpiAssists" class="text-2xl font-black text-white">0</p>
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between relative overflow-hidden">
+          <div class="flex items-center justify-between text-amber-400 mb-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Minuts Totals</span>
+            <i data-lucide="clock" class="w-4 h-4"></i>
+          </div>
+          <p id="kpiMinutes" class="text-2xl font-black text-white">0'</p>
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between relative overflow-hidden">
+          <div class="flex items-center justify-between text-yellow-400 mb-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Targetes (G / V)</span>
+            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+          </div>
+          <p id="kpiCards" class="text-2xl font-black text-white">0 / 0</p>
+        </div>
+      </div>
+
+      <!-- 2. SUSPENSIONS I AVISOS DE 5 GROGUES -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-gradient-to-r from-red-950/70 via-slate-900 to-slate-900 border border-red-800/60 rounded-2xl p-4 shadow-xl">
+          <div class="flex items-center justify-between mb-3 border-b border-red-900/40 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="p-1.5 rounded-lg bg-red-900/80 text-white flex items-center justify-center">
+                <i data-lucide="ban" class="w-4 h-4"></i>
+              </span>
+              <div>
+                <h3 class="text-xs font-black uppercase tracking-wider text-red-200">Sancionats per Cicle (Compleixen Sanció)</h3>
+                <p class="text-[10px] text-slate-400">Han arribat a 5, 10 o 15 grogues en el torneig actiu</p>
+              </div>
+            </div>
+            <span id="badgeSancionatsCount" class="text-xs font-bold px-2 py-0.5 rounded-full bg-red-900 text-red-200 border border-red-700">0</span>
+          </div>
+          <div id="sanctionedList" class="space-y-2"></div>
+        </div>
+
+        <div class="bg-gradient-to-r from-amber-950/60 via-slate-900 to-slate-900 border border-amber-800/60 rounded-2xl p-4 shadow-xl">
+          <div class="flex items-center justify-between mb-3 border-b border-amber-900/40 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="p-1.5 rounded-lg bg-amber-900/80 text-white flex items-center justify-center">
+                <i data-lucide="alert-circle" class="w-4 h-4"></i>
+              </span>
+              <div>
+                <h3 class="text-xs font-black uppercase tracking-wider text-amber-200">Avisats (A 1 groga de la sanció)</h3>
+                <p class="text-[10px] text-slate-400">Tenen 4, 9 o 14 grogues (perill de suspensió en el proper partit)</p>
+              </div>
+            </div>
+            <span id="badgeWarnedCount" class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-900 text-amber-200 border border-amber-700">0</span>
+          </div>
+          <div id="warnedList" class="space-y-2"></div>
+        </div>
+      </div>
+
+      <!-- 3. PODIS TOP 3 -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex flex-col shadow-lg">
+          <div class="flex items-center justify-between mb-2.5 border-b border-slate-800 pb-2">
+            <div class="flex items-center gap-1.5">
+              <span class="text-red-500 font-bold">⚽</span>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Golejadors</h2>
+            </div>
+            <span class="text-[9px] font-bold text-red-400 bg-red-950/60 px-1.5 py-0.5 rounded-full border border-red-900/60">Gols</span>
+          </div>
+          <div id="podiumGoals" class="space-y-2 flex-1"></div>
+        </div>
+
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex flex-col shadow-lg">
+          <div class="flex items-center justify-between mb-2.5 border-b border-slate-800 pb-2">
+            <div class="flex items-center gap-1.5">
+              <span class="text-indigo-400 font-bold">🎯</span>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Assistents</h2>
+            </div>
+            <span class="text-[9px] font-bold text-indigo-400 bg-indigo-950/60 px-1.5 py-0.5 rounded-full border border-indigo-900/60">Assist.</span>
+          </div>
+          <div id="podiumAssists" class="space-y-2 flex-1"></div>
+        </div>
+
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex flex-col shadow-lg">
+          <div class="flex items-center justify-between mb-2.5 border-b border-slate-800 pb-2">
+            <div class="flex items-center gap-1.5">
+              <span class="text-cyan-400 font-bold">🧤</span>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Porters (GC)</h2>
+            </div>
+            <span class="text-[9px] font-bold text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded-full border border-cyan-900/60">Encai.</span>
+          </div>
+          <div id="podiumKeepers" class="space-y-2 flex-1"></div>
+        </div>
+
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex flex-col shadow-lg">
+          <div class="flex items-center justify-between mb-2.5 border-b border-slate-800 pb-2">
+            <div class="flex items-center gap-1.5">
+              <span class="text-amber-400 font-bold">⏱️</span>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Més Minuts</h2>
+            </div>
+            <span class="text-[9px] font-bold text-amber-400 bg-amber-950/60 px-1.5 py-0.5 rounded-full border border-amber-900/60">Minuts</span>
+          </div>
+          <div id="podiumMinutes" class="space-y-2 flex-1"></div>
+        </div>
+
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex flex-col shadow-lg">
+          <div class="flex items-center justify-between mb-2.5 border-b border-slate-800 pb-2">
+            <div class="flex items-center gap-1.5">
+              <span class="text-yellow-400 font-bold">🟨</span>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Amonestats</h2>
+            </div>
+            <span class="text-[9px] font-bold text-yellow-400 bg-yellow-950/60 px-1.5 py-0.5 rounded-full border border-yellow-900/60">Grogues</span>
+          </div>
+          <div id="podiumYellows" class="space-y-2 flex-1"></div>
+        </div>
+
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex flex-col shadow-lg">
+          <div class="flex items-center justify-between mb-2.5 border-b border-slate-800 pb-2">
+            <div class="flex items-center gap-1.5">
+              <span class="text-red-500 font-bold">🟥</span>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Expulsats</h2>
+            </div>
+            <span class="text-[9px] font-bold text-red-500 bg-red-950/60 px-1.5 py-0.5 rounded-full border border-red-900/60">Vermelles</span>
+          </div>
+          <div id="podiumReds" class="space-y-2 flex-1"></div>
+        </div>
+      </div>
+
+      <!-- 4. TAULA COMPLETA DE PLANTILLA -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl shadow-xl overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 bg-slate-900">
+          <div class="flex items-center gap-3">
+            <img id="currentCompBadgeLogo" src="" class="w-8 h-8 rounded-lg object-contain bg-slate-950 p-1 border border-slate-700 hidden" />
+            <div>
+              <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <i data-lucide="users" class="w-4 h-4 text-red-500"></i>
+                Plantilla Terrassa FC — <span id="currentTableCompTitle" class="text-red-400">Total Temporada</span> (<span id="totalPlayerCount">0</span> Jugadors)
+              </h2>
+              <p class="text-xs text-slate-400" id="tableCompNotice">Estadístiques individuals acumulades amb GF, GC, assistències i seguiment disciplinari.</p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2.5">
+            <button id="addPlayerBtn" onclick="openAddPlayerModal()" class="hidden px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold items-center gap-1.5 shadow transition">
+              <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Afegir Jugador
+            </button>
+
+            <div class="relative">
+              <input type="text" id="searchInput" oninput="renderTable()" placeholder="Cercar jugador..." class="bg-slate-950 text-xs text-slate-200 pl-8 pr-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-red-500 w-44" />
+              <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5"></i>
+            </div>
+
+            <select id="posFilter" onchange="renderTable()" class="bg-slate-950 text-xs text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-red-500">
+              <option value="ALL">Totes les posicions</option>
+              <option value="Porter">Porters</option>
+              <option value="Defensa">Defenses</option>
+              <option value="Migcampista">Migcampistes</option>
+              <option value="Davanter">Davanters</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto custom-scroll max-h-[580px]">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead class="bg-slate-950 sticky top-0 z-10 text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-800">
+              <tr>
+                <th class="py-3 px-3 text-center w-12">#</th>
+                <th class="py-3 px-3 text-center w-14">Foto</th>
+                <th class="py-3 px-3 min-w-[150px]">Jugador</th>
+                <th class="py-3 px-3 text-center min-w-[100px]">Posició</th>
+                <th class="py-3 px-3 text-center w-14">PJ</th>
+                <th class="py-3 px-3 text-center w-16">Minuts</th>
+                <th class="py-3 px-3 text-center w-16 text-red-400 font-bold">GF ⚽</th>
+                <th class="py-3 px-3 text-center w-16 text-rose-400 font-bold">GC 🧤</th>
+                <th class="py-3 px-3 text-center w-16 text-indigo-400 font-bold">Assist. 🎯</th>
+                <th class="py-3 px-3 text-center w-14 text-yellow-400 font-bold">🟨</th>
+                <th class="py-3 px-3 text-center min-w-[125px] text-amber-300">Cicle Grogues</th>
+                <th class="py-3 px-3 text-center w-14 text-red-500 font-bold">🟥</th>
+                <th class="py-3 px-3 text-center w-20">Gol / 90m</th>
+                <th id="adminHeaderCol" class="py-3 px-3 text-center w-36 hidden">Accions Admin</th>
+              </tr>
+            </thead>
+            <tbody id="playerTableBody" class="divide-y divide-slate-800/60 font-medium"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VISTA 2: PESTANYA D'ACTES DE PARTIT & HISTORIAL -->
+    <div id="rivalsDedicatedView" class="hidden space-y-6">
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div class="flex items-center gap-3">
+            <span class="p-2.5 rounded-xl bg-rose-950 border border-rose-800 text-rose-400 flex items-center justify-center">
+              <i data-lucide="file-text" class="w-6 h-6"></i>
+            </span>
+            <div>
+              <h2 class="text-base font-black text-white flex items-center gap-2">
+                Actes Oficials de Partits & Rivals
+              </h2>
+              <p class="text-xs text-slate-400">Historial complet, fitxes detallades amb alineacions, minuts i incidències arbitrals.</p>
+            </div>
+          </div>
+
+          <button id="addMatchViewBtn" onclick="openAddMatchModal()" class="hidden px-4 py-2 bg-rose-700 hover:bg-rose-600 text-white rounded-xl text-xs font-bold items-center gap-2 shadow-lg transition">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i> Crear Nova Acta de Partit
+          </button>
+        </div>
+
+        <div id="rivalsFullGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL: DETALL DE L'ACTA DE PARTIT -->
+  <div id="matchDetailModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scroll">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="p-2 rounded-xl bg-red-950/80 border border-red-800 text-red-400">
+            <i data-lucide="file-check-2" class="w-5 h-5"></i>
+          </span>
+          <div>
+            <h3 id="detailModalTitle" class="font-extrabold text-white text-base">Acta del Partit</h3>
+            <p id="detailModalComp" class="text-xs text-slate-400"></p>
+          </div>
+        </div>
+        <button onclick="closeMatchDetailModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div id="detailModalContent" class="space-y-4 text-xs">
+        <!-- Rendered via JS -->
+      </div>
+
+      <div class="flex justify-end pt-3 border-t border-slate-800">
+        <button onclick="closeMatchDetailModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Tancar Acta</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTRAR / EDITAR ACTA DE PARTIT -->
+  <div id="matchModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scroll">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-rose-950 border border-rose-800 flex items-center justify-center text-rose-400">
+            <i data-lucide="file-plus" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-white text-base">Formulari d'Acta de Partit</h3>
+        </div>
+        <button onclick="closeAddMatchModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="submitNewMatch(event)" class="space-y-4 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="sm:col-span-2">
+            <label class="block font-semibold text-slate-300 mb-1">Equip Rival</label>
+            <input type="text" id="rivalNameInput" required placeholder="Ex. CE Sabadell, UE Sant Andreu..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Data / Jornada</label>
+            <input type="text" id="matchDateInput" placeholder="Ex. Jornada 14 (12/11/2026)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Competició</label>
+            <select id="matchCompSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Condició</label>
+            <select id="matchConditionSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500 font-bold">
+              <option value="Casa">🏠 Casa (Estadi Olímpic)</option>
+              <option value="Fora">✈️ Fora (Visitant)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Escut Rival (URL)</label>
+            <input type="text" id="rivalLogoInput" placeholder="https://.../escut.png" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <div>
+            <label class="block font-bold text-emerald-400 mb-1 text-center">Gols Terrassa FC (GF)</label>
+            <input type="number" id="matchGFTerrassa" min="0" value="0" required class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 text-center text-lg font-black text-white" />
+          </div>
+          <div>
+            <label class="block font-bold text-rose-400 mb-1 text-center">Gols Rival (GC)</label>
+            <input type="number" id="matchGCRival" min="0" value="0" required class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 text-center text-lg font-black text-rose-400" />
+          </div>
+        </div>
+
+        <!-- DETALLS DE L'ACTA -->
+        <div class="space-y-3 bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+          <h4 class="font-black text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+            <i data-lucide="clipboard-list" class="w-4 h-4 text-red-500"></i> Desglossament de l'Acta (Golejadors & Targetes)
+          </h4>
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Gols Terrassa (Autors & Minuts)</label>
+            <input type="text" id="matchScorersInput" placeholder="Ex. Aythami (23'), Jofre (67'), Gil Muntadas (89')" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-amber-300 mb-1">Targetes Grogues Terrassa</label>
+              <input type="text" id="matchYellowsInput" placeholder="Ex. Víctor Morales (34'), Adri Lledó (81')" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+            </div>
+            <div>
+              <label class="block font-semibold text-red-400 mb-1">Targetes Vermelles Terrassa</label>
+              <input type="text" id="matchRedsInput" placeholder="Ex. Jaouad Erraji (72' DVG)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+            </div>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Observacions Arbitrals / Notes</label>
+            <textarea id="matchNotesInput" rows="2" placeholder="Incidències de l'acta, penals xiulats, canvis destacats..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+          <button type="button" onclick="closeAddMatchModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-rose-700 hover:bg-rose-600 text-white shadow-lg">Desar Acta Oficial</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: GESTIONAR COMPETICIONS -->
+  <div id="compsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-indigo-950 border border-indigo-800 flex items-center justify-center text-indigo-400">
+            <i data-lucide="trophy" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-white text-base">Gestionar Competicions & Logos</h3>
+        </div>
+        <button onclick="closeManageCompsModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 max-h-[300px] overflow-y-auto custom-scroll pr-1" id="compsEditList"></div>
+
+      <div class="border-t border-slate-800 pt-3 space-y-2 text-xs">
+        <h4 class="font-bold text-slate-200 flex items-center gap-1.5"><i data-lucide="plus" class="w-3.5 h-3.5 text-emerald-400"></i> Afegir Nou Torneig</h4>
+        <div class="grid grid-cols-2 gap-2">
+          <input type="text" id="newCompName" placeholder="Nom (ex. Copa RFEF Fase Nacional)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+          <input type="text" id="newCompLogo" placeholder="URL Logo (opcional)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+        </div>
+        <button onclick="addNewCompetition()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow transition">Afegir Torneig</button>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+        <button onclick="closeManageCompsModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Tancar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: AFEGIR JUGADOR -->
+  <div id="addPlayerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-950 border border-emerald-800 flex items-center justify-center text-emerald-400">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-white text-base">Afegir Nou Jugador</h3>
+        </div>
+        <button onclick="closeAddPlayerModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="submitNewPlayer(event)" class="space-y-3.5 text-xs">
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-300 mb-1">Dorsal (#)</label>
+            <input type="number" id="newDorsal" required min="1" max="99" placeholder="9" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+          </div>
+          <div class="col-span-2">
+            <label class="block font-semibold text-slate-300 mb-1">Nom Complet</label>
+            <input type="text" id="newName" required placeholder="Ex. Fitxatge Nou" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-300 mb-1">Posició</label>
+          <select id="newPos" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+            <option value="Davanter">Davanter</option>
+            <option value="Migcampista">Migcampista</option>
+            <option value="Defensa">Defensa</option>
+            <option value="Porter">Porter</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-300 mb-1">Foto (URL opcional)</label>
+          <input type="text" id="newPhoto" placeholder="https://... (o puja fitxer després)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
+          <button type="button" onclick="closeAddPlayerModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg">Desar Jugador</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: EDITAR FOTO -->
+  <div id="photoModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-white text-base">Actualitzar Foto del Jugador</h3>
+        <button onclick="closePhotoModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center gap-3">
+        <img id="modalPreviewImg" src="" class="w-20 h-20 rounded-full object-cover border-2 border-red-500 bg-slate-800 shadow-md" />
+        <p id="modalPlayerName" class="text-sm font-bold text-slate-200"></p>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-300 mb-1">Opció A: Pujar fitxer</label>
+          <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-slate-300 text-xs file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-red-950 file:text-red-300 hover:file:bg-red-900" />
+        </div>
+        <div class="flex items-center gap-2 text-slate-500">
+          <div class="h-px bg-slate-800 flex-1"></div>
+          <span>o</span>
+          <div class="h-px bg-slate-800 flex-1"></div>
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-300 mb-1">Opció B: Enllaç URL</label>
+          <input type="text" id="photoUrlInput" placeholder="https://exemple.cat/foto.jpg" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button onclick="closePhotoModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
+        <button onclick="savePlayerPhoto()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-brand-red hover:bg-brand-darkRed text-white shadow-lg">Desar Foto</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN LOGIN MODAL -->
+  <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-red-950 border border-red-800/60 flex items-center justify-center text-red-400">
+            <i data-lucide="lock" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-white text-base">Accés Administrador</h3>
+        </div>
+        <button onclick="toggleAdminModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-400">Introdueix la clau per gestionar actes, jugadors i competicions.</p>
+      
+      <div>
+        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Contrasenya</label>
+        <input type="password" id="adminPasswordInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500" placeholder="Introdueix la contrasenya..." onkeyup="if(event.key==='Enter') verifyAdminPassword()" />
+        <p id="loginError" class="text-xs text-red-400 mt-1.5 hidden">Contrasenya incorrecta.</p>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button onclick="toggleAdminModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
+        <button onclick="verifyAdminPassword()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-brand-red hover:bg-brand-darkRed text-white shadow-lg">Accedir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT AMB SUPORT PER CARREGAR DADES.JSON -->
+  <script>
+    const getInitialsAvatar = (name) => {
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1e293b&color=cbd5e1&bold=true&size=128`;
+    };
+
+    let competitions = [];
+    let players = [];
+    let matches = [];
+    let activeCompId = "ALL";
+    let isAdmin = false;
+    let selectedPlayerForPhoto = null;
+    let tempUploadedBase64 = null;
+    const ADMIN_PASS = "egarareds2026";
+
+    function isPorter(pos) {
+      if (!pos) return false;
+      const clean = pos.trim().toLowerCase();
+      return clean === "porter" || clean === "portero" || clean === "gk" || clean === "goalkeeper";
+    }
+
+    // CARREGA DADES DE DADES.JSON O DE LOCALSTORAGE SI ESTÀS EDITANT
+    async function loadData() {
+      const savedComps = localStorage.getItem("terrassa_comps_v13");
+      const savedPlayers = localStorage.getItem("terrassa_players_v13");
+      const savedMatches = localStorage.getItem("terrassa_matches_v13");
+
+      if (savedComps && savedPlayers && savedMatches) {
+        competitions = JSON.parse(savedComps);
+        players = JSON.parse(savedPlayers);
+        matches = JSON.parse(savedMatches);
+      } else {
+        try {
+          const res = await fetch(`dades.json?v=${Date.now()}`);
+          if (!res.ok) throw new Error("No s'ha trobat dades.json");
+          const data = await res.json();
+          competitions = data.competitions || [];
+          players = data.players || [];
+          matches = data.matches || [];
+        } catch (err) {
+          console.error("Error carregant dades.json:", err);
+        }
+      }
+
+      matches.forEach(m => {
+        if (!m.condition) m.condition = "Casa";
+        if (!m.date) m.date = "Partit Oficial";
+      });
+
+      players.forEach(p => {
+        if (!p.stats) p.stats = {};
+        competitions.forEach(c => {
+          if (p.stats[c.id] && p.stats[c.id].goalsAgainst === undefined) {
+            p.stats[c.id].goalsAgainst = 0;
+          }
+        });
+      });
+
+      renderDashboard();
+    }
+
+    function saveData() {
+      localStorage.setItem("terrassa_comps_v13", JSON.stringify(competitions));
+      localStorage.setItem("terrassa_players_v13", JSON.stringify(players));
+      localStorage.setItem("terrassa_matches_v13", JSON.stringify(matches));
+      renderDashboard();
+    }
+
+    function getPlayerImg(p) {
+      return (p.photo && p.photo.trim() !== "") ? p.photo : getInitialsAvatar(p.name);
+    }
+
+    function getPlayerStats(p, compId) {
+      if (!p.stats) p.stats = {};
+      
+      if (compId !== "ALL" && compId !== "RIVALS_TAB") {
+        const s = p.stats[compId] || {};
+        return {
+          pj: Number(s.pj) || 0,
+          min: Number(s.min) || 0,
+          goals: Number(s.goals) || 0,
+          goalsAgainst: Number(s.goalsAgainst) || 0,
+          assists: Number(s.assists) || 0,
+          yellow: Number(s.yellow) || 0,
+          red: Number(s.red) || 0
+        };
+      }
+
+      let res = { pj: 0, min: 0, goals: 0, goalsAgainst: 0, assists: 0, yellow: 0, red: 0 };
+      competitions.forEach(c => {
+        const s = p.stats[c.id] || {};
+        res.pj += (Number(s.pj) || 0);
+        res.min += (Number(s.min) || 0);
+        res.goals += (Number(s.goals) || 0);
+        res.goalsAgainst += (Number(s.goalsAgainst) || 0);
+        res.assists += (Number(s.assists) || 0);
+        res.yellow += (Number(s.yellow) || 0);
+        res.red += (Number(s.red) || 0);
+      });
+      return res;
+    }
+
+    function setPlayerStat(playerId, key, value) {
+      const p = players.find(x => x.id === playerId);
+      if (!p) return;
+      if (!p.stats) p.stats = {};
+
+      const compKey = (activeCompId === "ALL" || activeCompId === "RIVALS_TAB") ? competitions[0].id : activeCompId;
+      if (!p.stats[compKey]) p.stats[compKey] = {};
+
+      p.stats[compKey][key] = Number(value) || 0;
+      saveData();
+    }
+
+    function switchComp(compId) {
+      activeCompId = compId;
+      renderDashboard();
+    }
+
+    function renderTabs() {
+      const container = document.getElementById("compTabsContainer");
+      const allTabActive = activeCompId === "ALL";
+      const rivalsTabActive = activeCompId === "RIVALS_TAB";
+
+      let html = `
+        <button onclick="switchComp('ALL')" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-extrabold transition ${
+          allTabActive 
+            ? 'bg-brand-red text-white shadow-lg shadow-red-950 border border-red-400/40 scale-105' 
+            : 'bg-slate-950 text-slate-300 hover:bg-slate-800 border border-slate-800'
+        }">
+          <span class="text-sm">🌟</span>
+          <span>Totes (Total Acumulat)</span>
+        </button>
+      `;
+
+      competitions.forEach(c => {
+        const isActive = activeCompId === c.id;
+        const logoImg = c.logo ? `<img src="${c.logo}" class="w-4 h-4 object-contain rounded shrink-0 bg-white/10 p-0.5" />` : `<span>🏆</span>`;
+        
+        html += `
+          <button onclick="switchComp('${c.id}')" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+            isActive 
+              ? 'bg-slate-100 text-slate-900 shadow-lg border border-white scale-105' 
+              : 'bg-slate-950 text-slate-300 hover:bg-slate-800 border border-slate-800'
+          }">
+            ${logoImg}
+            <span>${c.short || c.name}</span>
+          </button>
+        `;
+      });
+
+      html += `
+        <button onclick="switchComp('RIVALS_TAB')" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black transition ${
+          rivalsTabActive 
+            ? 'bg-rose-600 text-white shadow-lg shadow-rose-950 border border-rose-400 scale-105' 
+            : 'bg-slate-950 text-rose-300 hover:bg-rose-950/40 border border-rose-900/60'
+        }">
+          <span class="text-sm">📋</span>
+          <span>Actes de Partit & Rivals</span>
+        </button>
+      `;
+
+      container.innerHTML = html;
+
+      const mainView = document.getElementById("mainStatsView");
+      const rivalsView = document.getElementById("rivalsDedicatedView");
+      const currCompObj = competitions.find(c => c.id === activeCompId);
+      const titleSpan = document.getElementById("currentTableCompTitle");
+      const badgeLogo = document.getElementById("currentCompBadgeLogo");
+      const adminActiveCompName = document.getElementById("adminActiveCompName");
+      const sub = document.getElementById("activeCompSubtitle");
+
+      if (activeCompId === "RIVALS_TAB") {
+        mainView.classList.add("hidden");
+        rivalsView.classList.remove("hidden");
+        adminActiveCompName.textContent = "Actes de Partit & Historial Rivals";
+        sub.textContent = "Consulta de fitxes arbitrals completes, golejadors i incidències";
+      } else {
+        mainView.classList.remove("hidden");
+        rivalsView.classList.add("hidden");
+
+        if (activeCompId === "ALL") {
+          titleSpan.textContent = "Total Temporada (Totes)";
+          badgeLogo.classList.add("hidden");
+          adminActiveCompName.textContent = `General (Edita en cada torneig)`;
+          sub.textContent = "Veient estadístiques globals acumulades de tots els tornejos";
+        } else if (currCompObj) {
+          titleSpan.textContent = currCompObj.name;
+          adminActiveCompName.textContent = currCompObj.name;
+          sub.textContent = `Filtrat per: ${currCompObj.name}`;
+          if (currCompObj.logo) {
+            badgeLogo.src = currCompObj.logo;
+            badgeLogo.classList.remove("hidden");
+          } else {
+            badgeLogo.classList.add("hidden");
+          }
+        }
+      }
+    }
+
+    function renderRivalsModule() {
+      const grid = document.getElementById("rivalsFullGrid");
+      const addBtn = document.getElementById("addMatchViewBtn");
+
+      if (isAdmin) {
+        addBtn.classList.remove("hidden");
+        addBtn.classList.add("flex");
+      } else {
+        addBtn.classList.add("hidden");
+        addBtn.classList.remove("flex");
+      }
+
+      if (matches.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full p-8 rounded-2xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-sm text-slate-500">
+            Encara no s'ha registrat cap acta de partit. (Entra com a Admin per afegir-ne).
+          </div>
+        `;
+        return;
+      }
+
+      const sortedMatches = [...matches].reverse();
+
+      grid.innerHTML = sortedMatches.map(m => {
+        const compObj = competitions.find(c => c.id === m.compId);
+        const compName = compObj ? (compObj.short || compObj.name) : "Torneig";
+        const logoHTML = m.logo ? `<img src="${m.logo}" class="w-10 h-10 object-contain rounded-xl bg-slate-900 p-1 border border-slate-800 shrink-0 shadow" />` : `<div class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-xl border border-slate-800 shrink-0">🛡️</div>`;
+        
+        const isHome = (m.condition === "Casa" || !m.condition);
+        const conditionBadge = isHome 
+          ? `<span class="px-2 py-0.5 rounded-md text-[10px] font-black bg-blue-950 text-blue-300 border border-blue-800/60">🏠 CASA</span>`
+          : `<span class="px-2 py-0.5 rounded-md text-[10px] font-black bg-purple-950 text-purple-300 border border-purple-800/60">✈️ FORA</span>`;
+
+        return `
+          <div class="p-4 bg-slate-950 rounded-2xl border border-slate-800 flex flex-col justify-between gap-3 shadow-lg hover:border-slate-700 transition">
+            <div>
+              <div class="flex items-center justify-between gap-2 border-b border-slate-800/70 pb-2 mb-2.5">
+                <span class="text-[10px] font-bold text-slate-400 truncate">${compName} • ${m.date || 'Oficial'}</span>
+                <div class="flex items-center gap-1.5">
+                  ${conditionBadge}
+                  ${isAdmin ? `
+                    <button onclick="deleteMatch(${m.id})" title="Eliminar aquesta acta" class="p-1 bg-slate-900 hover:bg-rose-900/80 text-slate-500 hover:text-rose-200 rounded-lg border border-slate-800 transition">
+                      <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 mb-3">
+                ${logoHTML}
+                <div class="truncate flex-1 min-w-0">
+                  <h4 class="font-bold text-white text-sm truncate">${m.rival}</h4>
+                  <p class="text-[11px] text-slate-400">${isHome ? 'Terrassa FC (Local)' : 'Terrassa FC (Visitant)'}</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-slate-800/80 text-center mb-3">
+                <div>
+                  <span class="text-[10px] text-slate-400 font-semibold block">Gols Terrassa (GF)</span>
+                  <span class="text-lg font-black text-emerald-400">${m.gf}</span>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-400 font-semibold block">Gols Rival (GC)</span>
+                  <span class="text-lg font-black text-rose-400">${m.gc}</span>
+                </div>
+              </div>
+
+              ${m.scorers ? `
+                <div class="text-[11px] text-slate-300 bg-slate-900/50 p-2 rounded-lg border border-slate-800/60 mb-2">
+                  <span class="text-red-400 font-bold">⚽ Gols:</span> ${m.scorers}
+                </div>
+              ` : ''}
+            </div>
+
+            <button onclick="openMatchDetailModal(${m.id})" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition">
+              <i data-lucide="eye" class="w-3.5 h-3.5 text-red-400"></i> Veure Acta Completa
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openMatchDetailModal(matchId) {
+      const match = matches.find(m => m.id === matchId);
+      if (!match) return;
+
+      const compObj = competitions.find(c => c.id === match.compId);
+      const isHome = (match.condition === "Casa" || !match.condition);
+
+      document.getElementById('detailModalTitle').textContent = `Acta: Terrassa FC vs ${match.rival}`;
+      document.getElementById('detailModalComp').textContent = `${compObj ? compObj.name : 'Torneig'} • ${match.date || 'Sense data'} • ${isHome ? 'Estadi Olímpic de Terrassa' : 'Camp Rival'}`;
+
+      const content = document.getElementById('detailModalContent');
+      content.innerHTML = `
+        <div class="flex items-center justify-center gap-6 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+          <div class="text-center">
+            <div class="w-12 h-12 rounded-xl bg-brand-red flex items-center justify-center font-black text-white text-xl mx-auto mb-1">T</div>
+            <p class="font-extrabold text-white text-xs">Terrassa FC</p>
+            <span class="text-2xl font-black text-emerald-400">${match.gf}</span>
+          </div>
+          <span class="text-slate-600 font-black text-xl">-</span>
+          <div class="text-center">
+            ${match.logo ? `<img src="${match.logo}" class="w-12 h-12 object-contain rounded-xl bg-slate-900 p-1 mx-auto mb-1 border border-slate-800" />` : `<div class="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-xl mx-auto mb-1 border border-slate-800">🛡️</div>`}
+            <p class="font-extrabold text-white text-xs">${match.rival}</p>
+            <span class="text-2xl font-black text-rose-400">${match.gc}</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <h4 class="font-bold text-slate-300 flex items-center gap-1.5"><i data-lucide="target" class="w-4 h-4 text-red-400"></i> Autors dels Gols</h4>
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-300">
+            ${match.scorers ? match.scorers : '<span class="text-slate-500 italic">Sense gols registrats o no detallats.</span>'}
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="space-y-1.5">
+            <h4 class="font-bold text-yellow-300 flex items-center gap-1.5"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Grogues</h4>
+            <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-slate-300 text-[11px]">
+              ${match.yellows ? match.yellows : '<span class="text-slate-500 italic">Cap amonestació.</span>'}
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <h4 class="font-bold text-red-400 flex items-center gap-1.5"><i data-lucide="ban" class="w-4 h-4"></i> Vermelles</h4>
+            <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-slate-300 text-[11px]">
+              ${match.reds ? match.reds : '<span class="text-slate-500 italic">Cap expulsió.</span>'}
+            </div>
+          </div>
+        </div>
+
+        ${match.notes ? `
+          <div class="space-y-1.5">
+            <h4 class="font-bold text-slate-300 flex items-center gap-1.5"><i data-lucide="info" class="w-4 h-4 text-indigo-400"></i> Notes & Resum del Partit</h4>
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-300 leading-relaxed">
+              ${match.notes}
+            </div>
+          </div>
+        ` : ''}
+      `;
+
+      document.getElementById('matchDetailModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeMatchDetailModal() {
+      document.getElementById('matchDetailModal').classList.add('hidden');
+    }
+
+    function deleteMatch(matchId) {
+      const match = matches.find(m => m.id === matchId);
+      if (!match) return;
+      if (confirm(`Vols eliminar l'acta del partit contra ${match.rival}?`)) {
+        matches = matches.filter(m => m.id !== matchId);
+        saveData();
+      }
+    }
+
+    function renderCycleAlerts() {
+      const sanctionedContainer = document.getElementById("sanctionedList");
+      const warnedContainer = document.getElementById("warnedList");
+
+      const playerStatList = players.map(p => ({
+        player: p,
+        stats: getPlayerStats(p, activeCompId)
+      }));
+
+      const sanctioned = playerStatList.filter(x => x.stats.yellow > 0 && x.stats.yellow % 5 === 0);
+      const warned = playerStatList.filter(x => x.stats.yellow > 0 && x.stats.yellow % 5 === 4);
+
+      document.getElementById("badgeSancionatsCount").textContent = sanctioned.length;
+      document.getElementById("badgeWarnedCount").textContent = warned.length;
+
+      if (sanctioned.length === 0) {
+        sanctionedContainer.innerHTML = `
+          <div class="p-3 rounded-xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500/70"></i>
+            Cap jugador sancionat per cicle de grogues.
+          </div>
+        `;
+      } else {
+        sanctionedContainer.innerHTML = sanctioned.map(x => `
+          <div class="p-2.5 rounded-xl border border-red-800/80 bg-red-950/40 flex items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <img src="${getPlayerImg(x.player)}" class="w-8 h-8 rounded-full object-cover border border-red-500/80 shrink-0 bg-slate-800" />
+              <div class="truncate">
+                <p class="font-bold text-white truncate text-xs">${x.player.name}</p>
+                <p class="text-[10px] text-red-300 font-semibold">${x.player.pos} • #${x.player.dorsal}</p>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="px-2 py-0.5 rounded-md bg-red-900/90 text-red-100 font-black text-xs border border-red-700">
+                ${x.stats.yellow} Grogues (Cicle ${Math.floor(x.stats.yellow / 5)})
+              </span>
+              <span class="text-[9px] text-red-400 block mt-0.5 font-bold">⛔ Suspès 1 partit</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      if (warned.length === 0) {
+        warnedContainer.innerHTML = `
+          <div class="p-3 rounded-xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
+            <i data-lucide="shield" class="w-4 h-4 text-amber-500/70"></i>
+            Cap jugador en perill de sanció immediata (a 1 groga).
+          </div>
+        `;
+      } else {
+        warnedContainer.innerHTML = warned.map(x => `
+          <div class="p-2.5 rounded-xl border border-amber-800/80 bg-amber-950/40 flex items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <img src="${getPlayerImg(x.player)}" class="w-8 h-8 rounded-full object-cover border border-amber-500/80 shrink-0 bg-slate-800" />
+              <div class="truncate">
+                <p class="font-bold text-white truncate text-xs">${x.player.name}</p>
+                <p class="text-[10px] text-amber-300 font-semibold">${x.player.pos} • #${x.player.dorsal}</p>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="px-2 py-0.5 rounded-md bg-amber-900/90 text-amber-100 font-black text-xs border border-amber-700">
+                ${x.stats.yellow} Grogues (4/5)
+              </span>
+              <span class="text-[9px] text-amber-400 block mt-0.5 font-bold">⚠️ A 1 de suspensió</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function renderKPIs() {
+      let totGoals = 0, totAssists = 0, totMin = 0, totYel = 0, totRed = 0, totGoalsAgainst = 0;
+
+      players.forEach(p => {
+        const s = getPlayerStats(p, activeCompId);
+        totGoals += s.goals;
+        totGoalsAgainst += s.goalsAgainst;
+        totAssists += s.assists;
+        totMin += s.min;
+        totYel += s.yellow;
+        totRed += s.red;
+      });
+
+      const goalDiff = totGoals - totGoalsAgainst;
+      const diffSign = goalDiff > 0 ? `+${goalDiff}` : `${goalDiff}`;
+      const diffColorClass = goalDiff > 0 ? "text-emerald-400" : (goalDiff < 0 ? "text-rose-400" : "text-slate-200");
+
+      document.getElementById('kpiGoals').textContent = totGoals;
+      document.getElementById('kpiGoalsAgainst').textContent = totGoalsAgainst;
+      document.getElementById('kpiGoalDiff').textContent = diffSign;
+      document.getElementById('kpiGoalDiff').className = `text-2xl font-black ${diffColorClass}`;
+      document.getElementById('kpiAssists').textContent = totAssists;
+      document.getElementById('kpiMinutes').textContent = totMin.toLocaleString('ca-ES') + "'";
+      document.getElementById('kpiCards').innerHTML = `<span class="text-yellow-400">${totYel}</span> / <span class="text-red-400">${totRed}</span>`;
+    }
+
+    function buildPodiumHTML(sortedList, valueKey, suffix, medalCustomClass) {
+      const medals = [
+        { rank: '1r', icon: '🥇', bg: 'bg-amber-950/40 border-amber-800/60 text-amber-300', numColor: 'text-amber-400' },
+        { rank: '2n', icon: '🥈', bg: 'bg-slate-800/50 border-slate-700 text-slate-300', numColor: 'text-slate-300' },
+        { rank: '3r', icon: '🥉', bg: 'bg-orange-950/30 border-orange-900/50 text-orange-300', numColor: 'text-orange-400' }
+      ];
+
+      return medals.map((m, idx) => {
+        const item = sortedList[idx];
+        if (!item || (!item.isKeeper && item.val === 0 && idx > 0)) {
+          return `
+            <div class="flex items-center justify-between p-2 rounded-xl border border-slate-800/60 bg-slate-950/40 text-slate-600 text-xs">
+              <span class="font-bold">${m.icon} ${m.rank}</span>
+              <span>-</span>
+              <span>0 ${suffix}</span>
+            </div>
+          `;
+        }
+        const p = item.player;
+        const finalNumColor = medalCustomClass || m.numColor;
+        return `
+          <div class="flex items-center justify-between p-2 rounded-xl border ${m.bg} text-xs transition hover:scale-[1.01]">
+            <div class="flex items-center gap-1.5 min-w-0">
+              <span class="text-sm shrink-0">${m.icon}</span>
+              <img src="${getPlayerImg(p)}" class="w-6 h-6 rounded-full object-cover border border-slate-700 shrink-0 bg-slate-800" />
+              <div class="truncate">
+                <p class="font-bold text-white truncate text-xs">${p.name}</p>
+                <p class="text-[9px] text-slate-400">${p.pos} • #${p.dorsal}</p>
+              </div>
+            </div>
+            <div class="text-right shrink-0 pl-1">
+              <span class="text-sm font-black ${finalNumColor}">${item.val}</span>
+              <span class="text-[9px] text-slate-400 block -mt-1">${suffix}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderPodiums() {
+      const playerStatList = players.map(p => ({
+        player: p,
+        stats: getPlayerStats(p, activeCompId)
+      }));
+
+      const sortedGoals = [...playerStatList].map(x => ({ player: x.player, val: x.stats.goals, min: x.stats.min }))
+        .sort((a, b) => (b.val - a.val) || (a.min - b.min));
+      document.getElementById('podiumGoals').innerHTML = buildPodiumHTML(sortedGoals, 'val', 'Gols', 'text-red-400');
+
+      const allKeepers = playerStatList.filter(x => isPorter(x.player.pos));
+      const keepersSorted = allKeepers.map(x => ({
+        player: x.player,
+        val: x.stats.goalsAgainst,
+        min: x.stats.min,
+        pj: x.stats.pj,
+        isKeeper: true
+      })).sort((a, b) => {
+        if (a.pj > 0 && b.pj === 0) return -1;
+        if (a.pj === 0 && b.pj > 0) return 1;
+        if (a.val !== b.val) return a.val - b.val;
+        return b.min - a.min;
+      });
+
+      if (keepersSorted.length === 0) {
+        document.getElementById('podiumKeepers').innerHTML = `
+          <div class="p-3 text-center text-[10px] text-slate-500 italic">Sense porters a la plantilla</div>
+        `;
+      } else {
+        document.getElementById('podiumKeepers').innerHTML = buildPodiumHTML(keepersSorted, 'val', 'GC', 'text-cyan-400');
+      }
+
+      const sortedAssists = [...playerStatList].map(x => ({ player: x.player, val: x.stats.assists, min: x.stats.min }))
+        .sort((a, b) => (b.val - a.val) || (a.min - b.min));
+      document.getElementById('podiumAssists').innerHTML = buildPodiumHTML(sortedAssists, 'val', 'Assist.', 'text-indigo-400');
+
+      const sortedMin = [...playerStatList].map(x => ({ player: x.player, val: x.stats.min }))
+        .sort((a, b) => (b.val - a.val));
+      document.getElementById('podiumMinutes').innerHTML = buildPodiumHTML(sortedMin, 'val', 'Min.', 'text-amber-400');
+
+      const sortedYellows = [...playerStatList].map(x => ({ player: x.player, val: x.stats.yellow, red: x.stats.red, min: x.stats.min }))
+        .sort((a, b) => (b.val - a.val) || (a.min - b.min));
+      document.getElementById('podiumYellows').innerHTML = buildPodiumHTML(sortedYellows, 'val', 'Grogues', 'text-yellow-400');
+
+      const sortedReds = [...playerStatList].map(x => ({ player: x.player, val: x.stats.red, yellow: x.stats.yellow, min: x.stats.min }))
+        .sort((a, b) => (b.val - a.val) || (b.yellow - a.yellow) || (a.min - b.min));
+      document.getElementById('podiumReds').innerHTML = buildPodiumHTML(sortedReds, 'val', 'Vermelles', 'text-rose-400');
+    }
+
+    function renderTable() {
+      const search = (document.getElementById('searchInput').value || '').toLowerCase();
+      const pos = document.getElementById('posFilter').value;
+      const tbody = document.getElementById('playerTableBody');
+      const adminTh = document.getElementById('adminHeaderCol');
+      const addBtn = document.getElementById('addPlayerBtn');
+
+      if (isAdmin) {
+        adminTh.classList.remove('hidden');
+        addBtn.classList.remove('hidden');
+        addBtn.classList.add('flex');
+      } else {
+        adminTh.classList.add('hidden');
+        addBtn.classList.add('hidden');
+        addBtn.classList.remove('flex');
+      }
+
+      const filtered = players.filter(p => {
+        const matchesSearch = p.name.toLowerCase().includes(search) || p.dorsal.toString().includes(search);
+        let matchesPos = false;
+        if (pos === 'ALL' || pos === 'RIVALS_TAB') matchesPos = true;
+        else if (pos === 'Porter') matchesPos = isPorter(p.pos);
+        else matchesPos = (p.pos === pos);
+        return matchesSearch && matchesPos;
+      });
+
+      tbody.innerHTML = filtered.map((p) => {
+        const s = getPlayerStats(p, activeCompId);
+        const g90 = s.min > 0 ? ((s.goals / s.min) * 90).toFixed(2) : "0.00";
+        const porter = isPorter(p.pos);
+        
+        let posBadge = "bg-slate-800 text-slate-300";
+        if(p.pos === 'Davanter') posBadge = "bg-red-950/70 text-red-300 border border-red-800/40";
+        if(p.pos === 'Migcampista') posBadge = "bg-indigo-950/70 text-indigo-300 border border-indigo-800/40";
+        if(p.pos === 'Defensa') posBadge = "bg-emerald-950/70 text-emerald-300 border border-emerald-800/40";
+        if(porter) posBadge = "bg-amber-950/70 text-amber-300 border border-amber-800/40";
+
+        const editableClass = isAdmin ? "bg-slate-950 border border-slate-700 rounded px-1 py-0.5 w-12 text-center text-white focus:border-red-500 focus:outline-none" : "";
+
+        const currentInCycle = s.yellow % 5;
+        const isSanctioned = s.yellow > 0 && currentInCycle === 0;
+        const isWarned = currentInCycle === 4;
+
+        let cycleBoxesHTML = '';
+        for (let i = 1; i <= 5; i++) {
+          const filled = isSanctioned ? true : (i <= currentInCycle);
+          const boxColor = isSanctioned 
+            ? 'bg-red-500 border-red-400' 
+            : (filled ? (isWarned ? 'bg-amber-400 border-amber-300' : 'bg-yellow-400 border-yellow-300') : 'bg-slate-800 border-slate-700');
+          cycleBoxesHTML += `<span class="w-2.5 h-3.5 rounded-sm border ${boxColor} inline-block" title="${i}/5"></span>`;
+        }
+
+        let cycleStatusBadge = '';
+        if (isSanctioned) {
+          cycleStatusBadge = `<span class="text-[9px] font-black px-1 py-0.2 rounded bg-red-900 text-red-200 border border-red-700">SUSPÈS</span>`;
+        } else if (isWarned) {
+          cycleStatusBadge = `<span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-900 text-amber-200 border border-amber-700 animate-pulse">AVÍS (4/5)</span>`;
+        } else {
+          cycleStatusBadge = `<span class="text-[9px] text-slate-500">${currentInCycle}/5</span>`;
+        }
+
+        return `
+          <tr class="hover:bg-slate-800/40 transition border-b border-slate-800/50">
+            <td class="py-2.5 px-3 text-center text-slate-400 font-bold">
+              ${isAdmin ? `
+                <input type="number" value="${p.dorsal}" onchange="updatePlayerDetails(${p.id}, 'dorsal', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-center text-xs text-slate-200 w-10 font-bold" />
+              ` : p.dorsal}
+            </td>
+            <td class="py-2.5 px-3 text-center">
+              <div class="relative inline-block group">
+                <img src="${getPlayerImg(p)}" class="w-8 h-8 rounded-full object-cover border border-slate-700 bg-slate-800 shadow mx-auto" />
+                ${isAdmin ? `
+                  <button onclick="openPhotoModal(${p.id})" class="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition" title="Canviar foto">
+                    <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                  </button>
+                ` : ''}
+              </div>
+            </td>
+            <td class="py-2.5 px-3">
+              ${isAdmin ? `
+                <input type="text" value="${p.name}" onchange="updatePlayerDetails(${p.id}, 'name', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white w-full" />
+              ` : `
+                <span class="font-bold text-slate-100">${p.name}</span>
+              `}
+            </td>
+            <td class="py-2.5 px-3 text-center">
+              ${isAdmin ? `
+                <select onchange="updatePlayerDetails(${p.id}, 'pos', this.value)" class="bg-slate-950 border border-slate-700 text-xs rounded px-1 py-0.5 text-slate-200">
+                  <option value="Porter" ${porter?'selected':''}>Porter</option>
+                  <option value="Defensa" ${p.pos==='Defensa'?'selected':''}>Defensa</option>
+                  <option value="Migcampista" ${p.pos==='Migcampista'?'selected':''}>Migcampista</option>
+                  <option value="Davanter" ${p.pos==='Davanter'?'selected':''}>Davanter</option>
+                </select>
+              ` : `
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${posBadge}">${p.pos}</span>
+              `}
+            </td>
+            <td class="py-2.5 px-3 text-center">
+              ${isAdmin ? `<input type="number" min="0" value="${s.pj}" onchange="setPlayerStat(${p.id}, 'pj', this.value)" class="${editableClass}" />` : s.pj}
+            </td>
+            <td class="py-2.5 px-3 text-center text-slate-300">
+              ${isAdmin ? `<input type="number" min="0" value="${s.min}" onchange="setPlayerStat(${p.id}, 'min', this.value)" class="${editableClass} w-14" />` : s.min + "'"}
+            </td>
+            <td class="py-2.5 px-3 text-center font-bold text-red-400 bg-red-950/10">
+              ${isAdmin ? `<input type="number" min="0" value="${s.goals}" onchange="setPlayerStat(${p.id}, 'goals', this.value)" class="${editableClass} text-red-400 font-bold" />` : s.goals}
+            </td>
+            <td class="py-2.5 px-3 text-center font-bold ${porter ? 'text-rose-400 bg-rose-950/20' : 'text-slate-600'}">
+              ${isAdmin ? `
+                <input type="number" min="0" value="${s.goalsAgainst}" onchange="setPlayerStat(${p.id}, 'goalsAgainst', this.value)" class="${editableClass} text-rose-400 font-bold" />
+              ` : (porter ? s.goalsAgainst : (s.goalsAgainst > 0 ? s.goalsAgainst : '-'))}
+            </td>
+            <td class="py-2.5 px-3 text-center font-bold text-indigo-400 bg-indigo-950/10">
+              ${isAdmin ? `<input type="number" min="0" value="${s.assists}" onchange="setPlayerStat(${p.id}, 'assists', this.value)" class="${editableClass} text-indigo-400 font-bold" />` : s.assists}
+            </td>
+            <td class="py-2.5 px-3 text-center text-yellow-400 font-bold">
+              ${isAdmin ? `<input type="number" min="0" value="${s.yellow}" onchange="setPlayerStat(${p.id}, 'yellow', this.value)" class="${editableClass}" />` : s.yellow}
+            </td>
+            <td class="py-2.5 px-3 text-center">
+              <div class="flex items-center justify-center gap-1">
+                <div class="flex items-center gap-0.5">
+                  ${cycleBoxesHTML}
+                </div>
+                ${cycleStatusBadge}
+              </div>
+            </td>
+            <td class="py-2.5 px-3 text-center text-red-500 font-bold">
+              ${isAdmin ? `<input type="number" min="0" value="${s.red}" onchange="setPlayerStat(${p.id}, 'red', this.value)" class="${editableClass}" />` : s.red}
+            </td>
+            <td class="py-2.5 px-3 text-center text-slate-400">${g90}</td>
+            ${isAdmin ? `
+              <td class="py-2.5 px-3 text-center">
+                <div class="flex items-center justify-center gap-1">
+                  <button onclick="quickAddGoal(${p.id})" title="Sumar +1 GF (Gol Marcador)" class="px-1.5 py-0.5 bg-red-900/60 hover:bg-red-800 text-red-200 rounded text-[10px] font-bold border border-red-700/50">+1 ⚽</button>
+                  ${porter ? `
+                    <button onclick="quickAddGoalAgainst(${p.id})" title="Sumar +1 GC (Gol Encaixat)" class="px-1.5 py-0.5 bg-rose-900/60 hover:bg-rose-800 text-rose-200 rounded text-[10px] font-bold border border-rose-700/50">+1 🧤</button>
+                  ` : ''}
+                  <button onclick="deletePlayer(${p.id})" title="Eliminar Jugador" class="p-1 bg-slate-800 hover:bg-rose-900/80 text-slate-400 hover:text-rose-200 rounded text-[10px] border border-slate-700 transition">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </td>
+            ` : ''}
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderDashboard() {
+      document.getElementById('totalPlayerCount').textContent = players.length;
+      renderTabs();
+      renderRivalsModule();
+      renderCycleAlerts();
+      renderKPIs();
+      renderPodiums();
+      renderTable();
+      lucide.createIcons();
+    }
+
+    function updatePlayerDetails(id, key, val) {
+      const idx = players.findIndex(p => p.id === id);
+      if (idx !== -1) {
+        if (key === 'dorsal') players[idx].dorsal = Number(val) || 0;
+        else players[idx][key] = val;
+        saveData();
+      }
+    }
+
+    function quickAddGoal(id) {
+      const p = players.find(x => x.id === id);
+      if (!p) return;
+      if (!p.stats) p.stats = {};
+      const targetComp = (activeCompId === "ALL" || activeCompId === "RIVALS_TAB") ? competitions[0].id : activeCompId;
+      if (!p.stats[targetComp]) p.stats[targetComp] = {};
+
+      p.stats[targetComp].goals = (Number(p.stats[targetComp].goals) || 0) + 1;
+      saveData();
+    }
+
+    function quickAddGoalAgainst(id) {
+      const p = players.find(x => x.id === id);
+      if (!p) return;
+      if (!p.stats) p.stats = {};
+      const targetComp = (activeCompId === "ALL" || activeCompId === "RIVALS_TAB") ? competitions[0].id : activeCompId;
+      if (!p.stats[targetComp]) p.stats[targetComp] = {};
+
+      p.stats[targetComp].goalsAgainst = (Number(p.stats[targetComp].goalsAgainst) || 0) + 1;
+      saveData();
+    }
+
+    // MODAL D'ACTA DE PARTIT
+    function openAddMatchModal() {
+      const select = document.getElementById("matchCompSelect");
+      select.innerHTML = competitions.map(c => `
+        <option value="${c.id}">${c.name}</option>
+      `).join('');
+
+      document.getElementById("rivalNameInput").value = '';
+      document.getElementById("matchDateInput").value = '';
+      document.getElementById("rivalLogoInput").value = '';
+      document.getElementById("matchConditionSelect").value = 'Casa';
+      document.getElementById("matchGFTerrassa").value = 0;
+      document.getElementById("matchGCRival").value = 0;
+      document.getElementById("matchScorersInput").value = '';
+      document.getElementById("matchYellowsInput").value = '';
+      document.getElementById("matchRedsInput").value = '';
+      document.getElementById("matchNotesInput").value = '';
+      document.getElementById("matchModal").classList.remove("hidden");
+    }
+
+    function closeAddMatchModal() {
+      document.getElementById("matchModal").classList.add("hidden");
+    }
+
+    function submitNewMatch(e) {
+      e.preventDefault();
+      const rival = document.getElementById("rivalNameInput").value.trim();
+      const date = document.getElementById("matchDateInput").value.trim();
+      const compId = document.getElementById("matchCompSelect").value;
+      const condition = document.getElementById("matchConditionSelect").value;
+      const logo = document.getElementById("rivalLogoInput").value.trim();
+      const gf = Number(document.getElementById("matchGFTerrassa").value) || 0;
+      const gc = Number(document.getElementById("matchGCRival").value) || 0;
+      const scorers = document.getElementById("matchScorersInput").value.trim();
+      const yellows = document.getElementById("matchYellowsInput").value.trim();
+      const reds = document.getElementById("matchRedsInput").value.trim();
+      const notes = document.getElementById("matchNotesInput").value.trim();
+
+      if (!rival) return;
+
+      const nextId = matches.length > 0 ? (Math.max(...matches.map(m => m.id)) + 1) : 1;
+      matches.push({ id: nextId, rival, date, compId, condition, logo, gf, gc, scorers, yellows, reds, notes });
+
+      saveData();
+      closeAddMatchModal();
+    }
+
+    // GESTIÓ DE COMPETICIONS
+    function openManageCompsModal() {
+      const list = document.getElementById("compsEditList");
+      list.innerHTML = competitions.map(c => `
+        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <img src="${c.logo || 'https://via.placeholder.com/40'}" class="w-7 h-7 object-contain rounded bg-slate-900 p-0.5 border border-slate-800 shrink-0" />
+            <div class="truncate">
+              <p class="font-bold text-white truncate">${c.name}</p>
+              <p class="text-[10px] text-slate-400 truncate">Logo: ${c.logo ? 'Configurat' : 'Sense logo'}</p>
+            </div>
+          </div>
+          <button onclick="removeCompetition('${c.id}')" class="p-1.5 bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-800/40 rounded-lg shrink-0">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      `).join('');
+      document.getElementById("compsModal").classList.remove("hidden");
+      lucide.createIcons();
+    }
+
+    function closeManageCompsModal() {
+      document.getElementById("compsModal").classList.add("hidden");
+    }
+
+    function addNewCompetition() {
+      const name = document.getElementById("newCompName").value.trim();
+      const logo = document.getElementById("newCompLogo").value.trim();
+      if (!name) return;
+
+      const id = "comp_" + Date.now();
+      competitions.push({ id, name, short: name.substring(0, 16), logo });
+      document.getElementById("newCompName").value = '';
+      document.getElementById("newCompLogo").value = '';
+      saveData();
+      openManageCompsModal();
+    }
+
+    function removeCompetition(id) {
+      if (competitions.length <= 1) {
+        alert("Has de mantenir com a mínim una competició.");
+        return;
+      }
+      if (confirm("Segur que vols eliminar aquest torneig?")) {
+        competitions = competitions.filter(c => c.id !== id);
+        if (activeCompId === id) activeCompId = "ALL";
+        saveData();
+        openManageCompsModal();
+      }
+    }
+
+    // AFEGIR JUGADOR
+    function openAddPlayerModal() {
+      document.getElementById('newDorsal').value = players.length > 0 ? (Math.max(...players.map(p => p.dorsal)) + 1) : 1;
+      document.getElementById('newName').value = '';
+      document.getElementById('newPos').value = 'Davanter';
+      document.getElementById('newPhoto').value = '';
+      document.getElementById('addPlayerModal').classList.remove('hidden');
+    }
+
+    function closeAddPlayerModal() {
+      document.getElementById('addPlayerModal').classList.add('hidden');
+    }
+
+    function submitNewPlayer(e) {
+      e.preventDefault();
+      const newDorsal = Number(document.getElementById('newDorsal').value) || (players.length + 1);
+      const newName = document.getElementById('newName').value.trim();
+      const newPos = document.getElementById('newPos').value;
+      const newPhoto = document.getElementById('newPhoto').value.trim();
+
+      if (!newName) return;
+      const nextId = players.length > 0 ? (Math.max(...players.map(p => p.id)) + 1) : 1;
+
+      players.push({
+        id: nextId,
+        dorsal: newDorsal,
+        name: newName,
+        pos: newPos,
+        photo: newPhoto,
+        stats: {}
+      });
+
+      saveData();
+      closeAddPlayerModal();
+    }
+
+    function deletePlayer(id) {
+      const p = players.find(x => x.id === id);
+      if (!p) return;
+      if (confirm(`Vols eliminar a #${p.dorsal} ${p.name}?`)) {
+        players = players.filter(x => x.id !== id);
+        saveData();
+      }
+    }
+
+    // FOTOS
+    function openPhotoModal(id) {
+      selectedPlayerForPhoto = players.find(p => p.id === id);
+      if (!selectedPlayerForPhoto) return;
+      tempUploadedBase64 = null;
+
+      document.getElementById('modalPlayerName').textContent = `#${selectedPlayerForPhoto.dorsal} - ${selectedPlayerForPhoto.name}`;
+      document.getElementById('modalPreviewImg').src = getPlayerImg(selectedPlayerForPhoto);
+      document.getElementById('photoUrlInput').value = selectedPlayerForPhoto.photo || '';
+      document.getElementById('fileInput').value = '';
+      document.getElementById('photoModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closePhotoModal() {
+      document.getElementById('photoModal').classList.add('hidden');
+      selectedPlayerForPhoto = null;
+    }
+
+    function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        tempUploadedBase64 = evt.target.result;
+        document.getElementById('modalPreviewImg').src = tempUploadedBase64;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function savePlayerPhoto() {
+      if (!selectedPlayerForPhoto) return;
+      const urlInput = document.getElementById('photoUrlInput').value.trim();
+      selectedPlayerForPhoto.photo = tempUploadedBase64 || urlInput || "";
+      saveData();
+      closePhotoModal();
+    }
+
+    // AUTH
+    function toggleAdminModal() {
+      if (isAdmin) { lockAdmin(); return; }
+      document.getElementById('loginModal').classList.toggle('hidden');
+      document.getElementById('loginError').classList.add('hidden');
+      document.getElementById('adminPasswordInput').value = '';
+    }
+
+    function verifyAdminPassword() {
+      const pass = document.getElementById('adminPasswordInput').value;
+      if (pass === ADMIN_PASS) {
+        isAdmin = true;
+        document.getElementById('loginModal').classList.add('hidden');
+        document.getElementById('adminNotice').classList.remove('hidden');
+        document.getElementById('modeBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span><span class="text-amber-400 font-bold">Mode Administrador</span>`;
+        document.getElementById('modeBadge').className = "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-950/60 border border-amber-800/50 text-amber-400";
+        document.getElementById('adminBtnText').textContent = "Bloquejar";
+        renderDashboard();
+      } else {
+        document.getElementById('loginError').classList.remove('hidden');
+      }
+    }
+
+    function lockAdmin() {
+      isAdmin = false;
+      document.getElementById('adminNotice').classList.add('hidden');
+      document.getElementById('modeBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Mode Públic (Només Lectura)</span>`;
+      document.getElementById('modeBadge').className = "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-950/60 border border-emerald-800/50 text-emerald-400";
+      document.getElementById('adminBtnText').textContent = "Panell Admin";
+      renderDashboard();
+    }
+
+    function exportDataJSON() {
+      const data = { competitions, players, matches };
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+      const a = document.createElement('a');
+      a.setAttribute("href", dataStr);
+      a.setAttribute("download", "dades.json");
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    // Iniciar carregant dades.json
+    loadData();
+  </script>
+</body>
+</html>

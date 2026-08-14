@@ -5,6 +5,24 @@
       "name": "Pretemporada",
       "short": "Pretemporada",
       "logo": "https://cdn-icons-png.flaticon.com/512/1378/1378583.png"
+    },
+    {
+      "id": "comp_1786716013390",
+      "name": "2ª RFEF",
+      "short": "2ª RFEF",
+      "logo": "https://assets.football-logos.cc/logos/spain/1500x1500/segunda-federacion--no-text.c73ddca0.png"
+    },
+    {
+      "id": "comp_1786716059655",
+      "name": "Copa RFEF",
+      "short": "Copa RFEF",
+      "logo": "https://pbs.twimg.com/media/F2HL6GQWQAA7KeV.jpg"
+    },
+    {
+      "id": "comp_1786716101669",
+      "name": "Copa Catalunya",
+      "short": "Copa Catalunya",
+      "logo": "https://cdn.footystats.org/img/competitions/spain-copa-catalunya.png"
     }
   ],
   "players": [

@@ -46,14 +46,14 @@
             <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">TERRASSA FC 2026/27</h1>
             <span class="px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-red-950/80 text-red-400 border border-red-800/60 rounded-full">BI Analytics</span>
           </div>
-          <p class="text-xs text-slate-400">Dades de Rendiment, Disciplina, Rivals & Partits</p>
+          <p class="text-xs text-slate-400">Dades de Rendiment, Tvuargetes, Rivals & Partits</p>
         </div>
       </div>
 
       <div class="flex items-center gap-3">
         <div id="modeBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-950/60 border border-emerald-800/50 text-emerald-400">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>Mode Públic (Només Lectura)</span>
+          <span></
         </div>
 
         <button id="adminBtn" onclick="toggleAdminModal()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
@@ -71,11 +71,11 @@
     <div id="adminNotice" class="hidden p-4 rounded-xl bg-amber-950/50 border border-amber-800/60 flex flex-wrap items-center justify-between gap-3 text-amber-200 text-sm shadow-md">
       <div class="flex items-center gap-2">
         <i data-lucide="shield-check" class="w-5 h-5 text-amber-400 shrink-0"></i>
-        <span><strong>Mode Administrador Activat:</strong> Estàs editant les dades de la pestanya activa (<span id="adminActiveCompName" class="font-bold text-amber-300 underline">Totes</span>).</span>
+        <span><strong>Mode Administrador:</strong> Estàs editant les dades de la pestanya activa (<span id="adminActiveCompName" class="font-bold text-amber-300 underline">Totes</span>).</span>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
         <button onclick="openAddMatchModal()" class="px-3 py-1.5 bg-rose-700 hover:bg-rose-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
-          <i data-lucide="file-text" class="w-4 h-4"></i> + Nova Acta / Partit
+          <i data-lucide="file-text" class="w-4 h-4"></i> + Partit
         </button>
         <button onclick="openAddPlayerModal()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
           <i data-lucide="user-plus" class="w-4 h-4"></i> Afegir Jugador
@@ -96,9 +96,9 @@
     <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-2 shadow-lg">
       <div class="flex items-center justify-between px-3 py-1 border-b border-slate-800/80 mb-2">
         <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-          <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-red-500"></i> Seleccionar Vista / Competició:
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-red-500"></i> Seleccionar Competició:
         </span>
-        <span id="activeCompSubtitle" class="text-xs text-slate-400 italic">Veient estadístiques globals acumulades</span>
+        <span id="activeCompSubtitle" class="text-xs text-slate-400 italic">Estadístiques globals acumulades</span>
       </div>
       <div id="compTabsContainer" class="flex flex-wrap items-center gap-2"></div>
     </div>
@@ -166,8 +166,8 @@
                 <i data-lucide="ban" class="w-4 h-4"></i>
               </span>
               <div>
-                <h3 class="text-xs font-black uppercase tracking-wider text-red-200">Sancionats per Cicle (Compleixen Sanció)</h3>
-                <p class="text-[10px] text-slate-400">Han arribat a 5, 10 o 15 grogues en el torneig actiu</p>
+                <h3 class="text-xs font-black uppercase tracking-wider text-red-200">Sancionats per Cicle</h3>
+                <p class="text-[10px] text-slate-400">Han arribat a 5, 10 o 15 grogues en el torneig</p>
               </div>
             </div>
             <span id="badgeSancionatsCount" class="text-xs font-bold px-2 py-0.5 rounded-full bg-red-900 text-red-200 border border-red-700">0</span>
@@ -183,7 +183,7 @@
               </span>
               <div>
                 <h3 class="text-xs font-black uppercase tracking-wider text-amber-200">Apercebuts (A 1 groga de la sanció)</h3>
-                <p class="text-[10px] text-slate-400">Tenen 4, 9 o 14 grogues (perill de suspensió en el proper partit)</p>
+                <p class="text-[10px] text-slate-400">Perill de suspensió en el proper partit</p>
               </div>
             </div>
             <span id="badgeWarnedCount" class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-900 text-amber-200 border border-amber-700">0</span>
@@ -222,7 +222,7 @@
               <span class="text-cyan-400 font-bold">🧤</span>
               <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Porters (GC)</h2>
             </div>
-            <span class="text-[9px] font-bold text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded-full border border-cyan-900/60">Encai.</span>
+            <span class="text-[9px] font-bold text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded-full border border-cyan-900/60">Gols</span>
           </div>
           <div id="podiumKeepers" class="space-y-2 flex-1"></div>
         </div>
@@ -242,7 +242,6 @@
           <div class="flex items-center justify-between mb-2.5 border-b border-slate-800 pb-2">
             <div class="flex items-center gap-1.5">
               <span class="text-yellow-400 font-bold">🟨</span>
-              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Amonestats</h2>
             </div>
             <span class="text-[9px] font-bold text-yellow-400 bg-yellow-950/60 px-1.5 py-0.5 rounded-full border border-yellow-900/60">Grogues</span>
           </div>
@@ -254,8 +253,6 @@
             <div class="flex items-center gap-1.5">
               <span class="text-red-500 font-bold">🟥</span>
               <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Expulsats</h2>
-            </div>
-            <span class="text-[9px] font-bold text-red-500 bg-red-950/60 px-1.5 py-0.5 rounded-full border border-red-900/60">Vermelles</span>
           </div>
           <div id="podiumReds" class="space-y-2 flex-1"></div>
         </div>
@@ -271,7 +268,7 @@
                 <i data-lucide="users" class="w-4 h-4 text-red-500"></i>
                 Plantilla Terrassa FC — <span id="currentTableCompTitle" class="text-red-400">Total Temporada</span> (<span id="totalPlayerCount">0</span> Jugadors)
               </h2>
-              <p class="text-xs text-slate-400" id="tableCompNotice">Estadístiques individuals acumulades amb GF, GC, assistències i seguiment disciplinari.</p>
+              <p class="text-xs text-slate-400" id="tableCompNotice">Estadístiques individuals.</p>
             </div>
           </div>
 
@@ -332,14 +329,14 @@
             </span>
             <div>
               <h2 class="text-base font-black text-white flex items-center gap-2">
-                Actes Oficials de Partits & Rivals
+                Partits & Rivals
               </h2>
-              <p class="text-xs text-slate-400">Historial complet, fitxes detallades amb alineacions, minuts i incidències arbitrals.</p>
+              <p class="text-xs text-slate-400">Dades dels partits i rivals.</p>
             </div>
           </div>
 
           <button id="addMatchViewBtn" onclick="openAddMatchModal()" class="hidden px-4 py-2 bg-rose-700 hover:bg-rose-600 text-white rounded-xl text-xs font-bold items-center gap-2 shadow-lg transition">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i> Crear Nova Acta de Partit
+            <i data-lucide="plus-circle" class="w-4 h-4"></i> Nou Partit
           </button>
         </div>
 
@@ -358,7 +355,7 @@
             <i data-lucide="file-check-2" class="w-5 h-5"></i>
           </span>
           <div>
-            <h3 id="detailModalTitle" class="font-extrabold text-white text-base">Acta del Partit</h3>
+            <h3 id="detailModalTitle" class="font-extrabold text-white text-base">Dades del Partit</h3>
             <p id="detailModalComp" class="text-xs text-slate-400"></p>
           </div>
         </div>
@@ -372,7 +369,7 @@
       </div>
 
       <div class="flex justify-end pt-3 border-t border-slate-800">
-        <button onclick="closeMatchDetailModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Tancar Acta</button>
+        <button onclick="closeMatchDetailModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Tancar Partit</button>
       </div>
     </div>
   </div>
@@ -385,7 +382,7 @@
           <div class="w-8 h-8 rounded-lg bg-rose-950 border border-rose-800 flex items-center justify-center text-rose-400">
             <i data-lucide="file-plus" class="w-4 h-4"></i>
           </div>
-          <h3 class="font-bold text-white text-base">Formulari d'Acta de Partit</h3>
+          <h3 class="font-bold text-white text-base">Formulari de Partit</h3>
         </div>
         <button onclick="closeAddMatchModal()" class="text-slate-400 hover:text-white">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -453,14 +450,14 @@
             </div>
           </div>
           <div>
-            <label class="block font-semibold text-slate-300 mb-1">Observacions Arbitrals / Notes</label>
+            <label class="block font-semibold text-slate-300 mb-1">Notes</label>
             <textarea id="matchNotesInput" rows="2" placeholder="Incidències de l'acta, penals xiulats, canvis destacats..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
           </div>
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
           <button type="button" onclick="closeAddMatchModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
-          <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-rose-700 hover:bg-rose-600 text-white shadow-lg">Desar Acta Oficial</button>
+          <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-rose-700 hover:bg-rose-600 text-white shadow-lg">Desar Partit</button>
         </div>
       </form>
     </div>

@@ -31,12 +31,13 @@
       "dorsal": 1,
       "name": "Marcos Pérez",
       "pos": "Porter",
-      "photo": "",
+      "photo": "img/marcos1.jpg",
       "stats": {
         "comp_1786709158400": {
           "pj": 0,
           "goalsAgainst": 0,
-          "min": 0
+          "min": 0,
+          "yellow": 0
         }
       }
     },
@@ -45,7 +46,7 @@
       "dorsal": 13,
       "name": "Álvaro Pacheco",
       "pos": "Porter",
-      "photo": "img/alvaro.jpg",
+      "photo": "img/alvaro1.jpg",
       "stats": {}
     },
     {
@@ -53,7 +54,7 @@
       "dorsal": 2,
       "name": "Ferran Ruíz",
       "pos": "Defensa",
-      "photo": "",
+      "photo": "img/ferran.jpg",
       "stats": {}
     },
     {
@@ -61,7 +62,7 @@
       "dorsal": 21,
       "name": "Paulo Auzokoa",
       "pos": "Defensa",
-      "photo": "",
+      "photo": "img/paulo.jpg",
       "stats": {}
     },
     {
@@ -69,7 +70,7 @@
       "dorsal": 4,
       "name": "Iker Reche",
       "pos": "Defensa",
-      "photo": "",
+      "photo": "img/reche.jpg",
       "stats": {}
     },
     {
@@ -77,7 +78,7 @@
       "dorsal": 5,
       "name": "Gabri Clemente",
       "pos": "Defensa",
-      "photo": "",
+      "photo": "img/gabri.jpg",
       "stats": {}
     },
     {
@@ -85,7 +86,7 @@
       "dorsal": 22,
       "name": "Adrián Beamonte",
       "pos": "Defensa",
-      "photo": "",
+      "photo": "img/adrian.jpg",
       "stats": {}
     },
     {
@@ -93,7 +94,7 @@
       "dorsal": 15,
       "name": "Fran Moreno",
       "pos": "Defensa",
-      "photo": "",
+      "photo": "img/fran.jpg",
       "stats": {}
     },
     {
@@ -101,7 +102,7 @@
       "dorsal": 3,
       "name": "Sem Dirks",
       "pos": "Defensa",
-      "photo": "",
+      "photo": "img/diks.jpg",
       "stats": {}
     },
     {
@@ -109,7 +110,7 @@
       "dorsal": 18,
       "name": "Mario Domingo",
       "pos": "Defensa",
-      "photo": "",
+      "photo": "img/mario.jpg",
       "stats": {}
     },
     {
@@ -117,7 +118,7 @@
       "dorsal": 19,
       "name": "Aser Palacios",
       "pos": "Defensa",
-      "photo": "",
+      "photo": "img/aser.jpg",
       "stats": {}
     },
     {
@@ -125,7 +126,7 @@
       "dorsal": 12,
       "name": "Cristian Mármol",
       "pos": "Migcampista",
-      "photo": "",
+      "photo": "img/marmol.jpg",
       "stats": {}
     },
     {
@@ -133,7 +134,7 @@
       "dorsal": 6,
       "name": "Ekaitz Molina",
       "pos": "Migcampista",
-      "photo": "",
+      "photo": "img/molina.jpg",
       "stats": {}
     },
     {
@@ -141,7 +142,7 @@
       "dorsal": 14,
       "name": "Jaime Barrero",
       "pos": "Migcampista",
-      "photo": "",
+      "photo": "img/barrero.jpg",
       "stats": {}
     },
     {
@@ -149,7 +150,7 @@
       "dorsal": 8,
       "name": "Sergio Cortés",
       "pos": "Migcampista",
-      "photo": "",
+      "photo": "img/cortes.jpg",
       "stats": {}
     },
     {
@@ -157,7 +158,7 @@
       "dorsal": 16,
       "name": "Albert Celma",
       "pos": "Migcampista",
-      "photo": "",
+      "photo": "img/celma.jpg",
       "stats": {}
     },
     {
@@ -165,7 +166,7 @@
       "dorsal": 10,
       "name": "Sergio Montero",
       "pos": "Davanter",
-      "photo": "",
+      "photo": "img/montero.jpg",
       "stats": {}
     },
     {
@@ -173,7 +174,7 @@
       "dorsal": 9,
       "name": "Alberto Gutiérrez",
       "pos": "Davanter",
-      "photo": "",
+      "photo": "img/guti.jpg",
       "stats": {}
     },
     {
@@ -181,7 +182,7 @@
       "dorsal": 23,
       "name": "Larry Kelechi",
       "pos": "Davanter",
-      "photo": "",
+      "photo": "img/larry.jpg",
       "stats": {}
     },
     {
@@ -189,15 +190,15 @@
       "dorsal": 7,
       "name": "Max Marcet",
       "pos": "Davanter",
-      "photo": "",
+      "photo": "img/max.jpg",
       "stats": {}
     },
     {
       "id": 21,
       "dorsal": 20,
-      "name": "Nahuel Molina",
+      "name": "Nahuel Arroyo",
       "pos": "Davanter",
-      "photo": "",
+      "photo": "img/nahuel.jpg",
       "stats": {}
     },
     {
@@ -205,7 +206,7 @@
       "dorsal": 17,
       "name": "Marcos Mendes",
       "pos": "Davanter",
-      "photo": "",
+      "photo": "img/mendes.jpg",
       "stats": {}
     },
     {
@@ -213,7 +214,7 @@
       "dorsal": 11,
       "name": "Dano Lourens",
       "pos": "Davanter",
-      "photo": "",
+      "photo": "img/dano.jpg",
       "stats": {}
     },
     {
@@ -221,7 +222,7 @@
       "dorsal": 24,
       "name": "Frodo",
       "pos": "Davanter",
-      "photo": "",
+      "photo": "img/frodo.jpg",
       "stats": {}
     },
     {
@@ -229,7 +230,7 @@
       "dorsal": 26,
       "name": "Pau Santanach",
       "pos": "Davanter",
-      "photo": "",
+      "photo": "img/pau.jpg",
       "stats": {}
     }
   ],

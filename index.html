@@ -378,15 +378,18 @@
     </div>
   </div>
 
-  <!-- MODAL: REGISTRAR / EDITAR ACTA DE PARTIT -->
+  <!-- MODAL: REGISTRAR / EDITAR ACTA DE PARTIT AMB PLANTILLA COMPLETA -->
   <div id="matchModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scroll">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-4xl w-full p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto custom-scroll">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-lg bg-rose-950 border border-rose-800 flex items-center justify-center text-rose-400">
             <i data-lucide="file-plus" class="w-4 h-4"></i>
           </div>
-          <h3 class="font-bold text-white text-base">Formulari de Partit</h3>
+          <div>
+            <h3 class="font-bold text-white text-base">Acta de Partit & Participació de Jugadors</h3>
+            <p class="text-[11px] text-slate-400">En desar, les dades de cada jugador es bolcaran directament a la competició seleccionada.</p>
+          </div>
         </div>
         <button onclick="closeAddMatchModal()" class="text-slate-400 hover:text-white">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -394,35 +397,34 @@
       </div>
 
       <form onsubmit="submitNewMatch(event)" class="space-y-4 text-xs">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <!-- DETALLS BÀSICS DEL PARTIT -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
           <div class="sm:col-span-2">
             <label class="block font-semibold text-slate-300 mb-1">Equip Rival</label>
-            <input type="text" id="rivalNameInput" required placeholder="Ex. CE Sabadell, UE Sant Andreu..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+            <input type="text" id="rivalNameInput" required placeholder="Ex. CE Sabadell, UE Sant Andreu..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
           </div>
           <div>
             <label class="block font-semibold text-slate-300 mb-1">Data / Jornada</label>
-            <input type="text" id="matchDateInput" placeholder="Ex. Jornada 14 (12/11/2026)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+            <input type="text" id="matchDateInput" placeholder="Ex. Jornada 1 (06/09/2026)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
           </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label class="block font-semibold text-slate-300 mb-1">Competició</label>
-            <select id="matchCompSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></select>
+            <label class="block font-semibold text-amber-300 mb-1">Competició Destí</label>
+            <select id="matchCompSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500 font-bold"></select>
           </div>
           <div>
             <label class="block font-semibold text-slate-300 mb-1">Condició</label>
-            <select id="matchConditionSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500 font-bold">
+            <select id="matchConditionSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500 font-bold">
               <option value="Casa">🏠 Casa (Estadi Olímpic)</option>
               <option value="Fora">✈️ Fora (Visitant)</option>
             </select>
           </div>
           <div>
             <label class="block font-semibold text-slate-300 mb-1">Escut Rival (URL)</label>
-            <input type="text" id="rivalLogoInput" placeholder="https://.../escut.png" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+            <input type="text" id="rivalLogoInput" placeholder="https://.../escut.png" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
           </div>
         </div>
 
+        <!-- MARCADOR -->
         <div class="grid grid-cols-2 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
           <div>
             <label class="block font-bold text-emerald-400 mb-1 text-center">Gols Terrassa FC (GF)</label>
@@ -434,34 +436,46 @@
           </div>
         </div>
 
-        <!-- DETALLS DE L'ACTA -->
-        <div class="space-y-3 bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
-          <h4 class="font-black text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-            <i data-lucide="clipboard-list" class="w-4 h-4 text-red-500"></i> Desglossament del partit (Golejadors & Targetes)
-          </h4>
-          <div>
-            <label class="block font-semibold text-slate-300 mb-1">Gols Terrassa (Autors & Minuts)</label>
-            <input type="text" id="matchScorersInput" placeholder="Ex. Aythami (23'), Jofre (67'), Gil Muntadas (89')" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+        <!-- SELECCIÓ I REGISTRE DE JUGADORS PER AQUEST PARTIT -->
+        <div class="space-y-2 bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h4 class="font-black text-slate-200 uppercase tracking-wider text-xs flex items-center gap-1.5">
+              <i data-lucide="users" class="w-4 h-4 text-red-500"></i> Alineació, Minuts & Estadístiques del Partit
+            </h4>
+            <span class="text-[10px] text-slate-400 italic">Marca els jugadors que han participat</span>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block font-semibold text-amber-300 mb-1">Targetes Grogues Terrassa</label>
-              <input type="text" id="matchYellowsInput" placeholder="Ex. Víctor Morales (34'), Adri Lledó (81')" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
-            </div>
-            <div>
-              <label class="block font-semibold text-red-400 mb-1">Targetes Vermelles Terrassa</label>
-              <input type="text" id="matchRedsInput" placeholder="Ex. Jaouad Erraji (72' DVG)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
-            </div>
+
+          <div class="overflow-x-auto custom-scroll max-h-[300px] border border-slate-800 rounded-lg">
+            <table class="w-full text-left text-[11px]">
+              <thead class="bg-slate-900 sticky top-0 text-slate-400 font-bold border-b border-slate-800">
+                <tr>
+                  <th class="p-2 text-center w-10">Juga?</th>
+                  <th class="p-2 w-8 text-center">#</th>
+                  <th class="p-2 min-w-[130px]">Jugador</th>
+                  <th class="p-2 w-20 text-center">Minuts</th>
+                  <th class="p-2 w-14 text-center text-red-400">Gols ⚽</th>
+                  <th class="p-2 w-14 text-center text-rose-400">GC 🧤</th>
+                  <th class="p-2 w-14 text-center text-indigo-400">Assist 🎯</th>
+                  <th class="p-2 w-12 text-center text-yellow-400">🟨</th>
+                  <th class="p-2 w-12 text-center text-red-500">🟥</th>
+                </tr>
+              </thead>
+              <tbody id="matchPlayersListBody" class="divide-y divide-slate-800/60 bg-slate-950/40"></tbody>
+            </table>
           </div>
-          <div>
-            <label class="block font-semibold text-slate-300 mb-1">Observacions / Notes</label>
-            <textarea id="matchNotesInput" rows="2" placeholder="Incidències de l'acta, penals xiulats, canvis destacats..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
-          </div>
+        </div>
+
+        <!-- OBSERVACIONS / NOTES -->
+        <div>
+          <label class="block font-semibold text-slate-300 mb-1">Observacions Arbitrals / Notes de l'Acta</label>
+          <textarea id="matchNotesInput" rows="2" placeholder="Incidències de l'acta, penals xiulats, canvis destacats..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
           <button type="button" onclick="closeAddMatchModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
-          <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-rose-700 hover:bg-rose-600 text-white shadow-lg">Desar Partit</button>
+          <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-rose-700 hover:bg-rose-600 text-white shadow-lg flex items-center gap-1.5">
+            <i data-lucide="check" class="w-4 h-4"></i> Desar Partit & Bolcar Estadístiques
+          </button>
         </div>
       </form>
     </div>
@@ -912,7 +926,7 @@
       content.innerHTML = `
         <div class="flex items-center justify-center gap-6 bg-slate-950 p-4 rounded-2xl border border-slate-800">
           <div class="text-center">
-            <div class="w-12 h-12 rounded-xl bg-brand-red flex items-center justify-center font-black text-white text-xl mx-auto mb-1">T</div>
+            <img src="img/escut.png" alt="Escut Terrassa" class="w-12 h-12 object-contain rounded-xl bg-slate-900 p-1 mx-auto mb-1 border border-slate-800" onerror="this.src='https://ui-avatars.com/api/?name=TFC&background=C8102E&color=fff&bold=true&size=128'" />
             <p class="font-extrabold text-white text-xs">Terrassa FC</p>
             <span class="text-2xl font-black text-emerald-400">${match.gf}</span>
           </div>
@@ -1347,7 +1361,7 @@
       saveData();
     }
 
-    // MODAL D'ACTA DE PARTIT
+    // MODAL D'ACTA DE PARTIT AMB PLANTILLA COMPLETA
     function openAddMatchModal() {
       const select = document.getElementById("matchCompSelect");
       select.innerHTML = competitions.map(c => `
@@ -1360,11 +1374,75 @@
       document.getElementById("matchConditionSelect").value = 'Casa';
       document.getElementById("matchGFTerrassa").value = 0;
       document.getElementById("matchGCRival").value = 0;
-      document.getElementById("matchScorersInput").value = '';
-      document.getElementById("matchYellowsInput").value = '';
-      document.getElementById("matchRedsInput").value = '';
       document.getElementById("matchNotesInput").value = '';
+
+      // Render de la llista de jugadors per posar minuts i dades
+      const tbody = document.getElementById("matchPlayersListBody");
+      tbody.innerHTML = players.map(p => {
+        const porter = isPorter(p.pos);
+        return `
+          <tr class="hover:bg-slate-900/60 transition border-b border-slate-800/40">
+            <td class="p-2 text-center">
+              <input type="checkbox" id="mp_pj_${p.id}" onchange="togglePlayerMatchRow(${p.id})" class="rounded border-slate-700 text-rose-600 focus:ring-0 bg-slate-900 w-4 h-4 cursor-pointer" />
+            </td>
+            <td class="p-2 text-center font-bold text-slate-400">#${p.dorsal}</td>
+            <td class="p-2 font-semibold text-slate-200">
+              ${p.name}
+              <span class="text-[9px] text-slate-400 block">${p.pos}</span>
+            </td>
+            <td class="p-2 text-center">
+              <input type="number" id="mp_min_${p.id}" min="0" max="120" value="0" disabled class="w-14 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1.5 py-1 text-center text-white focus:border-red-500 focus:outline-none" />
+            </td>
+            <td class="p-2 text-center">
+              <input type="number" id="mp_gf_${p.id}" min="0" value="0" disabled class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-400 font-bold focus:border-red-500 focus:outline-none" />
+            </td>
+            <td class="p-2 text-center">
+              ${porter ? `
+                <input type="number" id="mp_gc_${p.id}" min="0" value="0" disabled class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-rose-400 font-bold focus:border-red-500 focus:outline-none" />
+              ` : `<span class="text-slate-600 text-xs">-</span><input type="hidden" id="mp_gc_${p.id}" value="0" />`}
+            </td>
+            <td class="p-2 text-center">
+              <input type="number" id="mp_as_${p.id}" min="0" value="0" disabled class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-indigo-400 font-bold focus:border-red-500 focus:outline-none" />
+            </td>
+            <td class="p-2 text-center">
+              <input type="number" id="mp_yel_${p.id}" min="0" max="2" value="0" disabled class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-yellow-400 font-bold focus:border-red-500 focus:outline-none" />
+            </td>
+            <td class="p-2 text-center">
+              <input type="number" id="mp_red_${p.id}" min="0" max="1" value="0" disabled class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-500 font-bold focus:border-red-500 focus:outline-none" />
+            </td>
+          </tr>
+        `;
+      }).join('');
+
       document.getElementById("matchModal").classList.remove("hidden");
+    }
+
+    function togglePlayerMatchRow(playerId) {
+      const isChecked = document.getElementById(`mp_pj_${playerId}`).checked;
+      const minInput = document.getElementById(`mp_min_${playerId}`);
+      const gfInput = document.getElementById(`mp_gf_${playerId}`);
+      const gcInput = document.getElementById(`mp_gc_${playerId}`);
+      const asInput = document.getElementById(`mp_as_${playerId}`);
+      const yelInput = document.getElementById(`mp_yel_${playerId}`);
+      const redInput = document.getElementById(`mp_red_${playerId}`);
+
+      minInput.disabled = !isChecked;
+      gfInput.disabled = !isChecked;
+      if (gcInput) gcInput.disabled = !isChecked;
+      asInput.disabled = !isChecked;
+      yelInput.disabled = !isChecked;
+      redInput.disabled = !isChecked;
+
+      if (isChecked) {
+        if (Number(minInput.value) === 0) minInput.value = 90; // Default titular 90'
+      } else {
+        minInput.value = 0;
+        gfInput.value = 0;
+        if (gcInput) gcInput.value = 0;
+        asInput.value = 0;
+        yelInput.value = 0;
+        redInput.value = 0;
+      }
     }
 
     function closeAddMatchModal() {
@@ -1380,15 +1458,62 @@
       const logo = document.getElementById("rivalLogoInput").value.trim();
       const gf = Number(document.getElementById("matchGFTerrassa").value) || 0;
       const gc = Number(document.getElementById("matchGCRival").value) || 0;
-      const scorers = document.getElementById("matchScorersInput").value.trim();
-      const yellows = document.getElementById("matchYellowsInput").value.trim();
-      const reds = document.getElementById("matchRedsInput").value.trim();
       const notes = document.getElementById("matchNotesInput").value.trim();
 
       if (!rival) return;
 
+      let scorersList = [];
+      let yellowsList = [];
+      let redsList = [];
+
+      // Bolcat automàtic als jugadors
+      players.forEach(p => {
+        const pjChecked = document.getElementById(`mp_pj_${p.id}`)?.checked;
+        if (pjChecked) {
+          const mMin = Number(document.getElementById(`mp_min_${p.id}`).value) || 0;
+          const mGf = Number(document.getElementById(`mp_gf_${p.id}`).value) || 0;
+          const mGc = Number(document.getElementById(`mp_gc_${p.id}`)?.value) || 0;
+          const mAs = Number(document.getElementById(`mp_as_${p.id}`).value) || 0;
+          const mYel = Number(document.getElementById(`mp_yel_${p.id}`).value) || 0;
+          const mRed = Number(document.getElementById(`mp_red_${p.id}`).value) || 0;
+
+          // Assegurar estructura d'stats
+          if (!p.stats) p.stats = {};
+          if (!p.stats[compId]) {
+            p.stats[compId] = { pj: 0, min: 0, goals: 0, goalsAgainst: 0, assists: 0, yellow: 0, red: 0 };
+          }
+
+          // Suma acumulativa directa al torneig seleccionat
+          p.stats[compId].pj = (p.stats[compId].pj || 0) + 1;
+          p.stats[compId].min = (p.stats[compId].min || 0) + mMin;
+          p.stats[compId].goals = (p.stats[compId].goals || 0) + mGf;
+          p.stats[compId].goalsAgainst = (p.stats[compId].goalsAgainst || 0) + mGc;
+          p.stats[compId].assists = (p.stats[compId].assists || 0) + mAs;
+          p.stats[compId].yellow = (p.stats[compId].yellow || 0) + mYel;
+          p.stats[compId].red = (p.stats[compId].red || 0) + mRed;
+
+          // Construcció de text resum per a l'acta
+          if (mGf > 0) scorersList.push(`${p.name}${mGf > 1 ? ` (x${mGf})` : ''}`);
+          if (mYel > 0) yellowsList.push(`${p.name}${mYel > 1 ? ` (x${mYel})` : ''}`);
+          if (mRed > 0) redsList.push(p.name);
+        }
+      });
+
       const nextId = matches.length > 0 ? (Math.max(...matches.map(m => m.id)) + 1) : 1;
-      matches.push({ id: nextId, rival, date, compId, condition, logo, gf, gc, scorers, yellows, reds, notes });
+      matches.push({
+        id: nextId,
+        rival,
+        date,
+        compId,
+        condition,
+        logo,
+        gf,
+        gc,
+        scorers: scorersList.join(', '),
+        yellows: yellowsList.join(', '),
+        reds: redsList.join(', '),
+        notes
+      });
 
       saveData();
       closeAddMatchModal();
@@ -1554,9 +1679,9 @@
     function lockAdmin() {
       isAdmin = false;
       document.getElementById('adminNotice').classList.add('hidden');
-      document.getElementById('modeBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Mode Públic (Només Lectura)</span>`;
+      document.getElementById('modeBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Mode Públic</span>`;
       document.getElementById('modeBadge').className = "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-950/60 border border-emerald-800/50 text-emerald-400";
-      document.getElementById('adminBtnText').textContent = "Panell Admin";
+      document.getElementById('adminBtnText').textContent = "Intern";
       renderDashboard();
     }
 

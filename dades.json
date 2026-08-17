@@ -34,10 +34,13 @@
       "photo": "img/marcos1.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 0,
-          "goalsAgainst": 0,
-          "min": 0,
-          "yellow": 0
+          "pj": 3,
+          "goalsAgainst": 3,
+          "min": 135,
+          "yellow": 0,
+          "goals": 0,
+          "assists": 0,
+          "red": 0
         }
       }
     },
@@ -47,7 +50,17 @@
       "name": "Álvaro Pacheco",
       "pos": "Porter",
       "photo": "img/alvaro1.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 3,
@@ -55,7 +68,17 @@
       "name": "Ferran Ruíz",
       "pos": "Defensa",
       "photo": "img/ferran.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 4,
@@ -63,7 +86,17 @@
       "name": "Paulo Auzokoa",
       "pos": "Defensa",
       "photo": "img/paulo.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 1,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 5,
@@ -71,7 +104,17 @@
       "name": "Iker Reche",
       "pos": "Defensa",
       "photo": "img/reche.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 2,
+          "min": 90,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 6,
@@ -79,7 +122,17 @@
       "name": "Gabri Clemente",
       "pos": "Defensa",
       "photo": "img/gabri.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 7,
@@ -87,7 +140,17 @@
       "name": "Adrián Beamonte",
       "pos": "Defensa",
       "photo": "img/adrian.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 8,
@@ -95,7 +158,17 @@
       "name": "Fran Moreno",
       "pos": "Defensa",
       "photo": "img/fran.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 1,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 9,
@@ -103,7 +176,17 @@
       "name": "Sem Dirks",
       "pos": "Defensa",
       "photo": "img/diks.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 10,
@@ -111,7 +194,17 @@
       "name": "Mario Domingo",
       "pos": "Defensa",
       "photo": "img/mario.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 1,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 11,
@@ -119,7 +212,17 @@
       "name": "Aser Palacios",
       "pos": "Defensa",
       "photo": "img/aser.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 12,
@@ -127,7 +230,17 @@
       "name": "Cristian Mármol",
       "pos": "Migcampista",
       "photo": "img/marmol.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 13,
@@ -135,7 +248,17 @@
       "name": "Ekaitz Molina",
       "pos": "Migcampista",
       "photo": "img/molina.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 14,
@@ -143,7 +266,17 @@
       "name": "Jaime Barrero",
       "pos": "Migcampista",
       "photo": "img/barrero.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 1,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 15,
@@ -151,7 +284,17 @@
       "name": "Sergio Cortés",
       "pos": "Migcampista",
       "photo": "img/cortes.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 16,
@@ -159,7 +302,17 @@
       "name": "Albert Celma",
       "pos": "Migcampista",
       "photo": "img/celma.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 1,
+          "min": 45,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 17,
@@ -167,7 +320,17 @@
       "name": "Sergio Montero",
       "pos": "Davanter",
       "photo": "img/montero.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 18,
@@ -175,7 +338,17 @@
       "name": "Alberto Gutiérrez",
       "pos": "Davanter",
       "photo": "img/guti.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 3,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 19,
@@ -183,7 +356,17 @@
       "name": "Larry Kelechi",
       "pos": "Davanter",
       "photo": "img/larry.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 1,
+          "min": 45,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 20,
@@ -191,7 +374,17 @@
       "name": "Max Marcet",
       "pos": "Davanter",
       "photo": "img/max.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 21,
@@ -199,7 +392,17 @@
       "name": "Nahuel Arroyo",
       "pos": "Davanter",
       "photo": "img/nahuel.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 22,
@@ -207,7 +410,17 @@
       "name": "Marcos Mendes",
       "pos": "Davanter",
       "photo": "img/mendes.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 3,
+          "min": 135,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 23,
@@ -215,7 +428,17 @@
       "name": "Dano Lourens",
       "pos": "Davanter",
       "photo": "img/dano.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 2,
+          "min": 90,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 24,
@@ -223,7 +446,17 @@
       "name": "Frodo",
       "pos": "Davanter",
       "photo": "img/frodo.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 1,
+          "min": 45,
+          "goals": 1,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     },
     {
       "id": 25,
@@ -231,8 +464,661 @@
       "name": "Pau Santanach",
       "pos": "Davanter",
       "photo": "img/pau.jpg",
-      "stats": {}
+      "stats": {
+        "comp_1786709158400": {
+          "pj": 2,
+          "min": 90,
+          "goals": 0,
+          "goalsAgainst": 0,
+          "assists": 0,
+          "yellow": 0,
+          "red": 0
+        }
+      }
     }
   ],
-  "matches": []
+  "matches": [
+    {
+      "id": 1,
+      "rival": "FC L'Escala",
+      "date": "1r Partit (05/08/2026)",
+      "compId": "comp_1786709158400",
+      "condition": "Fora",
+      "logo": "img/rivals/escala.png",
+      "gf": 1,
+      "gc": 0,
+      "scorers": "Jaime Barrero",
+      "yellows": "",
+      "reds": "",
+      "notes": "",
+      "matchPlayers": [
+        {
+          "id": 1,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 2,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 3,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 4,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 6,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 7,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 8,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 9,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 10,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 11,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 12,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 13,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 14,
+          "min": 45,
+          "gf": 1,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 15,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 16,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 17,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 18,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 20,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 21,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 22,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 23,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 25,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "rival": "CF Peralada",
+      "date": "2n Partit (05/08/2026)",
+      "compId": "comp_1786709158400",
+      "condition": "Fora",
+      "logo": "img/rivals/peralada.png",
+      "gf": 2,
+      "gc": 1,
+      "scorers": "Fran Moreno, Alberto Gutiérrez",
+      "yellows": "",
+      "reds": "",
+      "notes": "9' - Sergio Cortés falla un penal.",
+      "matchPlayers": [
+        {
+          "id": 1,
+          "min": 45,
+          "gf": 0,
+          "gc": 1,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 2,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 3,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 4,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 5,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 6,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 7,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 8,
+          "min": 45,
+          "gf": 1,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 9,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 10,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 11,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 12,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 13,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 14,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 15,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 17,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 18,
+          "min": 45,
+          "gf": 1,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 19,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 20,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 21,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 22,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 25,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "rival": "Girona FC 'B'",
+      "date": "3r Partit (15/08/2026)",
+      "compId": "comp_1786709158400",
+      "condition": "Fora",
+      "logo": "img/rivals/girona.png",
+      "gf": 3,
+      "gc": 2,
+      "scorers": "Alberto Gutiérrez (x2), Frodo",
+      "yellows": "",
+      "reds": "",
+      "notes": "",
+      "matchPlayers": [
+        {
+          "id": 1,
+          "min": 45,
+          "gf": 0,
+          "gc": 2,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 2,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 3,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 4,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 1,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 5,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 6,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 7,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 8,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 9,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 10,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 1,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 11,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 12,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 13,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 14,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 15,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 17,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 18,
+          "min": 45,
+          "gf": 2,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 20,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 21,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 22,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 23,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 24,
+          "min": 45,
+          "gf": 1,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        }
+      ]
+    }
+  ]
 }

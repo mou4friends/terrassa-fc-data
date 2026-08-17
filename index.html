@@ -107,8 +107,8 @@
     <!-- VISTA 1: VISTA PRINCIPAL (COMPETICIONS / TOTAL ACUMULAT) -->
     <div id="mainStatsView" class="space-y-6">
 
-      <!-- 1. TARGETES KPI RESUM GLOBALS -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <!-- 1. TARGETES KPI RESUM GLOBALS (AJUSTAT A 5 COLUMNES) -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between relative overflow-hidden">
           <div class="flex items-center justify-between text-red-400 mb-1">
             <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Gols a Favor</span>
@@ -139,14 +139,6 @@
             <i data-lucide="sparkles" class="w-4 h-4"></i>
           </div>
           <p id="kpiAssists" class="text-2xl font-black text-white">0</p>
-        </div>
-
-        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between relative overflow-hidden">
-          <div class="flex items-center justify-between text-amber-400 mb-1">
-            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Minuts Totals</span>
-            <i data-lucide="clock" class="w-4 h-4"></i>
-          </div>
-          <p id="kpiMinutes" class="text-2xl font-black text-white">0'</p>
         </div>
 
         <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between relative overflow-hidden">
@@ -387,7 +379,7 @@
             <i data-lucide="file-plus" class="w-4 h-4"></i>
           </div>
           <div>
-            <h3 class="font-bold text-white text-base">Acta de Partit & Participació de Jugadors</h3>
+            <h3 id="modalMatchTitle" class="font-bold text-white text-base">Formulari de Partit</h3>
             <p class="text-[11px] text-slate-400">En desar, les dades de cada jugador es bolcaran directament a la competició seleccionada.</p>
           </div>
         </div>
@@ -630,7 +622,7 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT AMB SUPORT PER CARREGAR DADES.JSON -->
+  <!-- JAVASCRIPT AMB LÒGICA D'ACTES I CÀLCUL DELTA -->
   <script>
     const getInitialsAvatar = (name) => {
       return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1e293b&color=cbd5e1&bold=true&size=128`;
@@ -643,6 +635,7 @@
     let isAdmin = false;
     let selectedPlayerForPhoto = null;
     let tempUploadedBase64 = null;
+    let editingMatchId = null; // NOVETAT: control per saber si creem o editem acta
     const ADMIN_PASS = "egarareds2026";
 
     function isPorter(pos) {
@@ -651,7 +644,7 @@
       return clean === "porter" || clean === "portero" || clean === "gk" || clean === "goalkeeper";
     }
 
-    // CARREGA DADES DE DADES.JSON O DE LOCALSTORAGE SI ESTÀS EDITANT
+    // CARREGA DADES DE DADES.JSON O DE LOCALSTORAGE
     async function loadData() {
       const savedComps = localStorage.getItem("terrassa_comps_v13");
       const savedPlayers = localStorage.getItem("terrassa_players_v13");
@@ -871,7 +864,10 @@
                 <div class="flex items-center gap-1.5">
                   ${conditionBadge}
                   ${isAdmin ? `
-                    <button onclick="deleteMatch(${m.id})" title="Eliminar aquesta acta" class="p-1 bg-slate-900 hover:bg-rose-900/80 text-slate-500 hover:text-rose-200 rounded-lg border border-slate-800 transition">
+                    <button onclick="editMatch(${m.id})" title="Editar aquesta acta" class="p-1.5 bg-slate-900 hover:bg-amber-900/80 text-slate-500 hover:text-amber-200 rounded-lg border border-slate-800 transition">
+                      <i data-lucide="edit" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <button onclick="deleteMatch(${m.id})" title="Eliminar aquesta acta" class="p-1.5 bg-slate-900 hover:bg-rose-900/80 text-slate-500 hover:text-rose-200 rounded-lg border border-slate-800 transition">
                       <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                     </button>
                   ` : ''}
@@ -926,7 +922,7 @@
       content.innerHTML = `
         <div class="flex items-center justify-center gap-6 bg-slate-950 p-4 rounded-2xl border border-slate-800">
           <div class="text-center">
-            <img src="img/escut.png" alt="Escut Terrassa" class="w-12 h-12 object-contain rounded-xl bg-slate-900 p-1 mx-auto mb-1 border border-slate-800" onerror="this.src='https://ui-avatars.com/api/?name=TFC&background=C8102E&color=fff&bold=true&size=128'" />
+            <div class="w-12 h-12 rounded-xl bg-brand-red flex items-center justify-center font-black text-white text-xl mx-auto mb-1">T</div>
             <p class="font-extrabold text-white text-xs">Terrassa FC</p>
             <span class="text-2xl font-black text-emerald-400">${match.gf}</span>
           </div>
@@ -979,13 +975,101 @@
       document.getElementById('matchDetailModal').classList.add('hidden');
     }
 
+    // LÒGICA DE DESFER ACTES EN ELIMINAR O EDITAR
+    function removeMatchStatsFromPlayers(match) {
+      if (!match || !match.matchPlayers) return;
+      match.matchPlayers.forEach(mp => {
+        const p = players.find(x => x.id === mp.id);
+        if (p && p.stats && p.stats[match.compId]) {
+          p.stats[match.compId].pj = Math.max(0, (p.stats[match.compId].pj || 0) - 1);
+          p.stats[match.compId].min = Math.max(0, (p.stats[match.compId].min || 0) - mp.min);
+          p.stats[match.compId].goals = Math.max(0, (p.stats[match.compId].goals || 0) - mp.gf);
+          p.stats[match.compId].goalsAgainst = Math.max(0, (p.stats[match.compId].goalsAgainst || 0) - mp.gc);
+          p.stats[match.compId].assists = Math.max(0, (p.stats[match.compId].assists || 0) - mp.as);
+          p.stats[match.compId].yellow = Math.max(0, (p.stats[match.compId].yellow || 0) - mp.yel);
+          p.stats[match.compId].red = Math.max(0, (p.stats[match.compId].red || 0) - mp.red);
+        }
+      });
+    }
+
     function deleteMatch(matchId) {
       const match = matches.find(m => m.id === matchId);
       if (!match) return;
-      if (confirm(`Vols eliminar l'acta del partit contra ${match.rival}?`)) {
+      if (confirm(`Estàs segur d'eliminar l'acta contra ${match.rival}? Els gols i targetes d'aquest partit es restaran automàticament de l'historial dels jugadors.`)) {
+        removeMatchStatsFromPlayers(match); // Desfer els números del partit eliminat
         matches = matches.filter(m => m.id !== matchId);
         saveData();
       }
+    }
+
+    function editMatch(matchId) {
+      const match = matches.find(m => m.id === matchId);
+      if (!match) return;
+
+      editingMatchId = matchId; // Activem el mode edició
+      document.getElementById("modalMatchTitle").textContent = "Editar Acta de Partit";
+
+      const select = document.getElementById("matchCompSelect");
+      select.innerHTML = competitions.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+      select.value = match.compId;
+
+      document.getElementById("rivalNameInput").value = match.rival || '';
+      document.getElementById("matchDateInput").value = match.date || '';
+      document.getElementById("rivalLogoInput").value = match.logo || '';
+      document.getElementById("matchConditionSelect").value = match.condition || 'Casa';
+      document.getElementById("matchGFTerrassa").value = match.gf || 0;
+      document.getElementById("matchGCRival").value = match.gc || 0;
+      document.getElementById("matchNotesInput").value = match.notes || '';
+
+      const tbody = document.getElementById("matchPlayersListBody");
+      tbody.innerHTML = players.map(p => {
+        const porter = isPorter(p.pos);
+        // Buscar si el jugador va jugar aquest partit per restaurar els seus valors al formulari
+        const savedMp = (match.matchPlayers || []).find(x => x.id === p.id);
+        const isChecked = savedMp ? 'checked' : '';
+        const minVal = savedMp ? savedMp.min : 0;
+        const gfVal = savedMp ? savedMp.gf : 0;
+        const gcVal = savedMp ? savedMp.gc : 0;
+        const asVal = savedMp ? savedMp.as : 0;
+        const yelVal = savedMp ? savedMp.yel : 0;
+        const redVal = savedMp ? savedMp.red : 0;
+        const disabledState = savedMp ? '' : 'disabled';
+
+        return `
+          <tr class="hover:bg-slate-900/60 transition border-b border-slate-800/40">
+            <td class="p-2 text-center">
+              <input type="checkbox" id="mp_pj_${p.id}" ${isChecked} onchange="togglePlayerMatchRow(${p.id})" class="rounded border-slate-700 text-rose-600 focus:ring-0 bg-slate-900 w-4 h-4 cursor-pointer" />
+            </td>
+            <td class="p-2 text-center font-bold text-slate-400">#${p.dorsal}</td>
+            <td class="p-2 font-semibold text-slate-200">
+              ${p.name}
+              <span class="text-[9px] text-slate-400 block">${p.pos}</span>
+            </td>
+            <td class="p-2 text-center">
+              <input type="number" id="mp_min_${p.id}" min="0" max="120" value="${minVal}" ${disabledState} class="w-14 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1.5 py-1 text-center text-white focus:border-red-500 focus:outline-none" />
+            </td>
+            <td class="p-2 text-center">
+              <input type="number" id="mp_gf_${p.id}" min="0" value="${gfVal}" ${disabledState} class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-400 font-bold focus:border-red-500 focus:outline-none" />
+            </td>
+            <td class="p-2 text-center">
+              ${porter ? `
+                <input type="number" id="mp_gc_${p.id}" min="0" value="${gcVal}" ${disabledState} class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-rose-400 font-bold focus:border-red-500 focus:outline-none" />
+              ` : `<span class="text-slate-600 text-xs">-</span><input type="hidden" id="mp_gc_${p.id}" value="0" />`}
+            </td>
+            <td class="p-2 text-center">
+              <input type="number" id="mp_as_${p.id}" min="0" value="${asVal}" ${disabledState} class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-indigo-400 font-bold focus:border-red-500 focus:outline-none" />
+            </td>
+            <td class="p-2 text-center">
+              <input type="number" id="mp_yel_${p.id}" min="0" max="2" value="${yelVal}" ${disabledState} class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-yellow-400 font-bold focus:border-red-500 focus:outline-none" />
+            </td>
+            <td class="p-2 text-center">
+              <input type="number" id="mp_red_${p.id}" min="0" max="1" value="${redVal}" ${disabledState} class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-500 font-bold focus:border-red-500 focus:outline-none" />
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById("matchModal").classList.remove("hidden");
     }
 
     function renderCycleAlerts() {
@@ -1059,14 +1143,13 @@
     }
 
     function renderKPIs() {
-      let totGoals = 0, totAssists = 0, totMin = 0, totYel = 0, totRed = 0, totGoalsAgainst = 0;
+      let totGoals = 0, totAssists = 0, totYel = 0, totRed = 0, totGoalsAgainst = 0;
 
       players.forEach(p => {
         const s = getPlayerStats(p, activeCompId);
         totGoals += s.goals;
         totGoalsAgainst += s.goalsAgainst;
         totAssists += s.assists;
-        totMin += s.min;
         totYel += s.yellow;
         totRed += s.red;
       });
@@ -1080,7 +1163,6 @@
       document.getElementById('kpiGoalDiff').textContent = diffSign;
       document.getElementById('kpiGoalDiff').className = `text-2xl font-black ${diffColorClass}`;
       document.getElementById('kpiAssists').textContent = totAssists;
-      document.getElementById('kpiMinutes').textContent = totMin.toLocaleString('ca-ES') + "'";
       document.getElementById('kpiCards').innerHTML = `<span class="text-yellow-400">${totYel}</span> / <span class="text-red-400">${totRed}</span>`;
     }
 
@@ -1363,6 +1445,9 @@
 
     // MODAL D'ACTA DE PARTIT AMB PLANTILLA COMPLETA
     function openAddMatchModal() {
+      editingMatchId = null; // Ens assegurem que estem en mode crear
+      document.getElementById("modalMatchTitle").textContent = "Formulari de Partit";
+
       const select = document.getElementById("matchCompSelect");
       select.innerHTML = competitions.map(c => `
         <option value="${c.id}">${c.name}</option>
@@ -1465,8 +1550,15 @@
       let scorersList = [];
       let yellowsList = [];
       let redsList = [];
+      let matchPlayers = []; // Aquí guardem tot el que ha fet cadascú en AQUEST partit
 
-      // Bolcat automàtic als jugadors
+      // Si estem editant, primer restem les dades velles als jugadors
+      if (editingMatchId) {
+        const oldMatch = matches.find(m => m.id === editingMatchId);
+        removeMatchStatsFromPlayers(oldMatch);
+      }
+
+      // Bolcat automàtic als jugadors i guardat de dades locals del partit
       players.forEach(p => {
         const pjChecked = document.getElementById(`mp_pj_${p.id}`)?.checked;
         if (pjChecked) {
@@ -1476,6 +1568,9 @@
           const mAs = Number(document.getElementById(`mp_as_${p.id}`).value) || 0;
           const mYel = Number(document.getElementById(`mp_yel_${p.id}`).value) || 0;
           const mRed = Number(document.getElementById(`mp_red_${p.id}`).value) || 0;
+
+          // Guardem per a l'historial intern d'aquest partit
+          matchPlayers.push({ id: p.id, min: mMin, gf: mGf, gc: mGc, as: mAs, yel: mYel, red: mRed });
 
           // Assegurar estructura d'stats
           if (!p.stats) p.stats = {};
@@ -1499,21 +1594,23 @@
         }
       });
 
-      const nextId = matches.length > 0 ? (Math.max(...matches.map(m => m.id)) + 1) : 1;
-      matches.push({
-        id: nextId,
-        rival,
-        date,
-        compId,
-        condition,
-        logo,
-        gf,
-        gc,
+      const matchData = {
+        rival, date, compId, condition, logo, gf, gc,
         scorers: scorersList.join(', '),
         yellows: yellowsList.join(', '),
         reds: redsList.join(', '),
-        notes
-      });
+        notes,
+        matchPlayers
+      };
+
+      if (editingMatchId) {
+        const idx = matches.findIndex(m => m.id === editingMatchId);
+        matches[idx] = { id: editingMatchId, ...matchData };
+        editingMatchId = null; // Tanquem el mode edició
+      } else {
+        const nextId = matches.length > 0 ? (Math.max(...matches.map(m => m.id)) + 1) : 1;
+        matches.push({ id: nextId, ...matchData });
+      }
 
       saveData();
       closeAddMatchModal();

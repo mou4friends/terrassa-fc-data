@@ -183,7 +183,7 @@
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
-          "yellow": 0,
+          "yellow": 1,
           "red": 0
         }
       }
@@ -291,7 +291,7 @@
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
-          "yellow": 0,
+          "yellow": 1,
           "red": 0
         }
       }
@@ -417,7 +417,7 @@
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
-          "yellow": 0,
+          "yellow": 1,
           "red": 0
         }
       }
@@ -702,9 +702,9 @@
       "gf": 2,
       "gc": 1,
       "scorers": "Fran Moreno, Alberto Gutiérrez",
-      "yellows": "",
+      "yellows": "Sem Dirks, Sergio Cortés, Marcos Mendes",
       "reds": "",
-      "notes": "9' - Sergio Cortés falla un penal.",
+      "notes": "9' - Sergio Cortés falla un penal.\n61' - Marcos Mendes falla un penal.",
       "matchPlayers": [
         {
           "id": 1,
@@ -784,7 +784,7 @@
           "gf": 0,
           "gc": 0,
           "as": 0,
-          "yel": 0,
+          "yel": 1,
           "red": 0
         },
         {
@@ -838,7 +838,7 @@
           "gf": 0,
           "gc": 0,
           "as": 0,
-          "yel": 0,
+          "yel": 1,
           "red": 0
         },
         {
@@ -892,7 +892,7 @@
           "gf": 0,
           "gc": 0,
           "as": 0,
-          "yel": 0,
+          "yel": 1,
           "red": 0
         },
         {
@@ -918,7 +918,7 @@
       "scorers": "Alberto Gutiérrez (x2), Frodo",
       "yellows": "",
       "reds": "",
-      "notes": "",
+      "notes": "Partit a porta tancada, desconeixement de targetes.",
       "matchPlayers": [
         {
           "id": 1,

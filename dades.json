@@ -42,6 +42,10 @@
           "assists": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -60,6 +64,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -78,6 +86,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -96,6 +108,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -114,6 +130,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -132,6 +152,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -150,6 +174,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -168,6 +196,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -186,6 +218,10 @@
           "yellow": 1,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -204,6 +240,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -222,6 +262,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -240,6 +284,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -258,6 +306,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -276,6 +328,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -294,6 +350,10 @@
           "yellow": 1,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -312,6 +372,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": true,
+        "notes": "Molesties"
       }
     },
     {
@@ -330,6 +394,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -348,6 +416,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -366,6 +438,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -384,6 +460,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -402,6 +482,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -420,6 +504,10 @@
           "yellow": 1,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -438,6 +526,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -456,6 +548,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     },
     {
@@ -474,6 +570,10 @@
           "yellow": 0,
           "red": 0
         }
+      },
+      "injury": {
+        "isInjured": false,
+        "notes": ""
       }
     }
   ],

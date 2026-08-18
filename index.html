@@ -235,7 +235,7 @@
               <span class="text-cyan-400 font-bold">🧤</span>
               <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Porters (GC)</h2>
             </div>
-            <span class="text-[9px] font-bold text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded-full border border-cyan-900/60">Encai.</span>
+            <span class="text-[9px] font-bold text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded-full border border-cyan-900/60">GC/90m</span>
           </div>
           <div id="podiumKeepers" class="space-y-2 flex-1"></div>
         </div>
@@ -321,9 +321,9 @@
                 <th class="py-3 px-3 text-center w-16 text-red-400 font-bold">GF ⚽</th>
                 <th class="py-3 px-3 text-center w-16 text-rose-400 font-bold">GC 🧤</th>
                 <th class="py-3 px-3 text-center w-16 text-indigo-400 font-bold">Assist. 🎯</th>
-                <!-- NOVES COLUMNES: Minuts per Gol i per Assistència -->
-                <th class="py-3 px-3 text-center w-20 text-emerald-400 font-bold">Min/Gol</th>
-                <th class="py-3 px-3 text-center w-20 text-sky-400 font-bold">Min/Assist</th>
+                <!-- NOVES COLUMNES PER 90 MINUTS -->
+                <th class="py-3 px-3 text-center w-20 text-emerald-400 font-bold">Gol/90m</th>
+                <th class="py-3 px-3 text-center w-20 text-sky-400 font-bold">Assist/90m</th>
                 <th class="py-3 px-3 text-center w-14 text-yellow-400 font-bold">🟨</th>
                 <th class="py-3 px-3 text-center min-w-[125px] text-amber-300">Cicle Grogues</th>
                 <th class="py-3 px-3 text-center w-14 text-red-500 font-bold">🟥</th>
@@ -911,7 +911,7 @@
       grid.innerHTML = sortedMatches.map(m => {
         const compObj = competitions.find(c => c.id === m.compId);
         const compName = compObj ? (compObj.short || compObj.name) : "Torneig";
-        const logoHTML = m.logo ? `<img src="${m.logo}" class="w-10 h-10 object-contain rounded-xl bg-slate-900 p-1 border border-slate-800 shrink-0 shadow" />` : `<div class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-xl border border-slate-800 shrink-0">🛡️</div>`;
+        const logoHTML = m.logo ? `<img src="${m.logo}" class="w-10 h-10 object-contain shrink-0" />` : `<div class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-xl border border-slate-800 shrink-0">🛡️</div>`;
         
         const isHome = (m.condition === "Casa" || !m.condition);
         const conditionBadge = isHome 
@@ -991,7 +991,7 @@
           </div>
           <span class="text-slate-600 font-black text-xl">-</span>
           <div class="text-center">
-            ${match.logo ? `<img src="${match.logo}" class="w-12 h-12 object-contain rounded-xl bg-slate-900 p-1 mx-auto mb-1 border border-slate-800" />` : `<div class="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-xl mx-auto mb-1 border border-slate-800">🛡️</div>`}
+            ${match.logo ? `<img src="${match.logo}" class="w-12 h-12 object-contain mx-auto mb-1" />` : `<div class="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-xl mx-auto mb-1 border border-slate-800">🛡️</div>`}
             <p class="font-extrabold text-white text-xs">${match.rival}</p>
             <span class="text-2xl font-black text-rose-400">${match.gc}</span>
           </div>
@@ -1273,6 +1273,8 @@
         }
         const p = item.player;
         const finalNumColor = medalCustomClass || m.numColor;
+        const displayValue = item.displayVal !== undefined ? item.displayVal : item.val;
+        
         return `
           <div class="flex items-center justify-between p-2 rounded-xl border ${m.bg} text-xs transition hover:scale-[1.01]">
             <div class="flex items-center gap-1.5 min-w-0">
@@ -1284,7 +1286,7 @@
               </div>
             </div>
             <div class="text-right shrink-0 pl-1">
-              <span class="text-sm font-black ${finalNumColor}">${item.val}</span>
+              <span class="text-sm font-black ${finalNumColor}">${displayValue}</span>
               <span class="text-[9px] text-slate-400 block -mt-1">${suffix}</span>
             </div>
           </div>
@@ -1303,16 +1305,20 @@
       document.getElementById('podiumGoals').innerHTML = buildPodiumHTML(sortedGoals, 'val', 'Gols', 'text-red-400');
 
       const allKeepers = playerStatList.filter(x => isPorter(x.player.pos));
-      const keepersSorted = allKeepers.map(x => ({
-        player: x.player,
-        val: x.stats.goalsAgainst,
-        min: x.stats.min,
-        pj: x.stats.pj,
-        isKeeper: true
-      })).sort((a, b) => {
+      const keepersSorted = allKeepers.map(x => {
+        const gc90 = x.stats.min > 0 ? ((x.stats.goalsAgainst / x.stats.min) * 90) : 0;
+        return {
+          player: x.player,
+          val: gc90,
+          displayVal: x.stats.min > 0 ? gc90.toFixed(2) : "-",
+          min: x.stats.min,
+          pj: x.stats.pj,
+          isKeeper: true
+        };
+      }).sort((a, b) => {
         if (a.pj > 0 && b.pj === 0) return -1;
         if (a.pj === 0 && b.pj > 0) return 1;
-        if (a.val !== b.val) return a.val - b.val;
+        if (a.val !== b.val) return a.val - b.val; // Menos es millor (Pocs GC per 90m)
         return b.min - a.min;
       });
 
@@ -1371,9 +1377,9 @@
         const s = getPlayerStats(p, activeCompId);
         const porter = isPorter(p.pos);
         
-        // NOVES MÈTRIQUES: Min/Gol i Min/Assistència
-        const minPerGol = s.goals > 0 ? Math.round(s.min / s.goals) : "-";
-        const minPerAssist = s.assists > 0 ? Math.round(s.min / s.assists) : "-";
+        // CÀLCULS PER 90 MINUTS
+        const gol90 = s.min > 0 ? ((s.goals / s.min) * 90).toFixed(2) : "0.00";
+        const assist90 = s.min > 0 ? ((s.assists / s.min) * 90).toFixed(2) : "0.00";
         
         let posBadge = "bg-slate-800 text-slate-300";
         if(p.pos === 'Davanter') posBadge = "bg-red-950/70 text-red-300 border border-red-800/40";
@@ -1405,7 +1411,6 @@
           cycleStatusBadge = `<span class="text-[9px] text-slate-500">${currentInCycle}/5</span>`;
         }
 
-        // Si està lesionat, posem l'avatar en blanc i negre i un petit badge
         const injuryOverlay = (p.injury && p.injury.isInjured) ? `<div class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-blue-500 rounded-full border border-slate-900 flex items-center justify-center" title="Lesionat"><i data-lucide="stethoscope" class="w-2 h-2 text-white"></i></div>` : "";
         const imgFilter = (p.injury && p.injury.isInjured) ? "grayscale brightness-75 opacity-70" : "";
 
@@ -1465,9 +1470,8 @@
               ${isAdmin ? `<input type="number" min="0" value="${s.assists}" onchange="setPlayerStat(${p.id}, 'assists', this.value)" class="${editableClass} text-indigo-400 font-bold" />` : s.assists}
             </td>
             
-            <!-- NOVES COLUMNES MINUTS / RATIOS -->
-            <td class="py-2.5 px-3 text-center text-emerald-400 font-medium">${minPerGol !== "-" ? minPerGol + "'" : "-"}</td>
-            <td class="py-2.5 px-3 text-center text-sky-400 font-medium">${minPerAssist !== "-" ? minPerAssist + "'" : "-"}</td>
+            <td class="py-2.5 px-3 text-center text-emerald-400 font-medium">${gol90 !== "0.00" ? gol90 : "-"}</td>
+            <td class="py-2.5 px-3 text-center text-sky-400 font-medium">${assist90 !== "0.00" ? assist90 : "-"}</td>
             
             <td class="py-2.5 px-3 text-center text-yellow-400 font-bold">
               ${isAdmin ? `<input type="number" min="0" value="${s.yellow}" onchange="setPlayerStat(${p.id}, 'yellow', this.value)" class="${editableClass}" />` : s.yellow}

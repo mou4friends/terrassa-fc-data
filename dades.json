@@ -34,9 +34,9 @@
       "photo": "img/marcos1.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
+          "pj": 4,
           "goalsAgainst": 3,
-          "min": 135,
+          "min": 180,
           "yellow": 0,
           "goals": 0,
           "assists": 0,
@@ -56,10 +56,10 @@
       "photo": "img/alvaro1.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 180,
           "goals": 0,
-          "goalsAgainst": 0,
+          "goalsAgainst": 1,
           "assists": 0,
           "yellow": 0,
           "red": 0
@@ -78,8 +78,8 @@
       "photo": "img/ferran.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 165,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
@@ -100,8 +100,8 @@
       "photo": "img/paulo.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 195,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 1,
@@ -122,8 +122,8 @@
       "photo": "img/reche.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 2,
-          "min": 90,
+          "pj": 3,
+          "min": 150,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
@@ -144,8 +144,8 @@
       "photo": "img/gabri.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 165,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
@@ -166,9 +166,9 @@
       "photo": "img/adrian.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
-          "goals": 0,
+          "pj": 4,
+          "min": 195,
+          "goals": 1,
           "goalsAgainst": 0,
           "assists": 0,
           "yellow": 0,
@@ -188,8 +188,8 @@
       "photo": "img/fran.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 165,
           "goals": 1,
           "goalsAgainst": 0,
           "assists": 0,
@@ -210,12 +210,12 @@
       "photo": "img/diks.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 195,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
-          "yellow": 1,
+          "yellow": 2,
           "red": 0
         }
       },
@@ -232,8 +232,8 @@
       "photo": "img/mario.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 195,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 1,
@@ -254,8 +254,8 @@
       "photo": "img/aser.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 165,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
@@ -276,8 +276,8 @@
       "photo": "img/marmol.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 165,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
@@ -298,8 +298,8 @@
       "photo": "img/molina.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 195,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
@@ -320,8 +320,8 @@
       "photo": "img/barrero.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 165,
           "goals": 1,
           "goalsAgainst": 0,
           "assists": 0,
@@ -342,11 +342,11 @@
       "photo": "img/cortes.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 195,
           "goals": 0,
           "goalsAgainst": 0,
-          "assists": 0,
+          "assists": 1,
           "yellow": 1,
           "red": 0
         }
@@ -386,9 +386,9 @@
       "photo": "img/montero.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
-          "goals": 0,
+          "pj": 4,
+          "min": 165,
+          "goals": 1,
           "goalsAgainst": 0,
           "assists": 0,
           "yellow": 0,
@@ -408,11 +408,11 @@
       "photo": "img/guti.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 165,
           "goals": 3,
           "goalsAgainst": 0,
-          "assists": 0,
+          "assists": 1,
           "yellow": 0,
           "red": 0
         }
@@ -452,8 +452,8 @@
       "photo": "img/max.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 165,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
@@ -474,8 +474,8 @@
       "photo": "img/nahuel.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 195,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
@@ -496,8 +496,8 @@
       "photo": "img/mendes.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 3,
-          "min": 135,
+          "pj": 4,
+          "min": 195,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
@@ -518,8 +518,8 @@
       "photo": "img/dano.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 2,
-          "min": 90,
+          "pj": 3,
+          "min": 150,
           "goals": 0,
           "goalsAgainst": 0,
           "assists": 0,
@@ -540,8 +540,8 @@
       "photo": "img/frodo.jpg",
       "stats": {
         "comp_1786709158400": {
-          "pj": 1,
-          "min": 45,
+          "pj": 2,
+          "min": 75,
           "goals": 1,
           "goalsAgainst": 0,
           "assists": 0,
@@ -1213,6 +1213,220 @@
           "id": 24,
           "min": 45,
           "gf": 1,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "rival": "CP San Cristóbal",
+      "date": "4t Partit (18/08/2026)",
+      "compId": "comp_1786709158400",
+      "condition": "Casa",
+      "logo": "img/rivals/sancris.png",
+      "gf": 2,
+      "gc": 1,
+      "scorers": "Adrián Beamonte, Sergio Montero",
+      "yellows": "Sem Dirks",
+      "reds": "",
+      "notes": "Partit retransmés a https://www.twitch.tv/mou4friends",
+      "matchPlayers": [
+        {
+          "id": 1,
+          "min": 45,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 2,
+          "min": 45,
+          "gf": 0,
+          "gc": 1,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 3,
+          "min": 30,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 4,
+          "min": 60,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 5,
+          "min": 60,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 6,
+          "min": 30,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 7,
+          "min": 60,
+          "gf": 1,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 8,
+          "min": 30,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 9,
+          "min": 60,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 1,
+          "red": 0
+        },
+        {
+          "id": 10,
+          "min": 60,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 11,
+          "min": 30,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 12,
+          "min": 30,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 13,
+          "min": 60,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 14,
+          "min": 30,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 15,
+          "min": 60,
+          "gf": 0,
+          "gc": 0,
+          "as": 1,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 17,
+          "min": 30,
+          "gf": 1,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 18,
+          "min": 30,
+          "gf": 0,
+          "gc": 0,
+          "as": 1,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 20,
+          "min": 30,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 21,
+          "min": 60,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 22,
+          "min": 60,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 23,
+          "min": 60,
+          "gf": 0,
+          "gc": 0,
+          "as": 0,
+          "yel": 0,
+          "red": 0
+        },
+        {
+          "id": 24,
+          "min": 30,
+          "gf": 0,
           "gc": 0,
           "as": 0,
           "yel": 0,

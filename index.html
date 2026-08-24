@@ -322,6 +322,7 @@
           </table>
         </div>
       </div>
+
     </div>
 
     <!-- VISTA 2: PESTANYA D'ACTES DE PARTIT & HISTORIAL -->
@@ -753,10 +754,156 @@
       renderDashboard();
     }
 
-    // ACTUALITZAR DADES EN LOCAL PER ARA (En el següent pas ho enviarem a Supabase)
-    function saveData() {
-      console.log("Les dades locals han canviat. En el següent pas connectarem els botons de guardar a Supabase.");
-      renderDashboard();
+    // ESCRIPTURA EN SUPABASE
+    async function updatePlayerDetails(id, key, val) {
+      const idx = players.findIndex(p => p.id === id);
+      if (idx !== -1) {
+        if (key === 'dorsal') players[idx].dorsal = Number(val) || 0;
+        else players[idx][key] = val;
+        
+        // Ho enviem a Supabase silenciosament
+        let dbKey = key;
+        if (key === 'dorsal') dbKey = 'dorsal';
+        
+        await supabaseClient.from('players').update({ [dbKey]: players[idx][dbKey] }).eq('id', id);
+      }
+    }
+
+    async function submitNewMatch(e) {
+      e.preventDefault();
+      const rival = document.getElementById("rivalNameInput").value.trim();
+      const date = document.getElementById("matchDateInput").value.trim();
+      const compId = document.getElementById("matchCompSelect").value;
+      const condition = document.getElementById("matchConditionSelect").value;
+      const logo = document.getElementById("rivalLogoInput").value.trim();
+      const gf = Number(document.getElementById("matchGFTerrassa").value) || 0;
+      const gc = Number(document.getElementById("matchGCRival").value) || 0;
+      const notes = document.getElementById("matchNotesInput").value.trim();
+
+      if (!rival) return;
+
+      let scorersList = [];
+      let yellowsList = [];
+      let redsList = [];
+      let matchPlayers = []; 
+
+      players.forEach(p => {
+        const pjChecked = document.getElementById(`mp_pj_${p.id}`)?.checked;
+        if (pjChecked) {
+          const mMin = Number(document.getElementById(`mp_min_${p.id}`).value) || 0;
+          const mGf = Number(document.getElementById(`mp_gf_${p.id}`).value) || 0;
+          const mGc = Number(document.getElementById(`mp_gc_${p.id}`)?.value) || 0;
+          const mAs = Number(document.getElementById(`mp_as_${p.id}`).value) || 0;
+          const mYel = Number(document.getElementById(`mp_yel_${p.id}`).value) || 0;
+          const mRed = Number(document.getElementById(`mp_red_${p.id}`).value) || 0;
+
+          matchPlayers.push({ player_id: p.id, minutes: mMin, gf: mGf, gc: mGc, assists: mAs, yellow: mYel, red: mRed });
+
+          if (mGf > 0) scorersList.push(`${p.name}${mGf > 1 ? ` (x${mGf})` : ''}`);
+          if (mYel > 0) yellowsList.push(`${p.name}${mYel > 1 ? ` (x${mYel})` : ''}`);
+          if (mRed > 0) redsList.push(p.name);
+        }
+      });
+
+      const matchData = {
+        rival, match_date: date, comp_id: compId, condition, logo, gf, gc,
+        scorers: scorersList.join(', '),
+        yellows: yellowsList.join(', '),
+        reds: redsList.join(', '),
+        notes
+      };
+
+      let currentMatchId = editingMatchId;
+
+      if (editingMatchId) {
+        await supabaseClient.from('matches').update(matchData).eq('id', editingMatchId);
+        await supabaseClient.from('match_players').delete().eq('match_id', editingMatchId);
+      } else {
+        const nextId = matches.length > 0 ? (Math.max(...matches.map(m => m.id)) + 1) : 1;
+        matchData.id = nextId;
+        currentMatchId = nextId;
+        await supabaseClient.from('matches').insert([matchData]);
+      }
+
+      if (matchPlayers.length > 0) {
+         const mpPayload = matchPlayers.map(mp => ({ ...mp, match_id: currentMatchId }));
+         await supabaseClient.from('match_players').insert(mpPayload);
+      }
+
+      editingMatchId = null;
+      closeAddMatchModal();
+      await loadData();
+    }
+
+    async function deleteMatch(matchId) {
+      if (confirm(`Estàs segur d'eliminar l'acta?`)) {
+        await supabaseClient.from('matches').delete().eq('id', matchId);
+        await loadData();
+      }
+    }
+
+    async function saveInjuryStatus() {
+      if (!selectedPlayerForInjury) return;
+      const status = document.getElementById('injuryStatusSelect').value;
+      const notes = document.getElementById('injuryNotesInput').value.trim();
+      const isInjured = status === 'Lesionat';
+      
+      await supabaseClient.from('players').update({ is_injured: isInjured, injury_notes: isInjured ? notes : '' }).eq('id', selectedPlayerForInjury.id);
+      
+      closeInjuryModal();
+      await loadData();
+    }
+
+    async function addNewCompetition() {
+      const name = document.getElementById("newCompName").value.trim();
+      const logo = document.getElementById("newCompLogo").value.trim();
+      if (!name) return;
+      const id = "comp_" + Date.now();
+      await supabaseClient.from('competitions').insert([{ id, name, short_name: name.substring(0, 16), logo }]);
+      closeManageCompsModal();
+      await loadData();
+    }
+
+    async function removeCompetition(id) {
+      if (competitions.length <= 1) return alert("Has de mantenir com a mínim una competició.");
+      if (confirm("Segur que vols eliminar aquest torneig?")) {
+        await supabaseClient.from('competitions').delete().eq('id', id);
+        if (activeCompId === id) activeCompId = "ALL";
+        closeManageCompsModal();
+        await loadData();
+      }
+    }
+
+    async function submitNewPlayer(e) {
+      e.preventDefault();
+      const dorsal = Number(document.getElementById('newDorsal').value) || (players.length + 1);
+      const name = document.getElementById('newName').value.trim();
+      const pos = document.getElementById('newPos').value;
+      const photo = document.getElementById('newPhoto').value.trim();
+      if (!name) return;
+      const nextId = players.length > 0 ? (Math.max(...players.map(p => p.id)) + 1) : 1;
+      
+      await supabaseClient.from('players').insert([{ id: nextId, dorsal, name, pos, photo, is_injured: false, injury_notes: '' }]);
+      closeAddPlayerModal();
+      await loadData();
+    }
+
+    async function deletePlayer(id) {
+      const p = players.find(x => x.id === id);
+      if (!p) return;
+      if (confirm(`Vols eliminar a #${p.dorsal} ${p.name}?`)) {
+        await supabaseClient.from('players').delete().eq('id', id);
+        await loadData();
+      }
+    }
+
+    async function savePlayerPhoto() {
+      if (!selectedPlayerForPhoto) return;
+      const urlInput = document.getElementById('photoUrlInput').value.trim();
+      const finalPhoto = tempUploadedBase64 || urlInput || "";
+      await supabaseClient.from('players').update({ photo: finalPhoto }).eq('id', selectedPlayerForPhoto.id);
+      closePhotoModal();
+      await loadData();
     }
 
     function getPlayerImg(p) {
@@ -1003,32 +1150,6 @@
       document.getElementById('matchDetailModal').classList.add('hidden');
     }
 
-    function removeMatchStatsFromPlayers(match) {
-      if (!match || !match.matchPlayers) return;
-      match.matchPlayers.forEach(mp => {
-        const p = players.find(x => x.id === mp.id);
-        if (p && p.stats && p.stats[match.compId]) {
-          p.stats[match.compId].pj = Math.max(0, (p.stats[match.compId].pj || 0) - 1);
-          p.stats[match.compId].min = Math.max(0, (p.stats[match.compId].min || 0) - mp.min);
-          p.stats[match.compId].goals = Math.max(0, (p.stats[match.compId].goals || 0) - mp.gf);
-          p.stats[match.compId].goalsAgainst = Math.max(0, (p.stats[match.compId].goalsAgainst || 0) - mp.gc);
-          p.stats[match.compId].assists = Math.max(0, (p.stats[match.compId].assists || 0) - mp.as);
-          p.stats[match.compId].yellow = Math.max(0, (p.stats[match.compId].yellow || 0) - mp.yel);
-          p.stats[match.compId].red = Math.max(0, (p.stats[match.compId].red || 0) - mp.red);
-        }
-      });
-    }
-
-    function deleteMatch(matchId) {
-      const match = matches.find(m => m.id === matchId);
-      if (!match) return;
-      if (confirm(`Estàs segur d'eliminar l'acta contra ${match.rival}?`)) {
-        removeMatchStatsFromPlayers(match);
-        matches = matches.filter(m => m.id !== matchId);
-        saveData();
-      }
-    }
-
     function editMatch(matchId) {
       const match = matches.find(m => m.id === matchId);
       if (!match) return;
@@ -1080,6 +1201,18 @@
 
       document.getElementById("matchModal").classList.remove("hidden");
     }
+
+    function togglePlayerMatchRow(playerId) {
+      const isChecked = document.getElementById(`mp_pj_${playerId}`).checked;
+      const inputs = ['min', 'gf', 'gc', 'as', 'yel', 'red'].map(k => document.getElementById(`mp_${k}_${playerId}`));
+      inputs.forEach(input => {
+        if (input) input.disabled = !isChecked;
+      });
+      if (isChecked && Number(inputs[0].value) === 0) inputs[0].value = 90;
+      else if (!isChecked) inputs.forEach(input => { if (input) input.value = 0; });
+    }
+
+    function closeAddMatchModal() { document.getElementById("matchModal").classList.add("hidden"); }
 
     function renderCycleAlerts() {
       const sanctionedContainer = document.getElementById("sanctionedList");
@@ -1315,7 +1448,7 @@
         return `
           <tr class="hover:bg-slate-800/40 transition border-b border-slate-800/50">
             <td class="py-2.5 px-3 text-center text-slate-400 font-bold">
-              ${isAdmin ? `<input type="number" value="${p.dorsal}" class="bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-center text-xs text-slate-200 w-10 font-bold" />` : p.dorsal}
+              ${isAdmin ? `<input type="number" value="${p.dorsal}" onchange="updatePlayerDetails(${p.id}, 'dorsal', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-center text-xs text-slate-200 w-10 font-bold" />` : p.dorsal}
             </td>
             <td class="py-2.5 px-3 text-center">
               <div class="relative inline-block group">
@@ -1329,14 +1462,14 @@
               </div>
             </td>
             <td class="py-2.5 px-3">
-              ${isAdmin ? `<input type="text" value="${p.name}" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white w-full" />` : `
+              ${isAdmin ? `<input type="text" value="${p.name}" onchange="updatePlayerDetails(${p.id}, 'name', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white w-full" />` : `
                 <span class="font-bold text-slate-100">${p.name}</span>
                 ${(p.injury && p.injury.isInjured) ? `<span class="block text-[9px] text-blue-400 italic">Baixa</span>` : ''}
               `}
             </td>
             <td class="py-2.5 px-3 text-center">
               ${isAdmin ? `
-                <select class="bg-slate-950 border border-slate-700 text-xs rounded px-1 py-0.5 text-slate-200">
+                <select onchange="updatePlayerDetails(${p.id}, 'pos', this.value)" class="bg-slate-950 border border-slate-700 text-xs rounded px-1 py-0.5 text-slate-200">
                   <option value="Porter" ${porter?'selected':''}>Porter</option>
                   <option value="Defensa" ${p.pos==='Defensa'?'selected':''}>Defensa</option>
                   <option value="Migcampista" ${p.pos==='Migcampista'?'selected':''}>Migcampista</option>
@@ -1344,16 +1477,16 @@
                 </select>
               ` : `<span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${posBadge}">${p.pos}</span>`}
             </td>
-            <td class="py-2.5 px-3 text-center">${isAdmin ? `<input type="number" min="0" value="${s.pj}" class="${editableClass}" />` : s.pj}</td>
-            <td class="py-2.5 px-3 text-center text-slate-300">${isAdmin ? `<input type="number" min="0" value="${s.min}" class="${editableClass} w-14" />` : s.min + "'"}</td>
-            <td class="py-2.5 px-3 text-center font-bold text-red-400 bg-red-950/10">${isAdmin ? `<input type="number" min="0" value="${s.goals}" class="${editableClass} text-red-400 font-bold" />` : s.goals}</td>
-            <td class="py-2.5 px-3 text-center font-bold ${porter ? 'text-rose-400 bg-rose-950/20' : 'text-slate-600'}">${isAdmin ? `<input type="number" min="0" value="${s.goalsAgainst}" class="${editableClass} text-rose-400 font-bold" />` : (porter ? s.goalsAgainst : (s.goalsAgainst > 0 ? s.goalsAgainst : '-'))}</td>
-            <td class="py-2.5 px-3 text-center font-bold text-indigo-400 bg-indigo-950/10">${isAdmin ? `<input type="number" min="0" value="${s.assists}" class="${editableClass} text-indigo-400 font-bold" />` : s.assists}</td>
+            <td class="py-2.5 px-3 text-center">${s.pj}</td>
+            <td class="py-2.5 px-3 text-center text-slate-300">${s.min}'</td>
+            <td class="py-2.5 px-3 text-center font-bold text-red-400 bg-red-950/10">${s.goals}</td>
+            <td class="py-2.5 px-3 text-center font-bold ${porter ? 'text-rose-400 bg-rose-950/20' : 'text-slate-600'}">${porter ? s.goalsAgainst : '-'}</td>
+            <td class="py-2.5 px-3 text-center font-bold text-indigo-400 bg-indigo-950/10">${s.assists}</td>
             <td class="py-2.5 px-3 text-center text-emerald-400 font-medium">${gol90 !== "0.00" ? gol90 : "-"}</td>
             <td class="py-2.5 px-3 text-center text-sky-400 font-medium">${assist90 !== "0.00" ? assist90 : "-"}</td>
-            <td class="py-2.5 px-3 text-center text-yellow-400 font-bold">${isAdmin ? `<input type="number" min="0" value="${s.yellow}" class="${editableClass}" />` : s.yellow}</td>
+            <td class="py-2.5 px-3 text-center text-yellow-400 font-bold">${s.yellow}</td>
             <td class="py-2.5 px-3 text-center"><div class="flex items-center justify-center gap-1"><div class="flex items-center gap-0.5">${cycleBoxesHTML}</div>${cycleStatusBadge}</div></td>
-            <td class="py-2.5 px-3 text-center text-red-500 font-bold">${isAdmin ? `<input type="number" min="0" value="${s.red}" class="${editableClass}" />` : s.red}</td>
+            <td class="py-2.5 px-3 text-center text-red-500 font-bold">${s.red}</td>
             ${isAdmin ? `
               <td class="py-2.5 px-3 text-center">
                 <div class="flex items-center justify-center gap-1">
@@ -1377,132 +1510,6 @@
       renderTable();
       lucide.createIcons();
     }
-
-    // MODALS D'ADMINISTRACIÓ
-    function openAddMatchModal() {
-      editingMatchId = null;
-      document.getElementById("modalMatchTitle").textContent = "Formulari de Partit";
-      const select = document.getElementById("matchCompSelect");
-      select.innerHTML = competitions.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-      document.getElementById("rivalNameInput").value = '';
-      document.getElementById("matchDateInput").value = '';
-      document.getElementById("rivalLogoInput").value = '';
-      document.getElementById("matchConditionSelect").value = 'Casa';
-      document.getElementById("matchGFTerrassa").value = 0;
-      document.getElementById("matchGCRival").value = 0;
-      document.getElementById("matchNotesInput").value = '';
-
-      const tbody = document.getElementById("matchPlayersListBody");
-      tbody.innerHTML = players.map(p => {
-        const porter = isPorter(p.pos);
-        const injuryWarning = (p.injury && p.injury.isInjured) ? `<span class="text-[9px] text-blue-400 italic block">Infermeria</span>` : '';
-        return `
-          <tr class="hover:bg-slate-900/60 transition border-b border-slate-800/40">
-            <td class="p-2 text-center"><input type="checkbox" id="mp_pj_${p.id}" onchange="togglePlayerMatchRow(${p.id})" class="rounded border-slate-700 text-rose-600 focus:ring-0 bg-slate-900 w-4 h-4 cursor-pointer" /></td>
-            <td class="p-2 text-center font-bold text-slate-400">#${p.dorsal}</td>
-            <td class="p-2 font-semibold text-slate-200">${p.name}<span class="text-[9px] text-slate-400 block">${p.pos}</span>${injuryWarning}</td>
-            <td class="p-2 text-center"><input type="number" id="mp_min_${p.id}" min="0" max="120" value="0" disabled class="w-14 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1.5 py-1 text-center text-white" /></td>
-            <td class="p-2 text-center"><input type="number" id="mp_gf_${p.id}" min="0" value="0" disabled class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-400 font-bold" /></td>
-            <td class="p-2 text-center">${porter ? `<input type="number" id="mp_gc_${p.id}" min="0" value="0" disabled class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-rose-400 font-bold" />` : `<span class="text-slate-600 text-xs">-</span><input type="hidden" id="mp_gc_${p.id}" value="0" />`}</td>
-            <td class="p-2 text-center"><input type="number" id="mp_as_${p.id}" min="0" value="0" disabled class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-indigo-400 font-bold" /></td>
-            <td class="p-2 text-center"><input type="number" id="mp_yel_${p.id}" min="0" max="2" value="0" disabled class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-yellow-400 font-bold" /></td>
-            <td class="p-2 text-center"><input type="number" id="mp_red_${p.id}" min="0" max="1" value="0" disabled class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-500 font-bold" /></td>
-          </tr>
-        `;
-      }).join('');
-
-      document.getElementById("matchModal").classList.remove("hidden");
-    }
-
-    function togglePlayerMatchRow(playerId) {
-      const isChecked = document.getElementById(`mp_pj_${playerId}`).checked;
-      const inputs = ['min', 'gf', 'gc', 'as', 'yel', 'red'].map(k => document.getElementById(`mp_${k}_${playerId}`));
-      inputs.forEach(input => {
-        if (input) input.disabled = !isChecked;
-      });
-      if (isChecked && Number(inputs[0].value) === 0) inputs[0].value = 90;
-      else if (!isChecked) inputs.forEach(input => { if (input) input.value = 0; });
-    }
-
-    function closeAddMatchModal() { document.getElementById("matchModal").classList.add("hidden"); }
-
-    function submitNewMatch(e) {
-      e.preventDefault();
-      saveData();
-      closeAddMatchModal();
-    }
-
-    function openInjuryModal(id) {
-      selectedPlayerForInjury = players.find(p => p.id === id);
-      if (!selectedPlayerForInjury) return;
-      document.getElementById('injuryModalName').textContent = `#${selectedPlayerForInjury.dorsal} - ${selectedPlayerForInjury.name}`;
-      document.getElementById('injuryModalImg').src = getPlayerImg(selectedPlayerForInjury);
-      const isInjured = selectedPlayerForInjury.injury && selectedPlayerForInjury.injury.isInjured;
-      document.getElementById('injuryStatusSelect').value = isInjured ? 'Lesionat' : 'Disponible';
-      if (isInjured) {
-        document.getElementById('injuryNotesDiv').classList.remove('hidden');
-        document.getElementById('injuryNotesInput').value = selectedPlayerForInjury.injury.notes || '';
-      } else {
-        document.getElementById('injuryNotesDiv').classList.add('hidden');
-        document.getElementById('injuryNotesInput').value = '';
-      }
-      document.getElementById('injuryModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function closeInjuryModal() { document.getElementById('injuryModal').classList.add('hidden'); selectedPlayerForInjury = null; }
-    function saveInjuryStatus() { saveData(); closeInjuryModal(); }
-
-    function openManageCompsModal() {
-      const list = document.getElementById("compsEditList");
-      list.innerHTML = competitions.map(c => `
-        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between gap-3 text-xs">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <img src="${c.logo || 'https://via.placeholder.com/40'}" class="w-7 h-7 object-contain rounded bg-slate-900 p-0.5 border border-slate-800 shrink-0" />
-            <div class="truncate"><p class="font-bold text-white truncate">${c.name}</p><p class="text-[10px] text-slate-400 truncate">Logo: ${c.logo ? 'Configurat' : 'Sense logo'}</p></div>
-          </div>
-          <button onclick="removeCompetition('${c.id}')" class="p-1.5 bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-800/40 rounded-lg shrink-0"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-        </div>
-      `).join('');
-      document.getElementById("compsModal").classList.remove("hidden");
-      lucide.createIcons();
-    }
-
-    function closeManageCompsModal() { document.getElementById("compsModal").classList.add("hidden"); }
-    function addNewCompetition() { saveData(); closeManageCompsModal(); }
-    function removeCompetition(id) { saveData(); closeManageCompsModal(); }
-
-    function openAddPlayerModal() {
-      document.getElementById('newDorsal').value = players.length > 0 ? (Math.max(...players.map(p => p.dorsal)) + 1) : 1;
-      document.getElementById('newName').value = '';
-      document.getElementById('newPos').value = 'Davanter';
-      document.getElementById('newPhoto').value = '';
-      document.getElementById('addPlayerModal').classList.remove('hidden');
-    }
-    function closeAddPlayerModal() { document.getElementById('addPlayerModal').classList.add('hidden'); }
-    function submitNewPlayer(e) { e.preventDefault(); saveData(); closeAddPlayerModal(); }
-    function deletePlayer(id) { saveData(); }
-
-    function openPhotoModal(id) {
-      selectedPlayerForPhoto = players.find(p => p.id === id);
-      if (!selectedPlayerForPhoto) return;
-      tempUploadedBase64 = null;
-      document.getElementById('modalPlayerName').textContent = `#${selectedPlayerForPhoto.dorsal} - ${selectedPlayerForPhoto.name}`;
-      document.getElementById('modalPreviewImg').src = getPlayerImg(selectedPlayerForPhoto);
-      document.getElementById('photoUrlInput').value = selectedPlayerForPhoto.photo || '';
-      document.getElementById('fileInput').value = '';
-      document.getElementById('photoModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-    function closePhotoModal() { document.getElementById('photoModal').classList.add('hidden'); selectedPlayerForPhoto = null; }
-    function handleFileUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(evt) { tempUploadedBase64 = evt.target.result; document.getElementById('modalPreviewImg').src = tempUploadedBase64; };
-      reader.readAsDataURL(file);
-    }
-    function savePlayerPhoto() { saveData(); closePhotoModal(); }
 
     // LOGIN D'ADMINISTRADOR AMB SUPABASE AUTH
     function toggleAdminModal() {
@@ -1544,7 +1551,7 @@
       renderDashboard();
     }
 
-    // INICIAR CÀRREGA DE DADES
+    // Inicialitzar la càrrega de dades en obrir la pàgina
     loadData();
   </script>
 </body>

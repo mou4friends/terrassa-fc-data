@@ -846,7 +846,7 @@
       document.getElementById("matchModal").classList.add("hidden"); 
     }
 
-    async function submitNewMatch(e) {
+async function submitNewMatch(e) {
       e.preventDefault();
       try {
         const rival = document.getElementById("rivalNameInput").value.trim();
@@ -899,9 +899,13 @@
           const { error: err2 } = await supabaseClient.from('match_players').delete().eq('match_id', editingMatchId);
           if (err2) throw err2;
         } else {
-          const { data: newMatch, error: err3 } = await supabaseClient.from('matches').insert([matchData]).select();
+          // CALCULEM EL NOU ID MANUALMENT PER EVITAR EL CONFLICTE DE NULL
+          const nextId = matches.length > 0 ? (Math.max(...matches.map(m => m.id)) + 1) : 1;
+          matchData.id = nextId;
+          currentMatchId = nextId;
+
+          const { error: err3 } = await supabaseClient.from('matches').insert([matchData]);
           if (err3) throw err3;
-          currentMatchId = newMatch[0].id;
         }
 
         if (matchPlayers.length > 0) {

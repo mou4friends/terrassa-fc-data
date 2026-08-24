@@ -390,7 +390,7 @@
           </div>
           <div>
             <h3 id="modalMatchTitle" class="font-bold text-white text-base">Formulari de Partit</h3>
-            <p class="text-[11px] text-slate-400">En desar, les dades de cada jugador es bolcaran directament a la competició seleccionada.</p>
+            <p class="text-[11px] text-slate-400">En desar, les dades es bolcaran directament a Supabase.</p>
           </div>
         </div>
         <button onclick="closeAddMatchModal()" class="text-slate-400 hover:text-white">
@@ -399,15 +399,14 @@
       </div>
 
       <form onsubmit="submitNewMatch(event)" class="space-y-4 text-xs">
-        <!-- DETALLS BÀSICS DEL PARTIT -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
           <div class="sm:col-span-2">
             <label class="block font-semibold text-slate-300 mb-1">Equip Rival</label>
-            <input type="text" id="rivalNameInput" required placeholder="Ex. CE Sabadell, UE Sant Andreu..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+            <input type="text" id="rivalNameInput" required placeholder="Ex. CE Sabadell..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
           </div>
           <div>
             <label class="block font-semibold text-slate-300 mb-1">Data / Jornada</label>
-            <input type="text" id="matchDateInput" placeholder="Ex. Jornada 1 (06/09/2026)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+            <input type="text" id="matchDateInput" placeholder="Ex. Jornada 1" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
           </div>
           <div>
             <label class="block font-semibold text-amber-300 mb-1">Competició Destí</label>
@@ -426,7 +425,6 @@
           </div>
         </div>
 
-        <!-- MARCADOR -->
         <div class="grid grid-cols-2 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
           <div>
             <label class="block font-bold text-emerald-400 mb-1 text-center">Gols Terrassa FC (GF)</label>
@@ -438,13 +436,11 @@
           </div>
         </div>
 
-        <!-- SELECCIÓ I REGISTRE DE JUGADORS PER AQUEST PARTIT -->
         <div class="space-y-2 bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
           <div class="flex items-center justify-between border-b border-slate-800 pb-2">
             <h4 class="font-black text-slate-200 uppercase tracking-wider text-xs flex items-center gap-1.5">
-              <i data-lucide="users" class="w-4 h-4 text-red-500"></i> Alineació, Minuts & Estadístiques del Partit
+              <i data-lucide="users" class="w-4 h-4 text-red-500"></i> Alineació i Estadístiques
             </h4>
-            <span class="text-[10px] text-slate-400 italic">Marca els jugadors que han participat</span>
           </div>
 
           <div class="overflow-x-auto custom-scroll max-h-[300px] border border-slate-800 rounded-lg">
@@ -467,23 +463,22 @@
           </div>
         </div>
 
-        <!-- OBSERVACIONS / NOTES -->
         <div>
-          <label class="block font-semibold text-slate-300 mb-1">Observacions Arbitrals / Notes de l'Acta</label>
-          <textarea id="matchNotesInput" rows="2" placeholder="Incidències de l'acta, penals xiulats, canvis destacats..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
+          <label class="block font-semibold text-slate-300 mb-1">Observacions / Notes de l'Acta</label>
+          <textarea id="matchNotesInput" rows="2" placeholder="Incidències..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
           <button type="button" onclick="closeAddMatchModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
           <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-rose-700 hover:bg-rose-600 text-white shadow-lg flex items-center gap-1.5">
-            <i data-lucide="check" class="w-4 h-4"></i> Desar Partit & Bolcar Estadístiques
+            <i data-lucide="check" class="w-4 h-4"></i> Desar Partit
           </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: INFERMERIA (DONAR D'ALTA / BAIXA MÈDICA) -->
+  <!-- ALTRES MODALS (INFERMERIA, COMPS, FOTO, LOGIN, AFEGIR JUGADOR) MANTINGUTS INTACTES -->
   <div id="injuryModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between">
@@ -493,30 +488,25 @@
           </div>
           <h3 class="font-bold text-white text-base">Estat Mèdic</h3>
         </div>
-        <button onclick="closeInjuryModal()" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button onclick="closeInjuryModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-
       <div class="flex flex-col items-center gap-2 border-b border-slate-800 pb-3">
         <img id="injuryModalImg" src="" class="w-16 h-16 rounded-full object-cover border-2 border-slate-700 bg-slate-800 shadow-md" />
         <p id="injuryModalName" class="text-sm font-bold text-slate-200"></p>
       </div>
-
       <div class="space-y-3 text-xs">
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Estat del jugador</label>
-          <select id="injuryStatusSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500">
+          <select id="injuryStatusSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white">
             <option value="Disponible">Disponible (Alta mèdica)</option>
             <option value="Lesionat">Lesionat / Baixa (Infermeria)</option>
           </select>
         </div>
         <div id="injuryNotesDiv" class="hidden">
           <label class="block font-semibold text-slate-300 mb-1">Motiu / Temps estimat de baixa</label>
-          <input type="text" id="injuryNotesInput" placeholder="Ex. Trencament isquiotibials (3 setmanes)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500" />
+          <input type="text" id="injuryNotesInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
         </div>
       </div>
-
       <div class="flex items-center justify-end gap-2 pt-2">
         <button onclick="closeInjuryModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
         <button onclick="saveInjuryStatus()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg">Guardar Canvis</button>
@@ -524,7 +514,6 @@
     </div>
   </div>
 
-  <!-- MODAL: GESTIONAR COMPETICIONS -->
   <div id="compsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between">
@@ -532,31 +521,25 @@
           <div class="w-8 h-8 rounded-lg bg-indigo-950 border border-indigo-800 flex items-center justify-center text-indigo-400">
             <i data-lucide="trophy" class="w-4 h-4"></i>
           </div>
-          <h3 class="font-bold text-white text-base">Gestionar Competicions & Logos</h3>
+          <h3 class="font-bold text-white text-base">Gestionar Competicions</h3>
         </div>
-        <button onclick="closeManageCompsModal()" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button onclick="closeManageCompsModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-
       <div class="space-y-3 max-h-[300px] overflow-y-auto custom-scroll pr-1" id="compsEditList"></div>
-
       <div class="border-t border-slate-800 pt-3 space-y-2 text-xs">
         <h4 class="font-bold text-slate-200 flex items-center gap-1.5"><i data-lucide="plus" class="w-3.5 h-3.5 text-emerald-400"></i> Afegir Nova competició</h4>
         <div class="grid grid-cols-2 gap-2">
-          <input type="text" id="newCompName" placeholder="Nom (ex. Copa RFEF Fase Nacional)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+          <input type="text" id="newCompName" placeholder="Nom (ex. Copa RFEF)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
           <input type="text" id="newCompLogo" placeholder="URL Logo (opcional)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
         </div>
         <button onclick="addNewCompetition()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow transition">Afegir Competició</button>
       </div>
-
       <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
         <button onclick="closeManageCompsModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Tancar</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: AFEGIR JUGADOR -->
   <div id="addPlayerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between">
@@ -566,38 +549,32 @@
           </div>
           <h3 class="font-bold text-white text-base">Afegir Nou Jugador</h3>
         </div>
-        <button onclick="closeAddPlayerModal()" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button onclick="closeAddPlayerModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-
       <form onsubmit="submitNewPlayer(event)" class="space-y-3.5 text-xs">
         <div class="grid grid-cols-3 gap-3">
           <div>
             <label class="block font-semibold text-slate-300 mb-1">Dorsal (#)</label>
-            <input type="number" id="newDorsal" required min="1" max="99" placeholder="9" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+            <input type="number" id="newDorsal" required min="1" max="99" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
           </div>
           <div class="col-span-2">
             <label class="block font-semibold text-slate-300 mb-1">Nom Complet</label>
-            <input type="text" id="newName" required placeholder="Ex. Fitxatge Nou" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+            <input type="text" id="newName" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
           </div>
         </div>
-
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Posició</label>
-          <select id="newPos" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+          <select id="newPos" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white">
             <option value="Davanter">Davanter</option>
             <option value="Migcampista">Migcampista</option>
             <option value="Defensa">Defensa</option>
             <option value="Porter">Porter</option>
           </select>
         </div>
-
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Foto (URL opcional)</label>
-          <input type="text" id="newPhoto" placeholder="https://... (o puja fitxer després)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+          <input type="text" id="newPhoto" placeholder="https://..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
         </div>
-
         <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
           <button type="button" onclick="closeAddPlayerModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
           <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg">Desar Jugador</button>
@@ -606,37 +583,29 @@
     </div>
   </div>
 
-  <!-- MODAL: EDITAR FOTO -->
   <div id="photoModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="font-bold text-white text-base">Actualitzar Foto del Jugador</h3>
-        <button onclick="closePhotoModal()" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button onclick="closePhotoModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
-
       <div class="flex flex-col items-center gap-3">
         <img id="modalPreviewImg" src="" class="w-20 h-20 rounded-full object-cover border-2 border-red-500 bg-slate-800 shadow-md" />
         <p id="modalPlayerName" class="text-sm font-bold text-slate-200"></p>
       </div>
-
       <div class="space-y-3 text-xs">
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Opció A: Pujar fitxer</label>
           <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-slate-300 text-xs file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-red-950 file:text-red-300 hover:file:bg-red-900" />
         </div>
         <div class="flex items-center gap-2 text-slate-500">
-          <div class="h-px bg-slate-800 flex-1"></div>
-          <span>o</span>
-          <div class="h-px bg-slate-800 flex-1"></div>
+          <div class="h-px bg-slate-800 flex-1"></div><span>o</span><div class="h-px bg-slate-800 flex-1"></div>
         </div>
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Opció B: Enllaç URL</label>
-          <input type="text" id="photoUrlInput" placeholder="https://exemple.cat/foto.jpg" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+          <input type="text" id="photoUrlInput" placeholder="https://exemple.cat/foto.jpg" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
         </div>
       </div>
-
       <div class="flex items-center justify-end gap-2 pt-2">
         <button onclick="closePhotoModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
         <button onclick="savePlayerPhoto()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-brand-red hover:bg-brand-darkRed text-white shadow-lg">Desar Foto</button>
@@ -644,7 +613,6 @@
     </div>
   </div>
 
-  <!-- ADMIN LOGIN MODAL -->
   <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between">
@@ -654,21 +622,16 @@
           </div>
           <h3 class="font-bold text-white text-base">Accés Administrador</h3>
         </div>
-        <button onclick="toggleAdminModal()" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+        <button onclick="toggleAdminModal()" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <p class="text-xs text-slate-400">Introdueix les teves credencials de Supabase.</p>
-      
       <div>
         <label class="block text-xs font-semibold text-slate-300 mb-1.5">Correu electrònic</label>
         <input type="email" id="adminEmailInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500 mb-3" placeholder="El teu correu..." />
-        
         <label class="block text-xs font-semibold text-slate-300 mb-1.5">Contrasenya</label>
         <input type="password" id="adminPasswordInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500" placeholder="Introdueix la contrasenya..." onkeyup="if(event.key==='Enter') verifyAdminPassword()" />
         <p id="loginError" class="text-xs text-red-400 mt-1.5 hidden">Correu o Contrasenya incorrectes.</p>
       </div>
-
       <div class="flex items-center justify-end gap-2 pt-2">
         <button onclick="toggleAdminModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
         <button onclick="verifyAdminPassword()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-brand-red hover:bg-brand-darkRed text-white shadow-lg">Accedir</button>
@@ -676,14 +639,12 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT AMB SUPABASE INTEGRAT I VOTACIÓ MVP -->
   <script>
     // --- CONNEXIÓ A SUPABASE ---
     const SUPABASE_URL = "https://qxsixyqgqccigljotoqe.supabase.co";
     const SUPABASE_KEY = "sb_publishable_-87VGu5FS4hW3HK7uy-gmA_5iwJXfrI";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Identificador únic per controlar els vots
     function getDeviceId() {
       let deviceId = localStorage.getItem('ue_device_id');
       if (!deviceId) {
@@ -721,7 +682,6 @@
       return clean === "porter" || clean === "portero" || clean === "gk" || clean === "goalkeeper";
     }
 
-    // LLEGIR DADES DES DE SUPABASE
     async function loadData() {
       try {
         const { data: compData } = await supabaseClient.from('competitions').select('*');
@@ -773,84 +733,91 @@
       renderDashboard();
     }
 
-    // ESCRIPTURA EN SUPABASE
     async function updatePlayerDetails(id, key, val) {
       const idx = players.findIndex(p => p.id === id);
       if (idx !== -1) {
         if (key === 'dorsal') players[idx].dorsal = Number(val) || 0;
         else players[idx][key] = val;
-        
         let dbKey = key;
         if (key === 'dorsal') dbKey = 'dorsal';
-        
         await supabaseClient.from('players').update({ [dbKey]: players[idx][dbKey] }).eq('id', id);
       }
     }
 
     async function submitNewMatch(e) {
       e.preventDefault();
-      const rival = document.getElementById("rivalNameInput").value.trim();
-      const date = document.getElementById("matchDateInput").value.trim();
-      const compId = document.getElementById("matchCompSelect").value;
-      const condition = document.getElementById("matchConditionSelect").value;
-      const logo = document.getElementById("rivalLogoInput").value.trim();
-      const gf = Number(document.getElementById("matchGFTerrassa").value) || 0;
-      const gc = Number(document.getElementById("matchGCRival").value) || 0;
-      const notes = document.getElementById("matchNotesInput").value.trim();
+      try {
+        const rival = document.getElementById("rivalNameInput").value.trim();
+        const date = document.getElementById("matchDateInput").value.trim();
+        const compId = document.getElementById("matchCompSelect").value;
+        const condition = document.getElementById("matchConditionSelect").value;
+        const logo = document.getElementById("rivalLogoInput").value.trim();
+        const gf = Number(document.getElementById("matchGFTerrassa").value) || 0;
+        const gc = Number(document.getElementById("matchGCRival").value) || 0;
+        const notes = document.getElementById("matchNotesInput").value.trim();
 
-      if (!rival) return;
+        if (!rival) return;
 
-      let scorersList = [];
-      let yellowsList = [];
-      let redsList = [];
-      let matchPlayers = []; 
+        let scorersList = [];
+        let yellowsList = [];
+        let redsList = [];
+        let matchPlayers = []; 
 
-      players.forEach(p => {
-        const pjChecked = document.getElementById(`mp_pj_${p.id}`)?.checked;
-        if (pjChecked) {
-          const mMin = Number(document.getElementById(`mp_min_${p.id}`).value) || 0;
-          const mGf = Number(document.getElementById(`mp_gf_${p.id}`).value) || 0;
-          const mGc = Number(document.getElementById(`mp_gc_${p.id}`)?.value) || 0;
-          const mAs = Number(document.getElementById(`mp_as_${p.id}`).value) || 0;
-          const mYel = Number(document.getElementById(`mp_yel_${p.id}`).value) || 0;
-          const mRed = Number(document.getElementById(`mp_red_${p.id}`).value) || 0;
+        players.forEach(p => {
+          const pjChecked = document.getElementById(`mp_pj_${p.id}`)?.checked;
+          if (pjChecked) {
+            const mMin = Number(document.getElementById(`mp_min_${p.id}`).value) || 0;
+            const mGf = Number(document.getElementById(`mp_gf_${p.id}`).value) || 0;
+            const mGc = Number(document.getElementById(`mp_gc_${p.id}`)?.value) || 0;
+            const mAs = Number(document.getElementById(`mp_as_${p.id}`).value) || 0;
+            const mYel = Number(document.getElementById(`mp_yel_${p.id}`).value) || 0;
+            const mRed = Number(document.getElementById(`mp_red_${p.id}`).value) || 0;
 
-          matchPlayers.push({ player_id: p.id, minutes: mMin, gf: mGf, gc: mGc, assists: mAs, yellow: mYel, red: mRed });
+            matchPlayers.push({ player_id: p.id, minutes: mMin, gf: mGf, gc: mGc, assists: mAs, yellow: mYel, red: mRed });
 
-          if (mGf > 0) scorersList.push(`${p.name}${mGf > 1 ? ` (x${mGf})` : ''}`);
-          if (mYel > 0) yellowsList.push(`${p.name}${mYel > 1 ? ` (x${mYel})` : ''}`);
-          if (mRed > 0) redsList.push(p.name);
+            if (mGf > 0) scorersList.push(`${p.name}${mGf > 1 ? ` (x${mGf})` : ''}`);
+            if (mYel > 0) yellowsList.push(`${p.name}${mYel > 1 ? ` (x${mYel})` : ''}`);
+            if (mRed > 0) redsList.push(p.name);
+          }
+        });
+
+        const matchData = {
+          rival, match_date: date, comp_id: compId, condition, logo, gf, gc,
+          scorers: scorersList.join(', '),
+          yellows: yellowsList.join(', '),
+          reds: redsList.join(', '),
+          notes
+        };
+
+        let currentMatchId = editingMatchId;
+
+        if (editingMatchId) {
+          const { error: err1 } = await supabaseClient.from('matches').update(matchData).eq('id', editingMatchId);
+          if (err1) throw err1;
+          const { error: err2 } = await supabaseClient.from('match_players').delete().eq('match_id', editingMatchId);
+          if (err2) throw err2;
+        } else {
+          // INSERTAMOS SIN PASAR ID para que Supabase lo genere solo, y usamos .select().single() para que nos lo devuelva.
+          const { data: newMatch, error: err3 } = await supabaseClient.from('matches').insert([matchData]).select().single();
+          if (err3) throw err3;
+          currentMatchId = newMatch.id;
         }
-      });
 
-      const matchData = {
-        rival, match_date: date, comp_id: compId, condition, logo, gf, gc,
-        scorers: scorersList.join(', '),
-        yellows: yellowsList.join(', '),
-        reds: redsList.join(', '),
-        notes
-      };
+        if (matchPlayers.length > 0) {
+           const mpPayload = matchPlayers.map(mp => ({ ...mp, match_id: currentMatchId }));
+           const { error: err4 } = await supabaseClient.from('match_players').insert(mpPayload);
+           if (err4) throw err4;
+        }
 
-      let currentMatchId = editingMatchId;
-
-      if (editingMatchId) {
-        await supabaseClient.from('matches').update(matchData).eq('id', editingMatchId);
-        await supabaseClient.from('match_players').delete().eq('match_id', editingMatchId);
-      } else {
-        const nextId = matches.length > 0 ? (Math.max(...matches.map(m => m.id)) + 1) : 1;
-        matchData.id = nextId;
-        currentMatchId = nextId;
-        await supabaseClient.from('matches').insert([matchData]);
+        editingMatchId = null;
+        closeAddMatchModal();
+        await loadData();
+        alert("Partit desat correctament!");
+        
+      } catch (err) {
+        console.error("Error complet:", err);
+        alert("🚨 Supabase ha rebutjat el partit. L'error és: " + err.message);
       }
-
-      if (matchPlayers.length > 0) {
-         const mpPayload = matchPlayers.map(mp => ({ ...mp, match_id: currentMatchId }));
-         await supabaseClient.from('match_players').insert(mpPayload);
-      }
-
-      editingMatchId = null;
-      closeAddMatchModal();
-      await loadData();
     }
 
     async function deleteMatch(matchId) {
@@ -861,25 +828,36 @@
     }
 
     async function saveInjuryStatus() {
-      if (!selectedPlayerForInjury) return;
-      const status = document.getElementById('injuryStatusSelect').value;
-      const notes = document.getElementById('injuryNotesInput').value.trim();
-      const isInjured = status === 'Lesionat';
-      
-      await supabaseClient.from('players').update({ is_injured: isInjured, injury_notes: isInjured ? notes : '' }).eq('id', selectedPlayerForInjury.id);
-      
-      closeInjuryModal();
-      await loadData();
+      try {
+        if (!selectedPlayerForInjury) return;
+        const status = document.getElementById('injuryStatusSelect').value;
+        const notes = document.getElementById('injuryNotesInput').value.trim();
+        const isInjured = status === 'Lesionat';
+        
+        const { error } = await supabaseClient.from('players').update({ is_injured: isInjured, injury_notes: isInjured ? notes : '' }).eq('id', selectedPlayerForInjury.id);
+        if (error) throw error;
+        
+        closeInjuryModal();
+        await loadData();
+      } catch(err) {
+        alert("Error actualitzant infermeria: " + err.message);
+      }
     }
 
     async function addNewCompetition() {
-      const name = document.getElementById("newCompName").value.trim();
-      const logo = document.getElementById("newCompLogo").value.trim();
-      if (!name) return;
-      const id = "comp_" + Date.now();
-      await supabaseClient.from('competitions').insert([{ id, name, short_name: name.substring(0, 16), logo }]);
-      closeManageCompsModal();
-      await loadData();
+      try {
+        const name = document.getElementById("newCompName").value.trim();
+        const logo = document.getElementById("newCompLogo").value.trim();
+        if (!name) return;
+        
+        const { error } = await supabaseClient.from('competitions').insert([{ name, short_name: name.substring(0, 16), logo }]);
+        if (error) throw error;
+        
+        closeManageCompsModal();
+        await loadData();
+      } catch(err) {
+        alert("Error afegint competició: " + err.message);
+      }
     }
 
     async function removeCompetition(id) {
@@ -894,16 +872,22 @@
 
     async function submitNewPlayer(e) {
       e.preventDefault();
-      const dorsal = Number(document.getElementById('newDorsal').value) || (players.length + 1);
-      const name = document.getElementById('newName').value.trim();
-      const pos = document.getElementById('newPos').value;
-      const photo = document.getElementById('newPhoto').value.trim();
-      if (!name) return;
-      const nextId = players.length > 0 ? (Math.max(...players.map(p => p.id)) + 1) : 1;
-      
-      await supabaseClient.from('players').insert([{ id: nextId, dorsal, name, pos, photo, is_injured: false, injury_notes: '' }]);
-      closeAddPlayerModal();
-      await loadData();
+      try {
+        const dorsal = Number(document.getElementById('newDorsal').value) || (players.length + 1);
+        const name = document.getElementById('newName').value.trim();
+        const pos = document.getElementById('newPos').value;
+        const photo = document.getElementById('newPhoto').value.trim();
+        if (!name) return;
+        
+        const { error } = await supabaseClient.from('players').insert([{ dorsal, name, pos, photo, is_injured: false, injury_notes: '' }]);
+        if (error) throw error;
+        
+        closeAddPlayerModal();
+        await loadData();
+        alert("Jugador afegit correctament!");
+      } catch(err) {
+        alert("Error afegint jugador: " + err.message);
+      }
     }
 
     async function deletePlayer(id) {
@@ -916,12 +900,19 @@
     }
 
     async function savePlayerPhoto() {
-      if (!selectedPlayerForPhoto) return;
-      const urlInput = document.getElementById('photoUrlInput').value.trim();
-      const finalPhoto = tempUploadedBase64 || urlInput || "";
-      await supabaseClient.from('players').update({ photo: finalPhoto }).eq('id', selectedPlayerForPhoto.id);
-      closePhotoModal();
-      await loadData();
+      try {
+        if (!selectedPlayerForPhoto) return;
+        const urlInput = document.getElementById('photoUrlInput').value.trim();
+        const finalPhoto = tempUploadedBase64 || urlInput || "";
+        
+        const { error } = await supabaseClient.from('players').update({ photo: finalPhoto }).eq('id', selectedPlayerForPhoto.id);
+        if (error) throw error;
+        
+        closePhotoModal();
+        await loadData();
+      } catch(err) {
+        alert("Error canviant la foto: " + err.message);
+      }
     }
 
     function getPlayerImg(p) {
@@ -1114,14 +1105,13 @@
       content.innerHTML = `<div class="p-8 text-center text-slate-400 animate-pulse">Carregant dades del partit i vots...</div>`;
       document.getElementById('matchDetailModal').classList.remove('hidden');
 
-      // 1. Carregar els vots
+      // Carregar vots de Supabase
       const { data: votesData } = await supabaseClient.from('mvp_votes').select('player_id, user_identifier').eq('match_id', matchId);
       const votes = votesData || [];
       const deviceId = getDeviceId();
       const hasVoted = votes.some(v => v.user_identifier === deviceId);
       const totalVotes = votes.length;
 
-      // 2. Llistar els jugadors que han jugat (min > 0)
       const playedPlayers = (match.matchPlayers || []).filter(mp => mp.min > 0).map(mp => {
           const p = players.find(x => x.id === mp.id);
           const playerVotes = votes.filter(v => v.player_id === p.id).length;
@@ -1206,7 +1196,7 @@
           </div>
         ` : ''}
 
-        <!-- NOU: SECCIÓ MVP -->
+        <!-- SECCIÓ MVP -->
         <div class="mt-4 pt-4 border-t border-slate-800">
           <h4 class="font-bold text-amber-400 flex items-center gap-1.5 mb-3"><i data-lucide="star" class="w-4 h-4 text-amber-400"></i> MVP del Partit</h4>
           ${mvpHTML}
@@ -1235,11 +1225,75 @@
       
       if (error) {
           console.error(error);
-          alert("Error al registrar el vot. Potser ja has votat en aquest partit?");
+          alert("Error al registrar el vot. Potser ja has votat?");
       } else {
           openMatchDetailModal(matchId); 
       }
     }
+
+    function editMatch(matchId) {
+      const match = matches.find(m => m.id === matchId);
+      if (!match) return;
+
+      editingMatchId = matchId; 
+      document.getElementById("modalMatchTitle").textContent = "Editar Acta de Partit";
+
+      const select = document.getElementById("matchCompSelect");
+      select.innerHTML = competitions.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+      select.value = match.compId;
+
+      document.getElementById("rivalNameInput").value = match.rival || '';
+      document.getElementById("matchDateInput").value = match.date || '';
+      document.getElementById("rivalLogoInput").value = match.logo || '';
+      document.getElementById("matchConditionSelect").value = match.condition || 'Casa';
+      document.getElementById("matchGFTerrassa").value = match.gf || 0;
+      document.getElementById("matchGCRival").value = match.gc || 0;
+      document.getElementById("matchNotesInput").value = match.notes || '';
+
+      const tbody = document.getElementById("matchPlayersListBody");
+      tbody.innerHTML = players.map(p => {
+        const porter = isPorter(p.pos);
+        const savedMp = (match.matchPlayers || []).find(x => x.id === p.id);
+        const isChecked = savedMp ? 'checked' : '';
+        const minVal = savedMp ? savedMp.min : 0;
+        const gfVal = savedMp ? savedMp.gf : 0;
+        const gcVal = savedMp ? savedMp.gc : 0;
+        const asVal = savedMp ? savedMp.as : 0;
+        const yelVal = savedMp ? savedMp.yel : 0;
+        const redVal = savedMp ? savedMp.red : 0;
+        const disabledState = savedMp ? '' : 'disabled';
+
+        return `
+          <tr class="hover:bg-slate-900/60 transition border-b border-slate-800/40">
+            <td class="p-2 text-center">
+              <input type="checkbox" id="mp_pj_${p.id}" ${isChecked} onchange="togglePlayerMatchRow(${p.id})" class="rounded border-slate-700 text-rose-600 focus:ring-0 bg-slate-900 w-4 h-4 cursor-pointer" />
+            </td>
+            <td class="p-2 text-center font-bold text-slate-400">#${p.dorsal}</td>
+            <td class="p-2 font-semibold text-slate-200">${p.name}<span class="text-[9px] text-slate-400 block">${p.pos}</span></td>
+            <td class="p-2 text-center"><input type="number" id="mp_min_${p.id}" min="0" max="120" value="${minVal}" ${disabledState} class="w-14 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-center text-white" /></td>
+            <td class="p-2 text-center"><input type="number" id="mp_gf_${p.id}" min="0" value="${gfVal}" ${disabledState} class="w-12 bg-slate-900 border border-slate-700 rounded px-1 py-1 text-center text-red-400 font-bold" /></td>
+            <td class="p-2 text-center">${porter ? `<input type="number" id="mp_gc_${p.id}" min="0" value="${gcVal}" ${disabledState} class="w-12 bg-slate-900 border border-slate-700 rounded px-1 py-1 text-center text-rose-400 font-bold" />` : `<span class="text-slate-600 text-xs">-</span><input type="hidden" id="mp_gc_${p.id}" value="0" />`}</td>
+            <td class="p-2 text-center"><input type="number" id="mp_as_${p.id}" min="0" value="${asVal}" ${disabledState} class="w-12 bg-slate-900 border border-slate-700 rounded px-1 py-1 text-center text-indigo-400 font-bold" /></td>
+            <td class="p-2 text-center"><input type="number" id="mp_yel_${p.id}" min="0" max="2" value="${yelVal}" ${disabledState} class="w-10 bg-slate-900 border border-slate-700 rounded px-1 py-1 text-center text-yellow-400 font-bold" /></td>
+            <td class="p-2 text-center"><input type="number" id="mp_red_${p.id}" min="0" max="1" value="${redVal}" ${disabledState} class="w-10 bg-slate-900 border border-slate-700 rounded px-1 py-1 text-center text-red-500 font-bold" /></td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById("matchModal").classList.remove("hidden");
+    }
+
+    function togglePlayerMatchRow(playerId) {
+      const isChecked = document.getElementById(`mp_pj_${playerId}`).checked;
+      const inputs = ['min', 'gf', 'gc', 'as', 'yel', 'red'].map(k => document.getElementById(`mp_${k}_${playerId}`));
+      inputs.forEach(input => {
+        if (input) input.disabled = !isChecked;
+      });
+      if (isChecked && Number(inputs[0].value) === 0) inputs[0].value = 90;
+      else if (!isChecked) inputs.forEach(input => { if (input) input.value = 0; });
+    }
+
+    function closeAddMatchModal() { document.getElementById("matchModal").classList.add("hidden"); }
 
     function renderCycleAlerts() {
       const sanctionedContainer = document.getElementById("sanctionedList");
@@ -1445,8 +1499,6 @@
         if(p.pos === 'Defensa') posBadge = "bg-emerald-950/70 text-emerald-300 border border-emerald-800/40";
         if(porter) posBadge = "bg-amber-950/70 text-amber-300 border border-amber-800/40";
 
-        const editableClass = isAdmin ? "bg-slate-950 border border-slate-700 rounded px-1 py-0.5 w-12 text-center text-white focus:border-red-500 focus:outline-none" : "";
-
         const currentInCycle = s.yellow % 5;
         const isSanctioned = s.yellow > 0 && currentInCycle === 0;
         const isWarned = currentInCycle === 4;
@@ -1475,9 +1527,7 @@
         return `
           <tr class="hover:bg-slate-800/40 transition border-b border-slate-800/50">
             <td class="py-2.5 px-3 text-center text-slate-400 font-bold">
-              ${isAdmin ? `
-                <input type="number" value="${p.dorsal}" onchange="updatePlayerDetails(${p.id}, 'dorsal', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-center text-xs text-slate-200 w-10 font-bold" />
-              ` : p.dorsal}
+              ${p.dorsal}
             </td>
             <td class="py-2.5 px-3 text-center">
               <div class="relative inline-block group">
@@ -1491,24 +1541,11 @@
               </div>
             </td>
             <td class="py-2.5 px-3">
-              ${isAdmin ? `
-                <input type="text" value="${p.name}" onchange="updatePlayerDetails(${p.id}, 'name', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white w-full" />
-              ` : `
-                <span class="font-bold text-slate-100">${p.name}</span>
-                ${(p.injury && p.injury.isInjured) ? `<span class="block text-[9px] text-blue-400 italic">Baixa</span>` : ''}
-              `}
+              <span class="font-bold text-slate-100">${p.name}</span>
+              ${(p.injury && p.injury.isInjured) ? `<span class="block text-[9px] text-blue-400 italic">Baixa</span>` : ''}
             </td>
             <td class="py-2.5 px-3 text-center">
-              ${isAdmin ? `
-                <select onchange="updatePlayerDetails(${p.id}, 'pos', this.value)" class="bg-slate-950 border border-slate-700 text-xs rounded px-1 py-0.5 text-slate-200">
-                  <option value="Porter" ${porter?'selected':''}>Porter</option>
-                  <option value="Defensa" ${p.pos==='Defensa'?'selected':''}>Defensa</option>
-                  <option value="Migcampista" ${p.pos==='Migcampista'?'selected':''}>Migcampista</option>
-                  <option value="Davanter" ${p.pos==='Davanter'?'selected':''}>Davanter</option>
-                </select>
-              ` : `
-                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${posBadge}">${p.pos}</span>
-              `}
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${posBadge}">${p.pos}</span>
             </td>
             <td class="py-2.5 px-3 text-center">${s.pj}</td>
             <td class="py-2.5 px-3 text-center text-slate-300">${s.min}'</td>

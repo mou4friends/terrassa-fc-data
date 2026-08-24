@@ -7,6 +7,13 @@
   <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- LIBRERÍAS DE FIREBASE (COMPATIBLES HTML) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics-compat.js"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -89,7 +96,7 @@
           <i data-lucide="download" class="w-3.5 h-3.5"></i> Còpia
         </button>
         <button onclick="lockAdmin()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold transition">
-          Guardar
+          Tancar Sessió
         </button>
       </div>
     </div>
@@ -108,7 +115,7 @@
     <!-- VISTA 1: VISTA PRINCIPAL (COMPETICIONS / TOTAL ACUMULAT) -->
     <div id="mainStatsView" class="space-y-6">
 
-      <!-- 1. TARGETES KPI RESUM GLOBALS (AJUSTAT A 5 COLUMNES) -->
+      <!-- 1. TARGETES KPI RESUM GLOBALS -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between relative overflow-hidden">
           <div class="flex items-center justify-between text-red-400 mb-1">
@@ -151,7 +158,7 @@
         </div>
       </div>
 
-      <!-- 2. SUSPENSIONS, AVISOS I INFERMERIA (3 COLUMNES) -->
+      <!-- 2. SUSPENSIONS, AVISOS I INFERMERIA -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- SANCIONATS -->
         <div class="bg-gradient-to-r from-red-950/70 via-slate-900 to-slate-900 border border-red-800/60 rounded-2xl p-4 shadow-xl">
@@ -321,7 +328,6 @@
                 <th class="py-3 px-3 text-center w-16 text-red-400 font-bold">GF ⚽</th>
                 <th class="py-3 px-3 text-center w-16 text-rose-400 font-bold">GC 🧤</th>
                 <th class="py-3 px-3 text-center w-16 text-indigo-400 font-bold">Assist. 🎯</th>
-                <!-- NOVES COLUMNES PER 90 MINUTS -->
                 <th class="py-3 px-3 text-center w-20 text-emerald-400 font-bold">Gol/90m</th>
                 <th class="py-3 px-3 text-center w-20 text-sky-400 font-bold">Assist/90m</th>
                 <th class="py-3 px-3 text-center w-14 text-yellow-400 font-bold">🟨</th>
@@ -392,7 +398,7 @@
     </div>
   </div>
 
-  <!-- MODAL: REGISTRAR / EDITAR ACTA DE PARTIT AMB PLANTILLA COMPLETA -->
+  <!-- MODAL: REGISTRAR / EDITAR ACTA DE PARTIT -->
   <div id="matchModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-4xl w-full p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto custom-scroll">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -411,7 +417,6 @@
       </div>
 
       <form onsubmit="submitNewMatch(event)" class="space-y-4 text-xs">
-        <!-- DETALLS BÀSICS DEL PARTIT -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
           <div class="sm:col-span-2">
             <label class="block font-semibold text-slate-300 mb-1">Equip Rival</label>
@@ -438,7 +443,6 @@
           </div>
         </div>
 
-        <!-- MARCADOR -->
         <div class="grid grid-cols-2 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
           <div>
             <label class="block font-bold text-emerald-400 mb-1 text-center">Gols Terrassa FC (GF)</label>
@@ -450,11 +454,10 @@
           </div>
         </div>
 
-        <!-- SELECCIÓ I REGISTRE DE JUGADORS PER AQUEST PARTIT -->
         <div class="space-y-2 bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
           <div class="flex items-center justify-between border-b border-slate-800 pb-2">
             <h4 class="font-black text-slate-200 uppercase tracking-wider text-xs flex items-center gap-1.5">
-              <i data-lucide="users" class="w-4 h-4 text-red-500"></i> Alineació, Minuts & Estadístiques del Partit
+              <i data-lucide="users" class="w-4 h-4 text-red-500"></i> Alineació, Minuts & Estadístiques
             </h4>
             <span class="text-[10px] text-slate-400 italic">Marca els jugadors que han participat</span>
           </div>
@@ -479,10 +482,9 @@
           </div>
         </div>
 
-        <!-- OBSERVACIONS / NOTES -->
         <div>
-          <label class="block font-semibold text-slate-300 mb-1">Observacions Arbitrals / Notes de l'Acta</label>
-          <textarea id="matchNotesInput" rows="2" placeholder="Incidències de l'acta, penals xiulats, canvis destacats..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
+          <label class="block font-semibold text-slate-300 mb-1">Observacions / Notes de l'Acta</label>
+          <textarea id="matchNotesInput" rows="2" placeholder="Incidències de l'acta, penals xiulats..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
@@ -495,7 +497,7 @@
     </div>
   </div>
 
-  <!-- MODAL: INFERMERIA (DONAR D'ALTA / BAIXA MÈDICA) -->
+  <!-- MODAL: INFERMERIA -->
   <div id="injuryModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between">
@@ -544,24 +546,21 @@
           <div class="w-8 h-8 rounded-lg bg-indigo-950 border border-indigo-800 flex items-center justify-center text-indigo-400">
             <i data-lucide="trophy" class="w-4 h-4"></i>
           </div>
-          <h3 class="font-bold text-white text-base">Gestionar Competicions & Logos</h3>
+          <h3 class="font-bold text-white text-base">Gestionar Competicions</h3>
         </div>
         <button onclick="closeManageCompsModal()" class="text-slate-400 hover:text-white">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-
       <div class="space-y-3 max-h-[300px] overflow-y-auto custom-scroll pr-1" id="compsEditList"></div>
-
       <div class="border-t border-slate-800 pt-3 space-y-2 text-xs">
         <h4 class="font-bold text-slate-200 flex items-center gap-1.5"><i data-lucide="plus" class="w-3.5 h-3.5 text-emerald-400"></i> Afegir Nova competició</h4>
         <div class="grid grid-cols-2 gap-2">
-          <input type="text" id="newCompName" placeholder="Nom (ex. Copa RFEF Fase Nacional)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+          <input type="text" id="newCompName" placeholder="Nom (ex. Copa RFEF)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
           <input type="text" id="newCompLogo" placeholder="URL Logo (opcional)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
         </div>
         <button onclick="addNewCompetition()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow transition">Afegir Competició</button>
       </div>
-
       <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
         <button onclick="closeManageCompsModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Tancar</button>
       </div>
@@ -582,19 +581,17 @@
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-
       <form onsubmit="submitNewPlayer(event)" class="space-y-3.5 text-xs">
         <div class="grid grid-cols-3 gap-3">
           <div>
             <label class="block font-semibold text-slate-300 mb-1">Dorsal (#)</label>
-            <input type="number" id="newDorsal" required min="1" max="99" placeholder="9" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+            <input type="number" id="newDorsal" required min="1" max="99" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
           </div>
           <div class="col-span-2">
             <label class="block font-semibold text-slate-300 mb-1">Nom Complet</label>
-            <input type="text" id="newName" required placeholder="Ex. Fitxatge Nou" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+            <input type="text" id="newName" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
           </div>
         </div>
-
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Posició</label>
           <select id="newPos" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
@@ -604,12 +601,10 @@
             <option value="Porter">Porter</option>
           </select>
         </div>
-
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Foto (URL opcional)</label>
-          <input type="text" id="newPhoto" placeholder="https://... (o puja fitxer després)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+          <input type="text" id="newPhoto" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
         </div>
-
         <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
           <button type="button" onclick="closeAddPlayerModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
           <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg">Desar Jugador</button>
@@ -627,28 +622,23 @@
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-
       <div class="flex flex-col items-center gap-3">
         <img id="modalPreviewImg" src="" class="w-20 h-20 rounded-full object-cover border-2 border-red-500 bg-slate-800 shadow-md" />
         <p id="modalPlayerName" class="text-sm font-bold text-slate-200"></p>
       </div>
-
       <div class="space-y-3 text-xs">
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Opció A: Pujar fitxer</label>
           <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-slate-300 text-xs file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-red-950 file:text-red-300 hover:file:bg-red-900" />
         </div>
         <div class="flex items-center gap-2 text-slate-500">
-          <div class="h-px bg-slate-800 flex-1"></div>
-          <span>o</span>
-          <div class="h-px bg-slate-800 flex-1"></div>
+          <div class="h-px bg-slate-800 flex-1"></div><span>o</span><div class="h-px bg-slate-800 flex-1"></div>
         </div>
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Opció B: Enllaç URL</label>
-          <input type="text" id="photoUrlInput" placeholder="https://exemple.cat/foto.jpg" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
+          <input type="text" id="photoUrlInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
         </div>
       </div>
-
       <div class="flex items-center justify-end gap-2 pt-2">
         <button onclick="closePhotoModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
         <button onclick="savePlayerPhoto()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-brand-red hover:bg-brand-darkRed text-white shadow-lg">Desar Foto</button>
@@ -670,14 +660,14 @@
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-      <p class="text-xs text-slate-400">Introdueix la clau per gestionar actes, jugadors i competicions.</p>
-      
+      <p class="text-xs text-slate-400">Introdueix les teves credencials per gestionar el lloc.</p>
       <div>
+        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Correu electrònic</label>
+        <input type="email" id="adminEmailInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500 mb-3" placeholder="admin@correu.cat" />
         <label class="block text-xs font-semibold text-slate-300 mb-1.5">Contrasenya</label>
         <input type="password" id="adminPasswordInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500" placeholder="Introdueix la contrasenya..." onkeyup="if(event.key==='Enter') verifyAdminPassword()" />
-        <p id="loginError" class="text-xs text-red-400 mt-1.5 hidden">Contrasenya incorrecta.</p>
+        <p id="loginError" class="text-xs text-red-400 mt-1.5 hidden">Correu o contrasenya incorrectes.</p>
       </div>
-
       <div class="flex items-center justify-end gap-2 pt-2">
         <button onclick="toggleAdminModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
         <button onclick="verifyAdminPassword()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-brand-red hover:bg-brand-darkRed text-white shadow-lg">Accedir</button>
@@ -685,11 +675,495 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT AMB LÒGICA D'ACTES I INFERMERIA -->
+  <!-- JAVASCRIPT AMB LÒGICA D'ACTES, INFERMERIA I AUTENTICACIÓ FIREBASE -->
   <script>
-    const getInitialsAvatar = (name) => {
-      return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1e293b&color=cbd5e1&bold=true&size=128`;
+    // 🔥 ESTRUCTURA DE DADES PER DEFECTE INCRUSTADA 🔥
+    const defaultData = {
+      "competitions": [
+        {
+          "id": "comp_1786709158400",
+          "name": "Pretemporada",
+          "short": "Pretemporada",
+          "logo": "https://cdn-icons-png.flaticon.com/512/1378/1378583.png"
+        },
+        {
+          "id": "comp_1786716013390",
+          "name": "2ª RFEF",
+          "short": "2ª RFEF",
+          "logo": "https://assets.football-logos.cc/logos/spain/1500x1500/segunda-federacion--no-text.c73ddca0.png"
+        },
+        {
+          "id": "comp_1786716059655",
+          "name": "Copa RFEF",
+          "short": "Copa RFEF",
+          "logo": "https://pbs.twimg.com/media/F2HL6GQWQAA7KeV.jpg"
+        },
+        {
+          "id": "comp_1786716101669",
+          "name": "Copa Catalunya",
+          "short": "Copa Catalunya",
+          "logo": "https://cdn.footystats.org/img/competitions/spain-copa-catalunya.png"
+        }
+      ],
+      "players": [
+        {
+          "id": 1,
+          "dorsal": 1,
+          "name": "Marcos Pérez",
+          "pos": "Porter",
+          "photo": "img/marcos1.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "goalsAgainst": 3, "min": 180, "yellow": 0, "goals": 0, "assists": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 2,
+          "dorsal": 13,
+          "name": "Álvaro Pacheco",
+          "pos": "Porter",
+          "photo": "img/alvaro1.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 180, "goals": 0, "goalsAgainst": 1, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 3,
+          "dorsal": 2,
+          "name": "Ferran Ruíz",
+          "pos": "Defensa",
+          "photo": "img/ferran.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 165, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 4,
+          "dorsal": 21,
+          "name": "Paulo Auzokoa",
+          "pos": "Defensa",
+          "photo": "img/paulo.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 195, "goals": 0, "goalsAgainst": 0, "assists": 1, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 5,
+          "dorsal": 4,
+          "name": "Iker Reche",
+          "pos": "Defensa",
+          "photo": "img/reche.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 3, "min": 150, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 6,
+          "dorsal": 5,
+          "name": "Gabri Clemente",
+          "pos": "Defensa",
+          "photo": "img/gabri.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 165, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 7,
+          "dorsal": 22,
+          "name": "Adrián Beamonte",
+          "pos": "Defensa",
+          "photo": "img/adrian.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 195, "goals": 1, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 8,
+          "dorsal": 15,
+          "name": "Fran Moreno",
+          "pos": "Defensa",
+          "photo": "img/fran.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 165, "goals": 1, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 9,
+          "dorsal": 3,
+          "name": "Sem Dirks",
+          "pos": "Defensa",
+          "photo": "img/diks.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 195, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 2, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 10,
+          "dorsal": 18,
+          "name": "Mario Domingo",
+          "pos": "Defensa",
+          "photo": "img/mario.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 195, "goals": 0, "goalsAgainst": 0, "assists": 1, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 11,
+          "dorsal": 19,
+          "name": "Aser Palacios",
+          "pos": "Defensa",
+          "photo": "img/aser.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 165, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 12,
+          "dorsal": 12,
+          "name": "Cristian Mármol",
+          "pos": "Migcampista",
+          "photo": "img/marmol.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 165, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 13,
+          "dorsal": 6,
+          "name": "Ekaitz Molina",
+          "pos": "Migcampista",
+          "photo": "img/molina.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 195, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 14,
+          "dorsal": 14,
+          "name": "Jaime Barrero",
+          "pos": "Migcampista",
+          "photo": "img/barrero.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 165, "goals": 1, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 15,
+          "dorsal": 8,
+          "name": "Sergio Cortés",
+          "pos": "Migcampista",
+          "photo": "img/cortes.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 195, "goals": 0, "goalsAgainst": 0, "assists": 1, "yellow": 1, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 16,
+          "dorsal": 16,
+          "name": "Albert Celma",
+          "pos": "Migcampista",
+          "photo": "img/celma.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 1, "min": 45, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": true, "notes": "Molesties" }
+        },
+        {
+          "id": 17,
+          "dorsal": 10,
+          "name": "Sergio Montero",
+          "pos": "Davanter",
+          "photo": "img/montero.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 165, "goals": 1, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 18,
+          "dorsal": 9,
+          "name": "Alberto Gutiérrez",
+          "pos": "Davanter",
+          "photo": "img/guti.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 165, "goals": 3, "goalsAgainst": 0, "assists": 1, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 19,
+          "dorsal": 23,
+          "name": "Larry Kelechi",
+          "pos": "Davanter",
+          "photo": "img/larry.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 1, "min": 45, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 20,
+          "dorsal": 7,
+          "name": "Max Marcet",
+          "pos": "Davanter",
+          "photo": "img/max.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 165, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 21,
+          "dorsal": 20,
+          "name": "Nahuel Arroyo",
+          "pos": "Davanter",
+          "photo": "img/nahuel.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 195, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 22,
+          "dorsal": 17,
+          "name": "Marcos Mendes",
+          "pos": "Davanter",
+          "photo": "img/mendes.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 4, "min": 195, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 1, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 23,
+          "dorsal": 11,
+          "name": "Dano Lourens",
+          "pos": "Davanter",
+          "photo": "img/dano.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 3, "min": 150, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 24,
+          "dorsal": 24,
+          "name": "Frodo",
+          "pos": "Davanter",
+          "photo": "img/frodo.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 2, "min": 75, "goals": 1, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        },
+        {
+          "id": 25,
+          "dorsal": 26,
+          "name": "Pau Santanach",
+          "pos": "Davanter",
+          "photo": "img/pau.jpg",
+          "stats": {
+            "comp_1786709158400": { "pj": 2, "min": 90, "goals": 0, "goalsAgainst": 0, "assists": 0, "yellow": 0, "red": 0 }
+          },
+          "injury": { "isInjured": false, "notes": "" }
+        }
+      ],
+      "matches": [
+        {
+          "id": 1,
+          "rival": "FC L'Escala",
+          "date": "1r Partit (05/08/2026)",
+          "compId": "comp_1786709158400",
+          "condition": "Fora",
+          "logo": "img/rivals/escala.png",
+          "gf": 1,
+          "gc": 0,
+          "scorers": "Jaime Barrero",
+          "yellows": "",
+          "reds": "",
+          "notes": "",
+          "matchPlayers": [
+            { "id": 1, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 2, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 3, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 4, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 6, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 7, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 8, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 9, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 10, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 11, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 12, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 13, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 14, "min": 45, "gf": 1, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 15, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 16, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 17, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 18, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 20, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 21, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 22, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 23, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 25, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 }
+          ]
+        },
+        {
+          "id": 2,
+          "rival": "CF Peralada",
+          "date": "2n Partit (05/08/2026)",
+          "compId": "comp_1786709158400",
+          "condition": "Fora",
+          "logo": "img/rivals/peralada.png",
+          "gf": 2,
+          "gc": 1,
+          "scorers": "Fran Moreno, Alberto Gutiérrez",
+          "yellows": "Sem Dirks, Sergio Cortés, Marcos Mendes",
+          "reds": "",
+          "notes": "9' - Sergio Cortés falla un penal.\n61' - Marcos Mendes falla un penal.",
+          "matchPlayers": [
+            { "id": 1, "min": 45, "gf": 0, "gc": 1, "as": 0, "yel": 0, "red": 0 },
+            { "id": 2, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 3, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 4, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 5, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 6, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 7, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 8, "min": 45, "gf": 1, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 9, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 1, "red": 0 },
+            { "id": 10, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 11, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 12, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 13, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 14, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 15, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 1, "red": 0 },
+            { "id": 17, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 18, "min": 45, "gf": 1, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 19, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 20, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 21, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 22, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 1, "red": 0 },
+            { "id": 25, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 }
+          ]
+        },
+        {
+          "id": 3,
+          "rival": "Girona FC 'B'",
+          "date": "3r Partit (15/08/2026)",
+          "compId": "comp_1786709158400",
+          "condition": "Fora",
+          "logo": "img/rivals/girona.png",
+          "gf": 3,
+          "gc": 2,
+          "scorers": "Alberto Gutiérrez (x2), Frodo",
+          "yellows": "",
+          "reds": "",
+          "notes": "Partit a porta tancada, desconeixement de targetes.",
+          "matchPlayers": [
+            { "id": 1, "min": 45, "gf": 0, "gc": 2, "as": 0, "yel": 0, "red": 0 },
+            { "id": 2, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 3, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 4, "min": 45, "gf": 0, "gc": 0, "as": 1, "yel": 0, "red": 0 },
+            { "id": 5, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 6, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 7, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 8, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 9, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 10, "min": 45, "gf": 0, "gc": 0, "as": 1, "yel": 0, "red": 0 },
+            { "id": 11, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 12, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 13, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 14, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 15, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 17, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 18, "min": 45, "gf": 2, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 20, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 21, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 22, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 23, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 24, "min": 45, "gf": 1, "gc": 0, "as": 0, "yel": 0, "red": 0 }
+          ]
+        },
+        {
+          "id": 4,
+          "rival": "CP San Cristóbal",
+          "date": "4t Partit (18/08/2026)",
+          "compId": "comp_1786709158400",
+          "condition": "Casa",
+          "logo": "img/rivals/sancris.png",
+          "gf": 2,
+          "gc": 1,
+          "scorers": "Adrián Beamonte, Sergio Montero",
+          "yellows": "Sem Dirks",
+          "reds": "",
+          "notes": "Partit retransmés a https://www.twitch.tv/mou4friends",
+          "matchPlayers": [
+            { "id": 1, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 2, "min": 45, "gf": 0, "gc": 1, "as": 0, "yel": 0, "red": 0 },
+            { "id": 3, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 4, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 5, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 6, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 7, "min": 60, "gf": 1, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 8, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 9, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 1, "red": 0 },
+            { "id": 10, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 11, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 12, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 13, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 14, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 15, "min": 60, "gf": 0, "gc": 0, "as": 1, "yel": 0, "red": 0 },
+            { "id": 17, "min": 30, "gf": 1, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 18, "min": 30, "gf": 0, "gc": 0, "as": 1, "yel": 0, "red": 0 },
+            { "id": 20, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 21, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 22, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 23, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 24, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 }
+          ]
+        }
+      ]
     };
+
+    // ⚠️ CONFIGURACIÓ DE FIREBASE ⚠️
+    const firebaseConfig = {
+      apiKey: "AIzaSyClrptNtVVnLNr05xQyohZKtefOftfro6o",
+      authDomain: "terrassa-fc-data.firebaseapp.com",
+      projectId: "terrassa-fc-data",
+      storageBucket: "terrassa-fc-data.firebasestorage.app",
+      messagingSenderId: "485033490227",
+      appId: "1:485033490227:web:cc4062c8258bfbfb31f046",
+      measurementId: "G-C0R0P1MJPE"
+    };
+
+    let auth = null;
+    let db = null;
+
+    // BLINDATGE ANTI-BLOQUEJADORS
+    try {
+      if (typeof firebase !== 'undefined') {
+        firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+        db = firebase.firestore();
+      } else {
+        console.warn("Firebase no s'ha pogut carregar (possible bloquejador d'anuncis o mode incògnit estricte).");
+      }
+    } catch(e) {
+      console.error("Error inicialitzant Firebase:", e);
+    }
 
     let competitions = [];
     let players = [];
@@ -700,9 +1174,31 @@
     let selectedPlayerForInjury = null;
     let tempUploadedBase64 = null;
     let editingMatchId = null; 
-    const ADMIN_PASS = "egarareds2026";
 
-    // Mostra/amaga l'input de text si el jugador està lesionat
+    // ESCOLTADOR D'ESTAT D'USUARI (CONTROL DE SEGURETAT)
+    if (auth) {
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          if (!user.isAnonymous) {
+            // És l'administrador!
+            isAdmin = true;
+            document.getElementById('adminNotice').classList.remove('hidden');
+            document.getElementById('modeBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span><span class="text-amber-400 font-bold">Mode Administrador</span>`;
+            document.getElementById('modeBadge').className = "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-950/60 border border-amber-800/50 text-amber-400";
+            document.getElementById('adminBtnText').textContent = "Bloquejar";
+          } else {
+            // És un visitant
+            isAdmin = false;
+          }
+        } else {
+          // Loguejar-se com a anònim invisible
+          isAdmin = false;
+          auth.signInAnonymously().catch(err => console.error("Error Auth Anònima:", err));
+        }
+        renderDashboard(); 
+      });
+    }
+
     document.getElementById('injuryStatusSelect').addEventListener('change', function() {
       if (this.value === 'Lesionat') {
         document.getElementById('injuryNotesDiv').classList.remove('hidden');
@@ -717,29 +1213,42 @@
       return clean === "porter" || clean === "portero" || clean === "gk" || clean === "goalkeeper";
     }
 
-    // CARREGA DADES DE DADES.JSON O DE LOCALSTORAGE
-    async function loadData() {
-      const savedComps = localStorage.getItem("terrassa_comps_v14");
-      const savedPlayers = localStorage.getItem("terrassa_players_v14");
-      const savedMatches = localStorage.getItem("terrassa_matches_v14");
-
-      if (savedComps && savedPlayers && savedMatches) {
-        competitions = JSON.parse(savedComps);
-        players = JSON.parse(savedPlayers);
-        matches = JSON.parse(savedMatches);
-      } else {
-        try {
-          const res = await fetch(`dades.json?v=${Date.now()}`);
-          if (!res.ok) throw new Error("No s'ha trobat dades.json");
-          const data = await res.json();
-          competitions = data.competitions || [];
-          players = data.players || [];
-          matches = data.matches || [];
-        } catch (err) {
-          console.error("Error carregant dades.json:", err);
-        }
+    // CARREGA DADES DE LA CONSTANT INCRUSTADA O DE LOCALSTORAGE AMB BLINDATGE
+    function loadData() {
+      let savedComps = null, savedPlayers = null, savedMatches = null;
+      
+      try {
+        savedComps = localStorage.getItem("terrassa_comps_v15");
+        savedPlayers = localStorage.getItem("terrassa_players_v15");
+        savedMatches = localStorage.getItem("terrassa_matches_v15");
+      } catch(e) {
+        console.warn("LocalStorage no disponible en aquest navegador/mode.");
       }
 
+      if (savedComps && savedPlayers && savedMatches) {
+        try {
+          competitions = JSON.parse(savedComps);
+          players = JSON.parse(savedPlayers);
+          matches = JSON.parse(savedMatches);
+        } catch(e) {
+          competitions = defaultData.competitions;
+          players = defaultData.players;
+          matches = defaultData.matches;
+        }
+      } else {
+        // CÀRREGA DES DE LA BASE INCRUSTADA
+        competitions = defaultData.competitions;
+        players = defaultData.players;
+        matches = defaultData.matches;
+        
+        try {
+          localStorage.setItem("terrassa_comps_v15", JSON.stringify(competitions));
+          localStorage.setItem("terrassa_players_v15", JSON.stringify(players));
+          localStorage.setItem("terrassa_matches_v15", JSON.stringify(matches));
+        } catch(e) {}
+      }
+
+      // Preparació de variables que poden faltar
       matches.forEach(m => {
         if (!m.condition) m.condition = "Casa";
         if (!m.date) m.date = "Partit Oficial";
@@ -759,9 +1268,13 @@
     }
 
     function saveData() {
-      localStorage.setItem("terrassa_comps_v14", JSON.stringify(competitions));
-      localStorage.setItem("terrassa_players_v14", JSON.stringify(players));
-      localStorage.setItem("terrassa_matches_v14", JSON.stringify(matches));
+      try {
+        localStorage.setItem("terrassa_comps_v15", JSON.stringify(competitions));
+        localStorage.setItem("terrassa_players_v15", JSON.stringify(players));
+        localStorage.setItem("terrassa_matches_v15", JSON.stringify(matches));
+      } catch(e) {
+        console.warn("No es poden desar dades en local.");
+      }
       renderDashboard();
     }
 
@@ -980,8 +1493,7 @@
       document.getElementById('detailModalTitle').textContent = `Acta: Terrassa FC vs ${match.rival}`;
       document.getElementById('detailModalComp').textContent = `${compObj ? compObj.name : 'Torneig'} • ${match.date || 'Sense data'} • ${isHome ? 'Estadi Olímpic de Terrassa' : 'Camp Rival'}`;
 
-      const content = document.getElementById('detailModalContent');
-      content.innerHTML = `
+      let contentHtml = `
         <div class="flex items-center justify-center gap-6 bg-slate-950 p-4 rounded-2xl border border-slate-800">
           <div class="text-center">
             <img src="img/escut.png" alt="Escut Terrassa FC" class="w-12 h-12 object-contain mx-auto mb-1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
@@ -1028,11 +1540,132 @@
             </div>
           </div>
         ` : ''}
+
+        <!-- CONTENEDOR MVP EN DIRECTE FIREBASE -->
+        <div id="mvpContainer_${match.id}" class="mt-4 pt-4 border-t border-slate-800 text-center text-slate-400 text-xs">
+          <i data-lucide="loader-2" class="w-4 h-4 animate-spin mx-auto mb-1 inline-block"></i> Carregant vots en directe...
+        </div>
       `;
 
+      document.getElementById('detailModalContent').innerHTML = contentHtml;
       document.getElementById('matchDetailModal').classList.remove('hidden');
-      lucide.createIcons();
+      if(window.lucide) lucide.createIcons();
+
+      // Cridar a Firebase per carregar els vots
+      loadMVPVotes(match);
     }
+
+    async function loadMVPVotes(match) {
+      const container = document.getElementById(`mvpContainer_${match.id}`);
+      if (!container) return;
+
+      if (!db) {
+        container.innerHTML = "<p class='text-rose-400 text-xs text-center p-3 border border-rose-900/40 rounded-xl bg-rose-950/20'>No es poden carregar els vots (Bloquejador d'anuncis detectat).</p>";
+        return;
+      }
+
+      try {
+        const snapshot = await db.collection('mvp_votes').doc(match.id.toString()).collection('votes').get();
+        let counts = {};
+        let hasVoted = false;
+        let totalVotes = 0;
+        const uid = auth && auth.currentUser ? auth.currentUser.uid : null;
+
+        snapshot.forEach(doc => {
+          let pid = doc.data().playerId;
+          counts[pid] = (counts[pid] || 0) + 1;
+          totalVotes++;
+          if (uid && doc.id === uid) hasVoted = true;
+        });
+
+        // Construir l'interfície un cop tenim els vots reals de Firebase
+        let mvpHtml = `<h4 class="font-bold text-amber-400 flex items-center gap-1.5 mb-3"><i data-lucide="star" class="w-4 h-4"></i> Votació MVP del Partit</h4>`;
+
+        if (match.matchPlayers && match.matchPlayers.length > 0) {
+          mvpHtml += `<div class="space-y-2 max-h-[200px] overflow-y-auto custom-scroll pr-1">`;
+          
+          let displayPlayers = [...match.matchPlayers].map(mp => {
+            const p = players.find(x => x.id === mp.id);
+            return { player: p, votes: counts[mp.id] || 0 };
+          }).filter(item => item.player);
+
+          if (hasVoted || isAdmin) {
+            displayPlayers.sort((a, b) => b.votes - a.votes);
+          }
+
+          displayPlayers.forEach(item => {
+            const p = item.player;
+            const votes = item.votes;
+            const pct = totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0;
+
+            if (hasVoted || isAdmin) {
+              mvpHtml += `
+                <div class="flex items-center gap-3 text-xs bg-slate-950 p-2 rounded-xl border border-slate-800/60">
+                  <img src="${getPlayerImg(p)}" class="w-6 h-6 rounded-full object-cover border border-slate-700 bg-slate-800 shrink-0" />
+                  <div class="flex-1 min-w-0">
+                    <div class="flex justify-between mb-1">
+                      <span class="font-bold text-slate-200 truncate">${p.name}</span>
+                      <span class="text-amber-400 font-bold shrink-0 ml-2">${votes} vots (${pct}%)</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-1.5">
+                      <div class="bg-amber-400 h-1.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                    </div>
+                  </div>
+                </div>`;
+            } else {
+              mvpHtml += `
+                <div class="flex items-center justify-between p-2 bg-slate-950 rounded-xl border border-slate-800 text-xs hover:border-amber-700/50 transition">
+                  <div class="flex items-center gap-2">
+                    <img src="${getPlayerImg(p)}" class="w-6 h-6 rounded-full object-cover border border-slate-700 bg-slate-800" />
+                    <span class="font-bold text-slate-200">${p.name}</span>
+                  </div>
+                  <button onclick="voteMVP(${match.id}, ${p.id})" class="px-3 py-1 bg-amber-900/40 hover:bg-amber-800 text-amber-200 rounded-lg font-bold border border-amber-700/50 transition">Votar</button>
+                </div>`;
+            }
+          });
+          mvpHtml += `</div>`;
+          if (hasVoted && !isAdmin) {
+            mvpHtml += `<p class="text-[10px] text-slate-500 mt-3 text-center italic">Ja has emès el teu vot d'MVP per aquest partit.</p>`;
+          }
+        } else {
+          mvpHtml += `<p class="text-[10px] text-slate-500 italic p-3 bg-slate-950 rounded-xl border border-slate-800">No hi ha jugadors registrats en aquesta acta per votar.</p>`;
+        }
+
+        container.innerHTML = mvpHtml;
+        container.classList.remove('text-center');
+        if(window.lucide) lucide.createIcons();
+
+      } catch(e) {
+        console.error("Error carregant vots:", e);
+        container.innerHTML = "<p class='text-rose-400 text-xs text-center p-3 border border-rose-900/40 rounded-xl bg-rose-950/20'>No s'han pogut carregar els vots (permisos o bloqueig).</p>";
+      }
+    }
+
+    // FUNCIÓ PER VOTAR MVP AMB SEGURETAT FIREBASE
+    window.voteMVP = async function(matchId, playerId) {
+      if (!auth || !auth.currentUser) {
+        alert("S'està establint la connexió segura. Torna-ho a provar en un segon o desactiva l'AdBlocker.");
+        return;
+      }
+      
+      const uid = auth.currentUser.uid;
+      
+      try {
+        const voteRef = db.collection('mvp_votes').doc(matchId.toString()).collection('votes').doc(uid);
+        await voteRef.set({
+            playerId: playerId,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // Recarregar interfície
+        const match = matches.find(m => m.id === matchId);
+        if (match) loadMVPVotes(match);
+
+      } catch(e) {
+        console.error("Error al votar:", e);
+        alert("Hi ha hagut un error en registrar el vot. Si us plau, comprova la teva connexió.");
+      }
+    };
 
     function closeMatchDetailModal() {
       document.getElementById('matchDetailModal').classList.add('hidden');
@@ -1126,460 +1759,6 @@
             </td>
             <td class="p-2 text-center">
               <input type="number" id="mp_red_${p.id}" min="0" max="1" value="${redVal}" ${disabledState} class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-500 font-bold focus:border-red-500 focus:outline-none" />
-            </td>
-          </tr>
-        `;
-      }).join('');
-
-      document.getElementById("matchModal").classList.remove("hidden");
-    }
-
-    function renderCycleAlerts() {
-      const sanctionedContainer = document.getElementById("sanctionedList");
-      const warnedContainer = document.getElementById("warnedList");
-      const injuredContainer = document.getElementById("injuredList");
-
-      const playerStatList = players.map(p => ({
-        player: p,
-        stats: getPlayerStats(p, activeCompId)
-      }));
-
-      const sanctioned = playerStatList.filter(x => x.stats.yellow > 0 && x.stats.yellow % 5 === 0);
-      const warned = playerStatList.filter(x => x.stats.yellow > 0 && x.stats.yellow % 5 === 4);
-      const injured = players.filter(p => p.injury && p.injury.isInjured);
-
-      document.getElementById("badgeSancionatsCount").textContent = sanctioned.length;
-      document.getElementById("badgeWarnedCount").textContent = warned.length;
-      document.getElementById("badgeInjuredCount").textContent = injured.length;
-
-      // SANCIONATS
-      if (sanctioned.length === 0) {
-        sanctionedContainer.innerHTML = `
-          <div class="p-3 rounded-xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
-            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500/70"></i>
-            Cap jugador sancionat per cicle de grogues.
-          </div>
-        `;
-      } else {
-        sanctionedContainer.innerHTML = sanctioned.map(x => `
-          <div class="p-2.5 rounded-xl border border-red-800/80 bg-red-950/40 flex items-center justify-between gap-3 text-xs">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <img src="${getPlayerImg(x.player)}" class="w-8 h-8 rounded-full object-cover border border-red-500/80 shrink-0 bg-slate-800" />
-              <div class="truncate">
-                <p class="font-bold text-white truncate text-xs">${x.player.name}</p>
-                <p class="text-[10px] text-red-300 font-semibold">${x.player.pos} • #${x.player.dorsal}</p>
-              </div>
-            </div>
-            <div class="text-right shrink-0">
-              <span class="px-2 py-0.5 rounded-md bg-red-900/90 text-red-100 font-black text-xs border border-red-700">
-                ${x.stats.yellow} Grogues (Cicle ${Math.floor(x.stats.yellow / 5)})
-              </span>
-              <span class="text-[9px] text-red-400 block mt-0.5 font-bold">⛔ Suspès 1 partit</span>
-            </div>
-          </div>
-        `).join('');
-      }
-
-      // APERCEBUTS
-      if (warned.length === 0) {
-        warnedContainer.innerHTML = `
-          <div class="p-3 rounded-xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
-            <i data-lucide="shield" class="w-4 h-4 text-amber-500/70"></i>
-            Cap jugador en perill de sanció immediata (a 1 groga).
-          </div>
-        `;
-      } else {
-        warnedContainer.innerHTML = warned.map(x => `
-          <div class="p-2.5 rounded-xl border border-amber-800/80 bg-amber-950/40 flex items-center justify-between gap-3 text-xs">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <img src="${getPlayerImg(x.player)}" class="w-8 h-8 rounded-full object-cover border border-amber-500/80 shrink-0 bg-slate-800" />
-              <div class="truncate">
-                <p class="font-bold text-white truncate text-xs">${x.player.name}</p>
-                <p class="text-[10px] text-amber-300 font-semibold">${x.player.pos} • #${x.player.dorsal}</p>
-              </div>
-            </div>
-            <div class="text-right shrink-0">
-              <span class="px-2 py-0.5 rounded-md bg-amber-900/90 text-amber-100 font-black text-xs border border-amber-700">
-                ${x.stats.yellow} Grogues (4/5)
-              </span>
-              <span class="text-[9px] text-amber-400 block mt-0.5 font-bold">⚠️ A 1 de suspensió</span>
-            </div>
-          </div>
-        `).join('');
-      }
-
-      // INFERMERIA
-      if (injured.length === 0) {
-        injuredContainer.innerHTML = `
-          <div class="p-3 rounded-xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
-            <i data-lucide="activity" class="w-4 h-4 text-blue-500/70"></i>
-            Tota la plantilla està disponible.
-          </div>
-        `;
-      } else {
-        injuredContainer.innerHTML = injured.map(p => `
-          <div class="p-2.5 rounded-xl border border-blue-800/80 bg-blue-950/40 flex items-center gap-3 text-xs">
-            <img src="${getPlayerImg(p)}" class="w-8 h-8 rounded-full object-cover border border-blue-500/80 shrink-0 bg-slate-800" />
-            <div class="flex-1 min-w-0">
-              <p class="font-bold text-white truncate text-xs">${p.name}</p>
-              <p class="text-[10px] text-blue-300 italic truncate">${p.injury.notes || "Baixa mèdica"}</p>
-            </div>
-          </div>
-        `).join('');
-      }
-    }
-
-    function renderKPIs() {
-      let totGoals = 0, totAssists = 0, totYel = 0, totRed = 0, totGoalsAgainst = 0;
-
-      players.forEach(p => {
-        const s = getPlayerStats(p, activeCompId);
-        totGoals += s.goals;
-        totGoalsAgainst += s.goalsAgainst;
-        totAssists += s.assists;
-        totYel += s.yellow;
-        totRed += s.red;
-      });
-
-      const goalDiff = totGoals - totGoalsAgainst;
-      const diffSign = goalDiff > 0 ? `+${goalDiff}` : `${goalDiff}`;
-      const diffColorClass = goalDiff > 0 ? "text-emerald-400" : (goalDiff < 0 ? "text-rose-400" : "text-slate-200");
-
-      document.getElementById('kpiGoals').textContent = totGoals;
-      document.getElementById('kpiGoalsAgainst').textContent = totGoalsAgainst;
-      document.getElementById('kpiGoalDiff').textContent = diffSign;
-      document.getElementById('kpiGoalDiff').className = `text-2xl font-black ${diffColorClass}`;
-      document.getElementById('kpiAssists').textContent = totAssists;
-      document.getElementById('kpiCards').innerHTML = `<span class="text-yellow-400">${totYel}</span> / <span class="text-red-400">${totRed}</span>`;
-    }
-
-    function buildPodiumHTML(sortedList, valueKey, suffix, medalCustomClass) {
-      const medals = [
-        { rank: '1r', icon: '🥇', bg: 'bg-amber-950/40 border-amber-800/60 text-amber-300', numColor: 'text-amber-400' },
-        { rank: '2n', icon: '🥈', bg: 'bg-slate-800/50 border-slate-700 text-slate-300', numColor: 'text-slate-300' },
-        { rank: '3r', icon: '🥉', bg: 'bg-orange-950/30 border-orange-900/50 text-orange-300', numColor: 'text-orange-400' }
-      ];
-
-      return medals.map((m, idx) => {
-        const item = sortedList[idx];
-        if (!item || (!item.isKeeper && item.val === 0 && idx > 0)) {
-          return `
-            <div class="flex items-center justify-between p-2 rounded-xl border border-slate-800/60 bg-slate-950/40 text-slate-600 text-xs">
-              <span class="font-bold">${m.icon} ${m.rank}</span>
-              <span>-</span>
-              <span>0 ${suffix}</span>
-            </div>
-          `;
-        }
-        const p = item.player;
-        const finalNumColor = medalCustomClass || m.numColor;
-        const displayValue = item.displayVal !== undefined ? item.displayVal : item.val;
-        
-        return `
-          <div class="flex items-center justify-between p-2 rounded-xl border ${m.bg} text-xs transition hover:scale-[1.01]">
-            <div class="flex items-center gap-1.5 min-w-0">
-              <span class="text-sm shrink-0">${m.icon}</span>
-              <img src="${getPlayerImg(p)}" class="w-6 h-6 rounded-full object-cover border border-slate-700 shrink-0 bg-slate-800" />
-              <div class="truncate">
-                <p class="font-bold text-white truncate text-xs">${p.name}</p>
-                <p class="text-[9px] text-slate-400">${p.pos} • #${p.dorsal}</p>
-              </div>
-            </div>
-            <div class="text-right shrink-0 pl-1">
-              <span class="text-sm font-black ${finalNumColor}">${displayValue}</span>
-              <span class="text-[9px] text-slate-400 block -mt-1">${suffix}</span>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function renderPodiums() {
-      const playerStatList = players.map(p => ({
-        player: p,
-        stats: getPlayerStats(p, activeCompId)
-      }));
-
-      const sortedGoals = [...playerStatList].map(x => ({ player: x.player, val: x.stats.goals, min: x.stats.min }))
-        .sort((a, b) => (b.val - a.val) || (a.min - b.min));
-      document.getElementById('podiumGoals').innerHTML = buildPodiumHTML(sortedGoals, 'val', 'Gols', 'text-red-400');
-
-      const allKeepers = playerStatList.filter(x => isPorter(x.player.pos));
-      const keepersSorted = allKeepers.map(x => {
-        const gc90 = x.stats.min > 0 ? ((x.stats.goalsAgainst / x.stats.min) * 90) : 0;
-        return {
-          player: x.player,
-          val: gc90,
-          displayVal: x.stats.min > 0 ? gc90.toFixed(2) : "-",
-          min: x.stats.min,
-          pj: x.stats.pj,
-          isKeeper: true
-        };
-      }).sort((a, b) => {
-        if (a.pj > 0 && b.pj === 0) return -1;
-        if (a.pj === 0 && b.pj > 0) return 1;
-        if (a.val !== b.val) return a.val - b.val; // Menos es millor (Pocs GC per 90m)
-        return b.min - a.min;
-      });
-
-      if (keepersSorted.length === 0) {
-        document.getElementById('podiumKeepers').innerHTML = `
-          <div class="p-3 text-center text-[10px] text-slate-500 italic">Sense porters a la plantilla</div>
-        `;
-      } else {
-        document.getElementById('podiumKeepers').innerHTML = buildPodiumHTML(keepersSorted, 'val', 'GC', 'text-cyan-400');
-      }
-
-      const sortedAssists = [...playerStatList].map(x => ({ player: x.player, val: x.stats.assists, min: x.stats.min }))
-        .sort((a, b) => (b.val - a.val) || (a.min - b.min));
-      document.getElementById('podiumAssists').innerHTML = buildPodiumHTML(sortedAssists, 'val', 'Assist.', 'text-indigo-400');
-
-      const sortedMin = [...playerStatList].map(x => ({ player: x.player, val: x.stats.min }))
-        .sort((a, b) => (b.val - a.val));
-      document.getElementById('podiumMinutes').innerHTML = buildPodiumHTML(sortedMin, 'val', 'Min.', 'text-amber-400');
-
-      const sortedYellows = [...playerStatList].map(x => ({ player: x.player, val: x.stats.yellow, red: x.stats.red, min: x.stats.min }))
-        .sort((a, b) => (b.val - a.val) || (a.min - b.min));
-      document.getElementById('podiumYellows').innerHTML = buildPodiumHTML(sortedYellows, 'val', 'Grogues', 'text-yellow-400');
-
-      const sortedReds = [...playerStatList].map(x => ({ player: x.player, val: x.stats.red, yellow: x.stats.yellow, min: x.stats.min }))
-        .sort((a, b) => (b.val - a.val) || (b.yellow - a.yellow) || (a.min - b.min));
-      document.getElementById('podiumReds').innerHTML = buildPodiumHTML(sortedReds, 'val', 'Vermelles', 'text-rose-400');
-    }
-
-    function renderTable() {
-      const search = (document.getElementById('searchInput').value || '').toLowerCase();
-      const pos = document.getElementById('posFilter').value;
-      const tbody = document.getElementById('playerTableBody');
-      const adminTh = document.getElementById('adminHeaderCol');
-      const addBtn = document.getElementById('addPlayerBtn');
-
-      if (isAdmin) {
-        adminTh.classList.remove('hidden');
-        addBtn.classList.remove('hidden');
-        addBtn.classList.add('flex');
-      } else {
-        adminTh.classList.add('hidden');
-        addBtn.classList.add('hidden');
-        addBtn.classList.remove('flex');
-      }
-
-      const filtered = players.filter(p => {
-        const matchesSearch = p.name.toLowerCase().includes(search) || p.dorsal.toString().includes(search);
-        let matchesPos = false;
-        if (pos === 'ALL' || pos === 'RIVALS_TAB') matchesPos = true;
-        else if (pos === 'Porter') matchesPos = isPorter(p.pos);
-        else matchesPos = (p.pos === pos);
-        return matchesSearch && matchesPos;
-      });
-
-      tbody.innerHTML = filtered.map((p) => {
-        const s = getPlayerStats(p, activeCompId);
-        const porter = isPorter(p.pos);
-        
-        // CÀLCULS PER 90 MINUTS
-        const gol90 = s.min > 0 ? ((s.goals / s.min) * 90).toFixed(2) : "0.00";
-        const assist90 = s.min > 0 ? ((s.assists / s.min) * 90).toFixed(2) : "0.00";
-        
-        let posBadge = "bg-slate-800 text-slate-300";
-        if(p.pos === 'Davanter') posBadge = "bg-red-950/70 text-red-300 border border-red-800/40";
-        if(p.pos === 'Migcampista') posBadge = "bg-indigo-950/70 text-indigo-300 border border-indigo-800/40";
-        if(p.pos === 'Defensa') posBadge = "bg-emerald-950/70 text-emerald-300 border border-emerald-800/40";
-        if(porter) posBadge = "bg-amber-950/70 text-amber-300 border border-amber-800/40";
-
-        const editableClass = isAdmin ? "bg-slate-950 border border-slate-700 rounded px-1 py-0.5 w-12 text-center text-white focus:border-red-500 focus:outline-none" : "";
-
-        const currentInCycle = s.yellow % 5;
-        const isSanctioned = s.yellow > 0 && currentInCycle === 0;
-        const isWarned = currentInCycle === 4;
-
-        let cycleBoxesHTML = '';
-        for (let i = 1; i <= 5; i++) {
-          const filled = isSanctioned ? true : (i <= currentInCycle);
-          const boxColor = isSanctioned 
-            ? 'bg-red-500 border-red-400' 
-            : (filled ? (isWarned ? 'bg-amber-400 border-amber-300' : 'bg-yellow-400 border-yellow-300') : 'bg-slate-800 border-slate-700');
-          cycleBoxesHTML += `<span class="w-2.5 h-3.5 rounded-sm border ${boxColor} inline-block" title="${i}/5"></span>`;
-        }
-
-        let cycleStatusBadge = '';
-        if (isSanctioned) {
-          cycleStatusBadge = `<span class="text-[9px] font-black px-1 py-0.2 rounded bg-red-900 text-red-200 border border-red-700">SUSPÈS</span>`;
-        } else if (isWarned) {
-          cycleStatusBadge = `<span class="text-[9px] font-bold px-1 py-0.2 rounded bg-amber-900 text-amber-200 border border-amber-700 animate-pulse">AVÍS (4/5)</span>`;
-        } else {
-          cycleStatusBadge = `<span class="text-[9px] text-slate-500">${currentInCycle}/5</span>`;
-        }
-
-        const injuryOverlay = (p.injury && p.injury.isInjured) ? `<div class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-blue-500 rounded-full border border-slate-900 flex items-center justify-center" title="Lesionat"><i data-lucide="stethoscope" class="w-2 h-2 text-white"></i></div>` : "";
-        const imgFilter = (p.injury && p.injury.isInjured) ? "grayscale brightness-75 opacity-70" : "";
-
-        return `
-          <tr class="hover:bg-slate-800/40 transition border-b border-slate-800/50">
-            <td class="py-2.5 px-3 text-center text-slate-400 font-bold">
-              ${isAdmin ? `
-                <input type="number" value="${p.dorsal}" onchange="updatePlayerDetails(${p.id}, 'dorsal', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-center text-xs text-slate-200 w-10 font-bold" />
-              ` : p.dorsal}
-            </td>
-            <td class="py-2.5 px-3 text-center">
-              <div class="relative inline-block group">
-                <img src="${getPlayerImg(p)}" class="w-8 h-8 rounded-full object-cover border border-slate-700 bg-slate-800 shadow mx-auto ${imgFilter}" />
-                ${injuryOverlay}
-                ${isAdmin ? `
-                  <button onclick="openPhotoModal(${p.id})" class="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition" title="Canviar foto">
-                    <i data-lucide="camera" class="w-3.5 h-3.5"></i>
-                  </button>
-                ` : ''}
-              </div>
-            </td>
-            <td class="py-2.5 px-3">
-              ${isAdmin ? `
-                <input type="text" value="${p.name}" onchange="updatePlayerDetails(${p.id}, 'name', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white w-full" />
-              ` : `
-                <span class="font-bold text-slate-100">${p.name}</span>
-                ${(p.injury && p.injury.isInjured) ? `<span class="block text-[9px] text-blue-400 italic">Baixa</span>` : ''}
-              `}
-            </td>
-            <td class="py-2.5 px-3 text-center">
-              ${isAdmin ? `
-                <select onchange="updatePlayerDetails(${p.id}, 'pos', this.value)" class="bg-slate-950 border border-slate-700 text-xs rounded px-1 py-0.5 text-slate-200">
-                  <option value="Porter" ${porter?'selected':''}>Porter</option>
-                  <option value="Defensa" ${p.pos==='Defensa'?'selected':''}>Defensa</option>
-                  <option value="Migcampista" ${p.pos==='Migcampista'?'selected':''}>Migcampista</option>
-                  <option value="Davanter" ${p.pos==='Davanter'?'selected':''}>Davanter</option>
-                </select>
-              ` : `
-                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${posBadge}">${p.pos}</span>
-              `}
-            </td>
-            <td class="py-2.5 px-3 text-center">
-              ${isAdmin ? `<input type="number" min="0" value="${s.pj}" onchange="setPlayerStat(${p.id}, 'pj', this.value)" class="${editableClass}" />` : s.pj}
-            </td>
-            <td class="py-2.5 px-3 text-center text-slate-300">
-              ${isAdmin ? `<input type="number" min="0" value="${s.min}" onchange="setPlayerStat(${p.id}, 'min', this.value)" class="${editableClass} w-14" />` : s.min + "'"}
-            </td>
-            <td class="py-2.5 px-3 text-center font-bold text-red-400 bg-red-950/10">
-              ${isAdmin ? `<input type="number" min="0" value="${s.goals}" onchange="setPlayerStat(${p.id}, 'goals', this.value)" class="${editableClass} text-red-400 font-bold" />` : s.goals}
-            </td>
-            <td class="py-2.5 px-3 text-center font-bold ${porter ? 'text-rose-400 bg-rose-950/20' : 'text-slate-600'}">
-              ${isAdmin ? `
-                <input type="number" min="0" value="${s.goalsAgainst}" onchange="setPlayerStat(${p.id}, 'goalsAgainst', this.value)" class="${editableClass} text-rose-400 font-bold" />
-              ` : (porter ? s.goalsAgainst : (s.goalsAgainst > 0 ? s.goalsAgainst : '-'))}
-            </td>
-            <td class="py-2.5 px-3 text-center font-bold text-indigo-400 bg-indigo-950/10">
-              ${isAdmin ? `<input type="number" min="0" value="${s.assists}" onchange="setPlayerStat(${p.id}, 'assists', this.value)" class="${editableClass} text-indigo-400 font-bold" />` : s.assists}
-            </td>
-            
-            <td class="py-2.5 px-3 text-center text-emerald-400 font-medium">${gol90 !== "0.00" ? gol90 : "-"}</td>
-            <td class="py-2.5 px-3 text-center text-sky-400 font-medium">${assist90 !== "0.00" ? assist90 : "-"}</td>
-            
-            <td class="py-2.5 px-3 text-center text-yellow-400 font-bold">
-              ${isAdmin ? `<input type="number" min="0" value="${s.yellow}" onchange="setPlayerStat(${p.id}, 'yellow', this.value)" class="${editableClass}" />` : s.yellow}
-            </td>
-            <td class="py-2.5 px-3 text-center">
-              <div class="flex items-center justify-center gap-1">
-                <div class="flex items-center gap-0.5">
-                  ${cycleBoxesHTML}
-                </div>
-                ${cycleStatusBadge}
-              </div>
-            </td>
-            <td class="py-2.5 px-3 text-center text-red-500 font-bold">
-              ${isAdmin ? `<input type="number" min="0" value="${s.red}" onchange="setPlayerStat(${p.id}, 'red', this.value)" class="${editableClass}" />` : s.red}
-            </td>
-            ${isAdmin ? `
-              <td class="py-2.5 px-3 text-center">
-                <div class="flex items-center justify-center gap-1">
-                  <!-- Botó Infermeria -->
-                  <button onclick="openInjuryModal(${p.id})" title="Gestionar Infermeria" class="p-1 bg-slate-800 hover:bg-blue-900/80 text-slate-400 hover:text-blue-200 rounded text-[10px] border border-slate-700 transition">
-                    <i data-lucide="stethoscope" class="w-3.5 h-3.5"></i>
-                  </button>
-                  <button onclick="deletePlayer(${p.id})" title="Eliminar Jugador" class="p-1 bg-slate-800 hover:bg-rose-900/80 text-slate-400 hover:text-rose-200 rounded text-[10px] border border-slate-700 transition">
-                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                  </button>
-                </div>
-              </td>
-            ` : ''}
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function renderDashboard() {
-      document.getElementById('totalPlayerCount').textContent = players.length;
-      renderTabs();
-      renderRivalsModule();
-      renderCycleAlerts();
-      renderKPIs();
-      renderPodiums();
-      renderTable();
-      lucide.createIcons();
-    }
-
-    function updatePlayerDetails(id, key, val) {
-      const idx = players.findIndex(p => p.id === id);
-      if (idx !== -1) {
-        if (key === 'dorsal') players[idx].dorsal = Number(val) || 0;
-        else players[idx][key] = val;
-        saveData();
-      }
-    }
-
-    // MODAL D'ACTA DE PARTIT AMB PLANTILLA COMPLETA
-    function openAddMatchModal() {
-      editingMatchId = null; // Ens assegurem que estem en mode crear
-      document.getElementById("modalMatchTitle").textContent = "Formulari de Partit";
-
-      const select = document.getElementById("matchCompSelect");
-      select.innerHTML = competitions.map(c => `
-        <option value="${c.id}">${c.name}</option>
-      `).join('');
-
-      document.getElementById("rivalNameInput").value = '';
-      document.getElementById("matchDateInput").value = '';
-      document.getElementById("rivalLogoInput").value = '';
-      document.getElementById("matchConditionSelect").value = 'Casa';
-      document.getElementById("matchGFTerrassa").value = 0;
-      document.getElementById("matchGCRival").value = 0;
-      document.getElementById("matchNotesInput").value = '';
-
-      // Render de la llista de jugadors per posar minuts i dades
-      const tbody = document.getElementById("matchPlayersListBody");
-      tbody.innerHTML = players.map(p => {
-        const porter = isPorter(p.pos);
-        // Si està lesionat, ho marquem i el desactivem per defecte (però l'Admin ho pot canviar si s'ha recuperat d'urgència)
-        const injuryWarning = (p.injury && p.injury.isInjured) ? `<span class="text-[9px] text-blue-400 italic block">Infermeria</span>` : '';
-        
-        return `
-          <tr class="hover:bg-slate-900/60 transition border-b border-slate-800/40">
-            <td class="p-2 text-center">
-              <input type="checkbox" id="mp_pj_${p.id}" onchange="togglePlayerMatchRow(${p.id})" class="rounded border-slate-700 text-rose-600 focus:ring-0 bg-slate-900 w-4 h-4 cursor-pointer" />
-            </td>
-            <td class="p-2 text-center font-bold text-slate-400">#${p.dorsal}</td>
-            <td class="p-2 font-semibold text-slate-200">
-              ${p.name}
-              <span class="text-[9px] text-slate-400 block">${p.pos}</span>
-              ${injuryWarning}
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_min_${p.id}" min="0" max="120" value="0" disabled class="w-14 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1.5 py-1 text-center text-white focus:border-red-500 focus:outline-none" />
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_gf_${p.id}" min="0" value="0" disabled class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-400 font-bold focus:border-red-500 focus:outline-none" />
-            </td>
-            <td class="p-2 text-center">
-              ${porter ? `
-                <input type="number" id="mp_gc_${p.id}" min="0" value="0" disabled class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-rose-400 font-bold focus:border-red-500 focus:outline-none" />
-              ` : `<span class="text-slate-600 text-xs">-</span><input type="hidden" id="mp_gc_${p.id}" value="0" />`}
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_as_${p.id}" min="0" value="0" disabled class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-indigo-400 font-bold focus:border-red-500 focus:outline-none" />
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_yel_${p.id}" min="0" max="2" value="0" disabled class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-yellow-400 font-bold focus:border-red-500 focus:outline-none" />
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_red_${p.id}" min="0" max="1" value="0" disabled class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-500 font-bold focus:border-red-500 focus:outline-none" />
             </td>
           </tr>
         `;
@@ -1722,7 +1901,7 @@
       }
 
       document.getElementById('injuryModal').classList.remove('hidden');
-      lucide.createIcons();
+      if(window.lucide) lucide.createIcons();
     }
 
     function closeInjuryModal() {
@@ -1767,7 +1946,7 @@
         </div>
       `).join('');
       document.getElementById("compsModal").classList.remove("hidden");
-      lucide.createIcons();
+      if(window.lucide) lucide.createIcons();
     }
 
     function closeManageCompsModal() {
@@ -1857,7 +2036,7 @@
       document.getElementById('photoUrlInput').value = selectedPlayerForPhoto.photo || '';
       document.getElementById('fileInput').value = '';
       document.getElementById('photoModal').classList.remove('hidden');
-      lucide.createIcons();
+      if(window.lucide) lucide.createIcons();
     }
 
     function closePhotoModal() {
@@ -1884,7 +2063,7 @@
       closePhotoModal();
     }
 
-    // AUTH
+    // LÒGICA D'AUTENTICACIÓ AMB FIREBASE
     function toggleAdminModal() {
       if (isAdmin) { lockAdmin(); return; }
       document.getElementById('loginModal').classList.toggle('hidden');
@@ -1893,27 +2072,33 @@
     }
 
     function verifyAdminPassword() {
-      const pass = document.getElementById('adminPasswordInput').value;
-      if (pass === ADMIN_PASS) {
-        isAdmin = true;
-        document.getElementById('loginModal').classList.add('hidden');
-        document.getElementById('adminNotice').classList.remove('hidden');
-        document.getElementById('modeBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span><span class="text-amber-400 font-bold">Mode Administrador</span>`;
-        document.getElementById('modeBadge').className = "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-950/60 border border-amber-800/50 text-amber-400";
-        document.getElementById('adminBtnText').textContent = "Bloquejar";
-        renderDashboard();
-      } else {
-        document.getElementById('loginError').classList.remove('hidden');
+      if (!auth) {
+        alert("El sistema de seguretat està bloquejat pel teu navegador.");
+        return;
       }
+      
+      const email = document.getElementById('adminEmailInput').value.trim();
+      const pass = document.getElementById('adminPasswordInput').value;
+      
+      auth.signInWithEmailAndPassword(email, pass)
+        .then((userCredential) => {
+          document.getElementById('loginModal').classList.add('hidden');
+          document.getElementById('adminEmailInput').value = '';
+          document.getElementById('adminPasswordInput').value = '';
+        })
+        .catch((error) => {
+          document.getElementById('loginError').classList.remove('hidden');
+        });
     }
 
     function lockAdmin() {
-      isAdmin = false;
-      document.getElementById('adminNotice').classList.add('hidden');
-      document.getElementById('modeBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Mode Públic</span>`;
-      document.getElementById('modeBadge').className = "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-950/60 border border-emerald-800/50 text-emerald-400";
-      document.getElementById('adminBtnText').textContent = "Intern";
-      renderDashboard();
+      if (!auth) return;
+      auth.signOut().then(() => {
+        document.getElementById('adminNotice').classList.add('hidden');
+        document.getElementById('modeBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Mode Públic</span>`;
+        document.getElementById('modeBadge').className = "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-950/60 border border-emerald-800/50 text-emerald-400";
+        document.getElementById('adminBtnText').textContent = "Intern";
+      });
     }
 
     function exportDataJSON() {
@@ -1927,7 +2112,7 @@
       a.remove();
     }
 
-    // Iniciar carregant dades.json
+    // Iniciar
     loadData();
   </script>
 </body>

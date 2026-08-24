@@ -12,6 +12,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics-compat.js"></script>
 
   <script>
     tailwind.config = {
@@ -114,7 +115,7 @@
     <!-- VISTA 1: VISTA PRINCIPAL (COMPETICIONS / TOTAL ACUMULAT) -->
     <div id="mainStatsView" class="space-y-6">
 
-      <!-- 1. TARGETES KPI RESUM GLOBALS (AJUSTAT A 5 COLUMNES) -->
+      <!-- 1. TARGETES KPI RESUM GLOBALS -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between relative overflow-hidden">
           <div class="flex items-center justify-between text-red-400 mb-1">
@@ -157,7 +158,7 @@
         </div>
       </div>
 
-      <!-- 2. SUSPENSIONS, AVISOS I INFERMERIA (3 COLUMNES) -->
+      <!-- 2. SUSPENSIONS, AVISOS I INFERMERIA -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- SANCIONATS -->
         <div class="bg-gradient-to-r from-red-950/70 via-slate-900 to-slate-900 border border-red-800/60 rounded-2xl p-4 shadow-xl">
@@ -697,6 +698,742 @@
 
   <!-- JAVASCRIPT AMB LÒGICA D'ACTES, INFERMERIA I AUTENTICACIÓ FIREBASE -->
   <script>
+    // 🔥 ESTRUCTURA DE DADES PER DEFECTE INCRUSTADA 🔥
+    const defaultData = {
+      "competitions": [
+        {
+          "id": "comp_1786709158400",
+          "name": "Pretemporada",
+          "short": "Pretemporada",
+          "logo": "https://cdn-icons-png.flaticon.com/512/1378/1378583.png"
+        },
+        {
+          "id": "comp_1786716013390",
+          "name": "2ª RFEF",
+          "short": "2ª RFEF",
+          "logo": "https://assets.football-logos.cc/logos/spain/1500x1500/segunda-federacion--no-text.c73ddca0.png"
+        },
+        {
+          "id": "comp_1786716059655",
+          "name": "Copa RFEF",
+          "short": "Copa RFEF",
+          "logo": "https://pbs.twimg.com/media/F2HL6GQWQAA7KeV.jpg"
+        },
+        {
+          "id": "comp_1786716101669",
+          "name": "Copa Catalunya",
+          "short": "Copa Catalunya",
+          "logo": "https://cdn.footystats.org/img/competitions/spain-copa-catalunya.png"
+        }
+      ],
+      "players": [
+        {
+          "id": 1,
+          "dorsal": 1,
+          "name": "Marcos Pérez",
+          "pos": "Porter",
+          "photo": "img/marcos1.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "goalsAgainst": 3,
+              "min": 180,
+              "yellow": 0,
+              "goals": 0,
+              "assists": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 2,
+          "dorsal": 13,
+          "name": "Álvaro Pacheco",
+          "pos": "Porter",
+          "photo": "img/alvaro1.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 180,
+              "goals": 0,
+              "goalsAgainst": 1,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 3,
+          "dorsal": 2,
+          "name": "Ferran Ruíz",
+          "pos": "Defensa",
+          "photo": "img/ferran.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 165,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 4,
+          "dorsal": 21,
+          "name": "Paulo Auzokoa",
+          "pos": "Defensa",
+          "photo": "img/paulo.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 195,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 1,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 5,
+          "dorsal": 4,
+          "name": "Iker Reche",
+          "pos": "Defensa",
+          "photo": "img/reche.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 3,
+              "min": 150,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 6,
+          "dorsal": 5,
+          "name": "Gabri Clemente",
+          "pos": "Defensa",
+          "photo": "img/gabri.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 165,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 7,
+          "dorsal": 22,
+          "name": "Adrián Beamonte",
+          "pos": "Defensa",
+          "photo": "img/adrian.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 195,
+              "goals": 1,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 8,
+          "dorsal": 15,
+          "name": "Fran Moreno",
+          "pos": "Defensa",
+          "photo": "img/fran.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 165,
+              "goals": 1,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 9,
+          "dorsal": 3,
+          "name": "Sem Dirks",
+          "pos": "Defensa",
+          "photo": "img/diks.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 195,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 2,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 10,
+          "dorsal": 18,
+          "name": "Mario Domingo",
+          "pos": "Defensa",
+          "photo": "img/mario.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 195,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 1,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 11,
+          "dorsal": 19,
+          "name": "Aser Palacios",
+          "pos": "Defensa",
+          "photo": "img/aser.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 165,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 12,
+          "dorsal": 12,
+          "name": "Cristian Mármol",
+          "pos": "Migcampista",
+          "photo": "img/marmol.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 165,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 13,
+          "dorsal": 6,
+          "name": "Ekaitz Molina",
+          "pos": "Migcampista",
+          "photo": "img/molina.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 195,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 14,
+          "dorsal": 14,
+          "name": "Jaime Barrero",
+          "pos": "Migcampista",
+          "photo": "img/barrero.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 165,
+              "goals": 1,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 15,
+          "dorsal": 8,
+          "name": "Sergio Cortés",
+          "pos": "Migcampista",
+          "photo": "img/cortes.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 195,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 1,
+              "yellow": 1,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 16,
+          "dorsal": 16,
+          "name": "Albert Celma",
+          "pos": "Migcampista",
+          "photo": "img/celma.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 1,
+              "min": 45,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": true,
+            "notes": "Molesties"
+          }
+        },
+        {
+          "id": 17,
+          "dorsal": 10,
+          "name": "Sergio Montero",
+          "pos": "Davanter",
+          "photo": "img/montero.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 165,
+              "goals": 1,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 18,
+          "dorsal": 9,
+          "name": "Alberto Gutiérrez",
+          "pos": "Davanter",
+          "photo": "img/guti.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 165,
+              "goals": 3,
+              "goalsAgainst": 0,
+              "assists": 1,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 19,
+          "dorsal": 23,
+          "name": "Larry Kelechi",
+          "pos": "Davanter",
+          "photo": "img/larry.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 1,
+              "min": 45,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 20,
+          "dorsal": 7,
+          "name": "Max Marcet",
+          "pos": "Davanter",
+          "photo": "img/max.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 165,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 21,
+          "dorsal": 20,
+          "name": "Nahuel Arroyo",
+          "pos": "Davanter",
+          "photo": "img/nahuel.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 195,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 22,
+          "dorsal": 17,
+          "name": "Marcos Mendes",
+          "pos": "Davanter",
+          "photo": "img/mendes.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 4,
+              "min": 195,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 1,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 23,
+          "dorsal": 11,
+          "name": "Dano Lourens",
+          "pos": "Davanter",
+          "photo": "img/dano.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 3,
+              "min": 150,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 24,
+          "dorsal": 24,
+          "name": "Frodo",
+          "pos": "Davanter",
+          "photo": "img/frodo.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 2,
+              "min": 75,
+              "goals": 1,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        },
+        {
+          "id": 25,
+          "dorsal": 26,
+          "name": "Pau Santanach",
+          "pos": "Davanter",
+          "photo": "img/pau.jpg",
+          "stats": {
+            "comp_1786709158400": {
+              "pj": 2,
+              "min": 90,
+              "goals": 0,
+              "goalsAgainst": 0,
+              "assists": 0,
+              "yellow": 0,
+              "red": 0
+            }
+          },
+          "injury": {
+            "isInjured": false,
+            "notes": ""
+          }
+        }
+      ],
+      "matches": [
+        {
+          "id": 1,
+          "rival": "FC L'Escala",
+          "date": "1r Partit (05/08/2026)",
+          "compId": "comp_1786709158400",
+          "condition": "Fora",
+          "logo": "img/rivals/escala.png",
+          "gf": 1,
+          "gc": 0,
+          "scorers": "Jaime Barrero",
+          "yellows": "",
+          "reds": "",
+          "notes": "",
+          "matchPlayers": [
+            { "id": 1, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 2, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 3, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 4, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 6, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 7, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 8, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 9, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 10, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 11, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 12, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 13, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 14, "min": 45, "gf": 1, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 15, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 16, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 17, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 18, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 20, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 21, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 22, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 23, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 25, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 }
+          ]
+        },
+        {
+          "id": 2,
+          "rival": "CF Peralada",
+          "date": "2n Partit (05/08/2026)",
+          "compId": "comp_1786709158400",
+          "condition": "Fora",
+          "logo": "img/rivals/peralada.png",
+          "gf": 2,
+          "gc": 1,
+          "scorers": "Fran Moreno, Alberto Gutiérrez",
+          "yellows": "Sem Dirks, Sergio Cortés, Marcos Mendes",
+          "reds": "",
+          "notes": "9' - Sergio Cortés falla un penal.\n61' - Marcos Mendes falla un penal.",
+          "matchPlayers": [
+            { "id": 1, "min": 45, "gf": 0, "gc": 1, "as": 0, "yel": 0, "red": 0 },
+            { "id": 2, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 3, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 4, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 5, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 6, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 7, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 8, "min": 45, "gf": 1, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 9, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 1, "red": 0 },
+            { "id": 10, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 11, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 12, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 13, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 14, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 15, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 1, "red": 0 },
+            { "id": 17, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 18, "min": 45, "gf": 1, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 19, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 20, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 21, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 22, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 1, "red": 0 },
+            { "id": 25, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 }
+          ]
+        },
+        {
+          "id": 3,
+          "rival": "Girona FC 'B'",
+          "date": "3r Partit (15/08/2026)",
+          "compId": "comp_1786709158400",
+          "condition": "Fora",
+          "logo": "img/rivals/girona.png",
+          "gf": 3,
+          "gc": 2,
+          "scorers": "Alberto Gutiérrez (x2), Frodo",
+          "yellows": "",
+          "reds": "",
+          "notes": "Partit a porta tancada, desconeixement de targetes.",
+          "matchPlayers": [
+            { "id": 1, "min": 45, "gf": 0, "gc": 2, "as": 0, "yel": 0, "red": 0 },
+            { "id": 2, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 3, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 4, "min": 45, "gf": 0, "gc": 0, "as": 1, "yel": 0, "red": 0 },
+            { "id": 5, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 6, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 7, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 8, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 9, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 10, "min": 45, "gf": 0, "gc": 0, "as": 1, "yel": 0, "red": 0 },
+            { "id": 11, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 12, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 13, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 14, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 15, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 17, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 18, "min": 45, "gf": 2, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 20, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 21, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 22, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 23, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 24, "min": 45, "gf": 1, "gc": 0, "as": 0, "yel": 0, "red": 0 }
+          ]
+        },
+        {
+          "id": 4,
+          "rival": "CP San Cristóbal",
+          "date": "4t Partit (18/08/2026)",
+          "compId": "comp_1786709158400",
+          "condition": "Casa",
+          "logo": "img/rivals/sancris.png",
+          "gf": 2,
+          "gc": 1,
+          "scorers": "Adrián Beamonte, Sergio Montero",
+          "yellows": "Sem Dirks",
+          "reds": "",
+          "notes": "Partit retransmés a https://www.twitch.tv/mou4friends",
+          "matchPlayers": [
+            { "id": 1, "min": 45, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 2, "min": 45, "gf": 0, "gc": 1, "as": 0, "yel": 0, "red": 0 },
+            { "id": 3, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 4, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 5, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 6, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 7, "min": 60, "gf": 1, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 8, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 9, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 1, "red": 0 },
+            { "id": 10, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 11, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 12, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 13, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 14, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 15, "min": 60, "gf": 0, "gc": 0, "as": 1, "yel": 0, "red": 0 },
+            { "id": 17, "min": 30, "gf": 1, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 18, "min": 30, "gf": 0, "gc": 0, "as": 1, "yel": 0, "red": 0 },
+            { "id": 20, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 21, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 22, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 23, "min": 60, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 },
+            { "id": 24, "min": 30, "gf": 0, "gc": 0, "as": 0, "yel": 0, "red": 0 }
+          ]
+        }
+      ]
+    };
+
     // ⚠️ CONFIGURACIÓ DE FIREBASE ⚠️
     const firebaseConfig = {
       apiKey: "AIzaSyClrptNtVVnLNr05xQyohZKtefOftfro6o",
@@ -714,10 +1451,6 @@
     }
     const auth = firebase.auth ? firebase.auth() : null;
     const db = firebase.firestore ? firebase.firestore() : null;
-
-    const getInitialsAvatar = (name) => {
-      return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1e293b&color=cbd5e1&bold=true&size=128`;
-    };
 
     let competitions = [];
     let players = [];
@@ -768,8 +1501,8 @@
       return clean === "porter" || clean === "portero" || clean === "gk" || clean === "goalkeeper";
     }
 
-    // CARREGA DADES DE DADES.JSON O DE LOCALSTORAGE
-    async function loadData() {
+    // CARREGA DADES DE LA CONSTANT INCRUSTADA O DE LOCALSTORAGE
+    function loadData() {
       const savedComps = localStorage.getItem("terrassa_comps_v14");
       const savedPlayers = localStorage.getItem("terrassa_players_v14");
       const savedMatches = localStorage.getItem("terrassa_matches_v14");
@@ -779,18 +1512,18 @@
         players = JSON.parse(savedPlayers);
         matches = JSON.parse(savedMatches);
       } else {
-        try {
-          const res = await fetch(`dades.json?v=${Date.now()}`);
-          if (!res.ok) throw new Error("No s'ha trobat dades.json");
-          const data = await res.json();
-          competitions = data.competitions || [];
-          players = data.players || [];
-          matches = data.matches || [];
-        } catch (err) {
-          console.error("Error carregant dades.json:", err);
-        }
+        // CÀRREGA DES DE LA BASE INCRUSTADA
+        competitions = defaultData.competitions;
+        players = defaultData.players;
+        matches = defaultData.matches;
+        
+        // Ho guardem perquè la propera vegada es llegeixi directament
+        localStorage.setItem("terrassa_comps_v14", JSON.stringify(competitions));
+        localStorage.setItem("terrassa_players_v14", JSON.stringify(players));
+        localStorage.setItem("terrassa_matches_v14", JSON.stringify(matches));
       }
 
+      // Preparació de variables que poden faltar
       matches.forEach(m => {
         if (!m.condition) m.condition = "Casa";
         if (!m.date) m.date = "Partit Oficial";
@@ -1127,7 +1860,7 @@
             return { player: p, votes: counts[mp.id] || 0 };
           }).filter(item => item.player);
 
-          if (hasVoted) {
+          if (hasVoted || isAdmin) {
             displayPlayers.sort((a, b) => b.votes - a.votes);
           }
 
@@ -1136,7 +1869,7 @@
             const votes = item.votes;
             const pct = totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0;
 
-            if (hasVoted) {
+            if (hasVoted || isAdmin) {
               mvpHtml += `
                 <div class="flex items-center gap-3 text-xs bg-slate-950 p-2 rounded-xl border border-slate-800/60">
                   <img src="${getPlayerImg(p)}" class="w-6 h-6 rounded-full object-cover border border-slate-700 bg-slate-800 shrink-0" />
@@ -1162,7 +1895,7 @@
             }
           });
           mvpHtml += `</div>`;
-          if (hasVoted) {
+          if (hasVoted && !isAdmin) {
             mvpHtml += `<p class="text-[10px] text-slate-500 mt-3 text-center italic">Ja has emès el teu vot d'MVP per aquest partit.</p>`;
           }
         } else {

@@ -7,6 +7,8 @@
   <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- LLIBRERIA OFICIAL DE SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -38,7 +40,6 @@
   <header class="bg-brand-navy border-b border-slate-800 sticky top-0 z-40 shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
       
-      <!-- Contenedor flex para alinear el logo y el texto horizontalmente -->
       <div class="flex items-center gap-3">
         <img src="img/escut.png" alt="Escut Terrassa FC" class="w-10 h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
         <div class="w-10 h-10 rounded-xl bg-brand-red hidden items-center justify-center font-black text-white text-xl shadow-md border border-red-400/30">T</div>
@@ -76,20 +77,8 @@
         <span><strong>Mode Administrador Activat:</strong> Estàs editant les dades de la pestanya activa (<span id="adminActiveCompName" class="font-bold text-amber-300 underline">Totes</span>).</span>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
-        <button onclick="openAddMatchModal()" class="px-3 py-1.5 bg-rose-700 hover:bg-rose-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
-          <i data-lucide="file-text" class="w-4 h-4"></i> + Nou partit
-        </button>
-        <button onclick="openAddPlayerModal()" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
-          <i data-lucide="user-plus" class="w-4 h-4"></i> Afegir Jugador
-        </button>
-        <button onclick="openManageCompsModal()" class="px-3 py-1.5 bg-indigo-700 hover:bg-indigo-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow">
-          <i data-lucide="trophy" class="w-4 h-4"></i> Gestionar Competicions
-        </button>
-        <button onclick="exportDataJSON()" class="px-3 py-1.5 bg-slate-900 hover:bg-black rounded-lg text-xs font-medium border border-slate-700 text-slate-200 flex items-center gap-1.5">
-          <i data-lucide="download" class="w-3.5 h-3.5"></i> Còpia
-        </button>
         <button onclick="lockAdmin()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold transition">
-          Guardar
+          Tancar Sessió Admin
         </button>
       </div>
     </div>
@@ -108,7 +97,7 @@
     <!-- VISTA 1: VISTA PRINCIPAL (COMPETICIONS / TOTAL ACUMULAT) -->
     <div id="mainStatsView" class="space-y-6">
 
-      <!-- 1. TARGETES KPI RESUM GLOBALS (AJUSTAT A 5 COLUMNES) -->
+      <!-- 1. TARGETES KPI RESUM GLOBALS -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 flex flex-col justify-between relative overflow-hidden">
           <div class="flex items-center justify-between text-red-400 mb-1">
@@ -151,9 +140,8 @@
         </div>
       </div>
 
-      <!-- 2. SUSPENSIONS, AVISOS I INFERMERIA (3 COLUMNES) -->
+      <!-- 2. SUSPENSIONS, AVISOS I INFERMERIA -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- SANCIONATS -->
         <div class="bg-gradient-to-r from-red-950/70 via-slate-900 to-slate-900 border border-red-800/60 rounded-2xl p-4 shadow-xl">
           <div class="flex items-center justify-between mb-3 border-b border-red-900/40 pb-2">
             <div class="flex items-center gap-2">
@@ -170,7 +158,6 @@
           <div id="sanctionedList" class="space-y-2"></div>
         </div>
 
-        <!-- APERCEBUTS -->
         <div class="bg-gradient-to-r from-amber-950/60 via-slate-900 to-slate-900 border border-amber-800/60 rounded-2xl p-4 shadow-xl">
           <div class="flex items-center justify-between mb-3 border-b border-amber-900/40 pb-2">
             <div class="flex items-center gap-2">
@@ -187,7 +174,6 @@
           <div id="warnedList" class="space-y-2"></div>
         </div>
 
-        <!-- INFERMERIA -->
         <div class="bg-gradient-to-r from-blue-950/70 via-slate-900 to-slate-900 border border-blue-800/60 rounded-2xl p-4 shadow-xl">
           <div class="flex items-center justify-between mb-3 border-b border-blue-900/40 pb-2">
             <div class="flex items-center gap-2">
@@ -255,7 +241,7 @@
           <div class="flex items-center justify-between mb-2.5 border-b border-slate-800 pb-2">
             <div class="flex items-center gap-1.5">
               <span class="text-yellow-400 font-bold">🟨</span>
-              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Amonestats </h2>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Amonestats</h2>
             </div>
             <span class="text-[9px] font-bold text-yellow-400 bg-yellow-950/60 px-1.5 py-0.5 rounded-full border border-yellow-900/60">Grogues</span>
           </div>
@@ -266,7 +252,7 @@
           <div class="flex items-center justify-between mb-2.5 border-b border-slate-800 pb-2">
             <div class="flex items-center gap-1.5">
               <span class="text-red-500 font-bold">🟥</span>
-              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Expulsats </h2>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Expulsats</h2>
             </div>
             <span class="text-[9px] font-bold text-red-500 bg-red-950/60 px-1.5 py-0.5 rounded-full border border-red-900/60">Vermelles</span>
           </div>
@@ -289,10 +275,6 @@
           </div>
 
           <div class="flex flex-wrap items-center gap-2.5">
-            <button id="addPlayerBtn" onclick="openAddPlayerModal()" class="hidden px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold items-center gap-1.5 shadow transition">
-              <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Afegir Jugador
-            </button>
-
             <div class="relative">
               <input type="text" id="searchInput" oninput="renderTable()" placeholder="Cercar jugador..." class="bg-slate-950 text-xs text-slate-200 pl-8 pr-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-red-500 w-44" />
               <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5"></i>
@@ -321,13 +303,11 @@
                 <th class="py-3 px-3 text-center w-16 text-red-400 font-bold">GF ⚽</th>
                 <th class="py-3 px-3 text-center w-16 text-rose-400 font-bold">GC 🧤</th>
                 <th class="py-3 px-3 text-center w-16 text-indigo-400 font-bold">Assist. 🎯</th>
-                <!-- NOVES COLUMNES PER 90 MINUTS -->
                 <th class="py-3 px-3 text-center w-20 text-emerald-400 font-bold">Gol/90m</th>
                 <th class="py-3 px-3 text-center w-20 text-sky-400 font-bold">Assist/90m</th>
                 <th class="py-3 px-3 text-center w-14 text-yellow-400 font-bold">🟨</th>
                 <th class="py-3 px-3 text-center min-w-[125px] text-amber-300">Cicle Grogues</th>
                 <th class="py-3 px-3 text-center w-14 text-red-500 font-bold">🟥</th>
-                <th id="adminHeaderCol" class="py-3 px-3 text-center w-36 hidden">Accions Admin</th>
               </tr>
             </thead>
             <tbody id="playerTableBody" class="divide-y divide-slate-800/60 font-medium"></tbody>
@@ -352,10 +332,6 @@
               <p class="text-xs text-slate-400">Dades, alineacions i incidències.</p>
             </div>
           </div>
-
-          <button id="addMatchViewBtn" onclick="openAddMatchModal()" class="hidden px-4 py-2 bg-rose-700 hover:bg-rose-600 text-white rounded-xl text-xs font-bold items-center gap-2 shadow-lg transition">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i> Crear Nou Partit
-          </button>
         </div>
 
         <div id="rivalsFullGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
@@ -382,276 +358,10 @@
         </button>
       </div>
 
-      <div id="detailModalContent" class="space-y-4 text-xs">
-        <!-- Rendered via JS -->
-      </div>
+      <div id="detailModalContent" class="space-y-4 text-xs"></div>
 
       <div class="flex justify-end pt-3 border-t border-slate-800">
         <button onclick="closeMatchDetailModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Tancar Acta</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: REGISTRAR / EDITAR ACTA DE PARTIT AMB PLANTILLA COMPLETA -->
-  <div id="matchModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-4xl w-full p-6 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto custom-scroll">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-rose-950 border border-rose-800 flex items-center justify-center text-rose-400">
-            <i data-lucide="file-plus" class="w-4 h-4"></i>
-          </div>
-          <div>
-            <h3 id="modalMatchTitle" class="font-bold text-white text-base">Formulari de Partit</h3>
-            <p class="text-[11px] text-slate-400">En desar, les dades de cada jugador es bolcaran directament a la competició seleccionada.</p>
-          </div>
-        </div>
-        <button onclick="closeAddMatchModal()" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <form onsubmit="submitNewMatch(event)" class="space-y-4 text-xs">
-        <!-- DETALLS BÀSICS DEL PARTIT -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-          <div class="sm:col-span-2">
-            <label class="block font-semibold text-slate-300 mb-1">Equip Rival</label>
-            <input type="text" id="rivalNameInput" required placeholder="Ex. CE Sabadell, UE Sant Andreu..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-300 mb-1">Data / Jornada</label>
-            <input type="text" id="matchDateInput" placeholder="Ex. Jornada 1 (06/09/2026)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
-          </div>
-          <div>
-            <label class="block font-semibold text-amber-300 mb-1">Competició Destí</label>
-            <select id="matchCompSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500 font-bold"></select>
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-300 mb-1">Condició</label>
-            <select id="matchConditionSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500 font-bold">
-              <option value="Casa">🏠 Casa (Estadi Olímpic)</option>
-              <option value="Fora">✈️ Fora (Visitant)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-300 mb-1">Escut Rival (URL)</label>
-            <input type="text" id="rivalLogoInput" placeholder="https://.../escut.png" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
-          </div>
-        </div>
-
-        <!-- MARCADOR -->
-        <div class="grid grid-cols-2 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
-          <div>
-            <label class="block font-bold text-emerald-400 mb-1 text-center">Gols Terrassa FC (GF)</label>
-            <input type="number" id="matchGFTerrassa" min="0" value="0" required class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 text-center text-lg font-black text-white" />
-          </div>
-          <div>
-            <label class="block font-bold text-rose-400 mb-1 text-center">Gols Rival (GC)</label>
-            <input type="number" id="matchGCRival" min="0" value="0" required class="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 text-center text-lg font-black text-rose-400" />
-          </div>
-        </div>
-
-        <!-- SELECCIÓ I REGISTRE DE JUGADORS PER AQUEST PARTIT -->
-        <div class="space-y-2 bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-            <h4 class="font-black text-slate-200 uppercase tracking-wider text-xs flex items-center gap-1.5">
-              <i data-lucide="users" class="w-4 h-4 text-red-500"></i> Alineació, Minuts & Estadístiques del Partit
-            </h4>
-            <span class="text-[10px] text-slate-400 italic">Marca els jugadors que han participat</span>
-          </div>
-
-          <div class="overflow-x-auto custom-scroll max-h-[300px] border border-slate-800 rounded-lg">
-            <table class="w-full text-left text-[11px]">
-              <thead class="bg-slate-900 sticky top-0 text-slate-400 font-bold border-b border-slate-800">
-                <tr>
-                  <th class="p-2 text-center w-10">Juga?</th>
-                  <th class="p-2 w-8 text-center">#</th>
-                  <th class="p-2 min-w-[130px]">Jugador</th>
-                  <th class="p-2 w-20 text-center">Minuts</th>
-                  <th class="p-2 w-14 text-center text-red-400">Gols ⚽</th>
-                  <th class="p-2 w-14 text-center text-rose-400">GC 🧤</th>
-                  <th class="p-2 w-14 text-center text-indigo-400">Assist 🎯</th>
-                  <th class="p-2 w-12 text-center text-yellow-400">🟨</th>
-                  <th class="p-2 w-12 text-center text-red-500">🟥</th>
-                </tr>
-              </thead>
-              <tbody id="matchPlayersListBody" class="divide-y divide-slate-800/60 bg-slate-950/40"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- OBSERVACIONS / NOTES -->
-        <div>
-          <label class="block font-semibold text-slate-300 mb-1">Observacions Arbitrals / Notes de l'Acta</label>
-          <textarea id="matchNotesInput" rows="2" placeholder="Incidències de l'acta, penals xiulats, canvis destacats..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
-        </div>
-
-        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
-          <button type="button" onclick="closeAddMatchModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
-          <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-rose-700 hover:bg-rose-600 text-white shadow-lg flex items-center gap-1.5">
-            <i data-lucide="check" class="w-4 h-4"></i> Desar Partit & Bolcar Estadístiques
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL: INFERMERIA (DONAR D'ALTA / BAIXA MÈDICA) -->
-  <div id="injuryModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-blue-950 border border-blue-800 flex items-center justify-center text-blue-400">
-            <i data-lucide="stethoscope" class="w-4 h-4"></i>
-          </div>
-          <h3 class="font-bold text-white text-base">Estat Mèdic</h3>
-        </div>
-        <button onclick="closeInjuryModal()" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <div class="flex flex-col items-center gap-2 border-b border-slate-800 pb-3">
-        <img id="injuryModalImg" src="" class="w-16 h-16 rounded-full object-cover border-2 border-slate-700 bg-slate-800 shadow-md" />
-        <p id="injuryModalName" class="text-sm font-bold text-slate-200"></p>
-      </div>
-
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block font-semibold text-slate-300 mb-1">Estat del jugador</label>
-          <select id="injuryStatusSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500">
-            <option value="Disponible">Disponible (Alta mèdica)</option>
-            <option value="Lesionat">Lesionat / Baixa (Infermeria)</option>
-          </select>
-        </div>
-        <div id="injuryNotesDiv" class="hidden">
-          <label class="block font-semibold text-slate-300 mb-1">Motiu / Temps estimat de baixa</label>
-          <input type="text" id="injuryNotesInput" placeholder="Ex. Trencament isquiotibials (3 setmanes)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500" />
-        </div>
-      </div>
-
-      <div class="flex items-center justify-end gap-2 pt-2">
-        <button onclick="closeInjuryModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
-        <button onclick="saveInjuryStatus()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg">Guardar Canvis</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: GESTIONAR COMPETICIONS -->
-  <div id="compsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-indigo-950 border border-indigo-800 flex items-center justify-center text-indigo-400">
-            <i data-lucide="trophy" class="w-4 h-4"></i>
-          </div>
-          <h3 class="font-bold text-white text-base">Gestionar Competicions & Logos</h3>
-        </div>
-        <button onclick="closeManageCompsModal()" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <div class="space-y-3 max-h-[300px] overflow-y-auto custom-scroll pr-1" id="compsEditList"></div>
-
-      <div class="border-t border-slate-800 pt-3 space-y-2 text-xs">
-        <h4 class="font-bold text-slate-200 flex items-center gap-1.5"><i data-lucide="plus" class="w-3.5 h-3.5 text-emerald-400"></i> Afegir Nova competició</h4>
-        <div class="grid grid-cols-2 gap-2">
-          <input type="text" id="newCompName" placeholder="Nom (ex. Copa RFEF Fase Nacional)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
-          <input type="text" id="newCompLogo" placeholder="URL Logo (opcional)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
-        </div>
-        <button onclick="addNewCompetition()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow transition">Afegir Competició</button>
-      </div>
-
-      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
-        <button onclick="closeManageCompsModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Tancar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: AFEGIR JUGADOR -->
-  <div id="addPlayerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-emerald-950 border border-emerald-800 flex items-center justify-center text-emerald-400">
-            <i data-lucide="user-plus" class="w-4 h-4"></i>
-          </div>
-          <h3 class="font-bold text-white text-base">Afegir Nou Jugador</h3>
-        </div>
-        <button onclick="closeAddPlayerModal()" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <form onsubmit="submitNewPlayer(event)" class="space-y-3.5 text-xs">
-        <div class="grid grid-cols-3 gap-3">
-          <div>
-            <label class="block font-semibold text-slate-300 mb-1">Dorsal (#)</label>
-            <input type="number" id="newDorsal" required min="1" max="99" placeholder="9" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
-          </div>
-          <div class="col-span-2">
-            <label class="block font-semibold text-slate-300 mb-1">Nom Complet</label>
-            <input type="text" id="newName" required placeholder="Ex. Fitxatge Nou" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
-          </div>
-        </div>
-
-        <div>
-          <label class="block font-semibold text-slate-300 mb-1">Posició</label>
-          <select id="newPos" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
-            <option value="Davanter">Davanter</option>
-            <option value="Migcampista">Migcampista</option>
-            <option value="Defensa">Defensa</option>
-            <option value="Porter">Porter</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block font-semibold text-slate-300 mb-1">Foto (URL opcional)</label>
-          <input type="text" id="newPhoto" placeholder="https://... (o puja fitxer després)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
-        </div>
-
-        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
-          <button type="button" onclick="closeAddPlayerModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
-          <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg">Desar Jugador</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL: EDITAR FOTO -->
-  <div id="photoModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="font-bold text-white text-base">Actualitzar Foto del Jugador</h3>
-        <button onclick="closePhotoModal()" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <div class="flex flex-col items-center gap-3">
-        <img id="modalPreviewImg" src="" class="w-20 h-20 rounded-full object-cover border-2 border-red-500 bg-slate-800 shadow-md" />
-        <p id="modalPlayerName" class="text-sm font-bold text-slate-200"></p>
-      </div>
-
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block font-semibold text-slate-300 mb-1">Opció A: Pujar fitxer</label>
-          <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-slate-300 text-xs file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-red-950 file:text-red-300 hover:file:bg-red-900" />
-        </div>
-        <div class="flex items-center gap-2 text-slate-500">
-          <div class="h-px bg-slate-800 flex-1"></div>
-          <span>o</span>
-          <div class="h-px bg-slate-800 flex-1"></div>
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-300 mb-1">Opció B: Enllaç URL</label>
-          <input type="text" id="photoUrlInput" placeholder="https://exemple.cat/foto.jpg" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
-        </div>
-      </div>
-
-      <div class="flex items-center justify-end gap-2 pt-2">
-        <button onclick="closePhotoModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
-        <button onclick="savePlayerPhoto()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-brand-red hover:bg-brand-darkRed text-white shadow-lg">Desar Foto</button>
       </div>
     </div>
   </div>
@@ -670,12 +380,18 @@
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-      <p class="text-xs text-slate-400">Introdueix la clau per gestionar actes, jugadors i competicions.</p>
+      <p class="text-xs text-slate-400">Introdueix les teves credencials de Supabase.</p>
       
-      <div>
-        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Contrasenya</label>
-        <input type="password" id="adminPasswordInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500" placeholder="Introdueix la contrasenya..." onkeyup="if(event.key==='Enter') verifyAdminPassword()" />
-        <p id="loginError" class="text-xs text-red-400 mt-1.5 hidden">Contrasenya incorrecta.</p>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Correu electrònic</label>
+          <input type="email" id="adminEmailInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500" placeholder="correu@admin.com" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Contrasenya</label>
+          <input type="password" id="adminPasswordInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500" placeholder="Contrasenya..." onkeyup="if(event.key==='Enter') verifyAdminPassword()" />
+          <p id="loginError" class="text-xs text-red-400 mt-1.5 hidden">Correu o contrasenya incorrectes.</p>
+        </div>
       </div>
 
       <div class="flex items-center justify-end gap-2 pt-2">
@@ -685,8 +401,13 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT AMB LÒGICA D'ACTES I INFERMERIA -->
+  <!-- JAVASCRIPT AMB SUPABASE INTEGRAT -->
   <script>
+    // --- CONFIGURACIÓ DE SUPABASE ---
+    const SUPABASE_URL = "https://qxsixyqgqccigljotoqe.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_-87VGu5FS4hW3HK7uy-gmA_5iwJXfrI";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     const getInitialsAvatar = (name) => {
       return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1e293b&color=cbd5e1&bold=true&size=128`;
     };
@@ -696,20 +417,6 @@
     let matches = [];
     let activeCompId = "ALL";
     let isAdmin = false;
-    let selectedPlayerForPhoto = null;
-    let selectedPlayerForInjury = null;
-    let tempUploadedBase64 = null;
-    let editingMatchId = null; 
-    const ADMIN_PASS = "egarareds2026";
-
-    // Mostra/amaga l'input de text si el jugador està lesionat
-    document.getElementById('injuryStatusSelect').addEventListener('change', function() {
-      if (this.value === 'Lesionat') {
-        document.getElementById('injuryNotesDiv').classList.remove('hidden');
-      } else {
-        document.getElementById('injuryNotesDiv').classList.add('hidden');
-      }
-    });
 
     function isPorter(pos) {
       if (!pos) return false;
@@ -717,51 +424,65 @@
       return clean === "porter" || clean === "portero" || clean === "gk" || clean === "goalkeeper";
     }
 
-    // CARREGA DADES DE DADES.JSON O DE LOCALSTORAGE
+    // CARREGA DE DADES DES DE LA NUBE DE SUPABASE
     async function loadData() {
-      const savedComps = localStorage.getItem("terrassa_comps_v14");
-      const savedPlayers = localStorage.getItem("terrassa_players_v14");
-      const savedMatches = localStorage.getItem("terrassa_matches_v14");
+      try {
+        // 1. Carregar competicions
+        const { data: compData, error: compErr } = await supabase.from('competitions').select('*');
+        if (compErr) throw compErr;
+        competitions = compData || [];
 
-      if (savedComps && savedPlayers && savedMatches) {
-        competitions = JSON.parse(savedComps);
-        players = JSON.parse(savedPlayers);
-        matches = JSON.parse(savedMatches);
-      } else {
-        try {
-          const res = await fetch(`dades.json?v=${Date.now()}`);
-          if (!res.ok) throw new Error("No s'ha trobat dades.json");
-          const data = await res.json();
-          competitions = data.competitions || [];
-          players = data.players || [];
-          matches = data.matches || [];
-        } catch (err) {
-          console.error("Error carregant dades.json:", err);
-        }
-      }
+        // 2. Carregar jugadors
+        const { data: playerData, error: playerErr } = await supabase.from('players').select('*');
+        if (playerErr) throw playerErr;
+        
+        players = (playerData || []).map(p => ({
+          ...p,
+          stats: {},
+          injury: { isInjured: p.is_injured || false, notes: p.injury_notes || "" }
+        }));
 
-      matches.forEach(m => {
-        if (!m.condition) m.condition = "Casa";
-        if (!m.date) m.date = "Partit Oficial";
-      });
+        // 3. Carregar partits
+        const { data: matchData, error: matchErr } = await supabase.from('matches').select('*');
+        if (matchErr) throw matchErr;
+        
+        matches = (matchData || []).map(m => ({
+          ...m,
+          date: m.match_date,
+          condition: m.condition || "Casa"
+        }));
 
-      players.forEach(p => {
-        if (!p.stats) p.stats = {};
-        if (!p.injury) p.injury = { isInjured: false, notes: "" };
-        competitions.forEach(c => {
-          if (p.stats[c.id] && p.stats[c.id].goalsAgainst === undefined) {
-            p.stats[c.id].goalsAgainst = 0;
+        // 4. Carregar estadístiques de partits (match_players) i calcular acumulats
+        const { data: mpData, error: mpErr } = await supabase.from('match_players').select('*');
+        if (mpErr) throw mpErr;
+
+        players.forEach(p => { p.stats = {}; });
+
+        (mpData || []).forEach(mp => {
+          const p = players.find(x => x.id === mp.player_id);
+          if (p) {
+            const matchObj = matches.find(m => m.id === mp.match_id);
+            const compId = matchObj ? matchObj.compId : competitions[0]?.id;
+
+            if (compId) {
+              if (!p.stats[compId]) {
+                p.stats[compId] = { pj: 0, min: 0, goals: 0, goalsAgainst: 0, assists: 0, yellow: 0, red: 0 };
+              }
+              p.stats[compId].pj += 1;
+              p.stats[compId].min += (mp.minutes || 0);
+              p.stats[compId].goals += (mp.gf || 0);
+              p.stats[compId].goalsAgainst += (mp.gc || 0);
+              p.stats[compId].assists += (mp.assists || 0);
+              p.stats[compId].yellow += (mp.yellow || 0);
+              p.stats[compId].red += (mp.red || 0);
+            }
           }
         });
-      });
 
-      renderDashboard();
-    }
+      } catch (err) {
+        console.error("Error carregant dades de Supabase:", err);
+      }
 
-    function saveData() {
-      localStorage.setItem("terrassa_comps_v14", JSON.stringify(competitions));
-      localStorage.setItem("terrassa_players_v14", JSON.stringify(players));
-      localStorage.setItem("terrassa_matches_v14", JSON.stringify(matches));
       renderDashboard();
     }
 
@@ -869,7 +590,7 @@
         if (activeCompId === "ALL") {
           titleSpan.textContent = "Total Temporada (Totes)";
           badgeLogo.classList.add("hidden");
-          adminActiveCompName.textContent = `General (Edita en cada torneig)`;
+          adminActiveCompName.textContent = `General`;
           sub.textContent = "Veient estadístiques globals acumulades de tots els tornejos";
         } else if (currCompObj) {
           titleSpan.textContent = currCompObj.name;
@@ -887,20 +608,11 @@
 
     function renderRivalsModule() {
       const grid = document.getElementById("rivalsFullGrid");
-      const addBtn = document.getElementById("addMatchViewBtn");
-
-      if (isAdmin) {
-        addBtn.classList.remove("hidden");
-        addBtn.classList.add("flex");
-      } else {
-        addBtn.classList.add("hidden");
-        addBtn.classList.remove("flex");
-      }
 
       if (matches.length === 0) {
         grid.innerHTML = `
           <div class="col-span-full p-8 rounded-2xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-sm text-slate-500">
-            Encara no s'ha registrat cap acta de partit. (Entra com a Admin per afegir-ne).
+            Encara no s'ha registrat cap acta de partit.
           </div>
         `;
         return;
@@ -925,14 +637,6 @@
                 <span class="text-[10px] font-bold text-slate-400 truncate">${compName} • ${m.date || 'Oficial'}</span>
                 <div class="flex items-center gap-1.5">
                   ${conditionBadge}
-                  ${isAdmin ? `
-                    <button onclick="editMatch(${m.id})" title="Editar aquesta acta" class="p-1.5 bg-slate-900 hover:bg-amber-900/80 text-slate-500 hover:text-amber-200 rounded-lg border border-slate-800 transition">
-                      <i data-lucide="edit" class="w-3.5 h-3.5"></i>
-                    </button>
-                    <button onclick="deleteMatch(${m.id})" title="Eliminar aquesta acta" class="p-1.5 bg-slate-900 hover:bg-rose-900/80 text-slate-500 hover:text-rose-200 rounded-lg border border-slate-800 transition">
-                      <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                    </button>
-                  ` : ''}
                 </div>
               </div>
 
@@ -1038,102 +742,6 @@
       document.getElementById('matchDetailModal').classList.add('hidden');
     }
 
-    // LÒGICA DE DESFER ACTES EN ELIMINAR O EDITAR
-    function removeMatchStatsFromPlayers(match) {
-      if (!match || !match.matchPlayers) return;
-      match.matchPlayers.forEach(mp => {
-        const p = players.find(x => x.id === mp.id);
-        if (p && p.stats && p.stats[match.compId]) {
-          p.stats[match.compId].pj = Math.max(0, (p.stats[match.compId].pj || 0) - 1);
-          p.stats[match.compId].min = Math.max(0, (p.stats[match.compId].min || 0) - mp.min);
-          p.stats[match.compId].goals = Math.max(0, (p.stats[match.compId].goals || 0) - mp.gf);
-          p.stats[match.compId].goalsAgainst = Math.max(0, (p.stats[match.compId].goalsAgainst || 0) - mp.gc);
-          p.stats[match.compId].assists = Math.max(0, (p.stats[match.compId].assists || 0) - mp.as);
-          p.stats[match.compId].yellow = Math.max(0, (p.stats[match.compId].yellow || 0) - mp.yel);
-          p.stats[match.compId].red = Math.max(0, (p.stats[match.compId].red || 0) - mp.red);
-        }
-      });
-    }
-
-    function deleteMatch(matchId) {
-      const match = matches.find(m => m.id === matchId);
-      if (!match) return;
-      if (confirm(`Estàs segur d'eliminar l'acta contra ${match.rival}? Els gols i targetes d'aquest partit es restaran automàticament de l'historial dels jugadors.`)) {
-        removeMatchStatsFromPlayers(match); // Desfer els números del partit eliminat
-        matches = matches.filter(m => m.id !== matchId);
-        saveData();
-      }
-    }
-
-    function editMatch(matchId) {
-      const match = matches.find(m => m.id === matchId);
-      if (!match) return;
-
-      editingMatchId = matchId; 
-      document.getElementById("modalMatchTitle").textContent = "Editar Acta de Partit";
-
-      const select = document.getElementById("matchCompSelect");
-      select.innerHTML = competitions.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-      select.value = match.compId;
-
-      document.getElementById("rivalNameInput").value = match.rival || '';
-      document.getElementById("matchDateInput").value = match.date || '';
-      document.getElementById("rivalLogoInput").value = match.logo || '';
-      document.getElementById("matchConditionSelect").value = match.condition || 'Casa';
-      document.getElementById("matchGFTerrassa").value = match.gf || 0;
-      document.getElementById("matchGCRival").value = match.gc || 0;
-      document.getElementById("matchNotesInput").value = match.notes || '';
-
-      const tbody = document.getElementById("matchPlayersListBody");
-      tbody.innerHTML = players.map(p => {
-        const porter = isPorter(p.pos);
-        const savedMp = (match.matchPlayers || []).find(x => x.id === p.id);
-        const isChecked = savedMp ? 'checked' : '';
-        const minVal = savedMp ? savedMp.min : 0;
-        const gfVal = savedMp ? savedMp.gf : 0;
-        const gcVal = savedMp ? savedMp.gc : 0;
-        const asVal = savedMp ? savedMp.as : 0;
-        const yelVal = savedMp ? savedMp.yel : 0;
-        const redVal = savedMp ? savedMp.red : 0;
-        const disabledState = savedMp ? '' : 'disabled';
-
-        return `
-          <tr class="hover:bg-slate-900/60 transition border-b border-slate-800/40">
-            <td class="p-2 text-center">
-              <input type="checkbox" id="mp_pj_${p.id}" ${isChecked} onchange="togglePlayerMatchRow(${p.id})" class="rounded border-slate-700 text-rose-600 focus:ring-0 bg-slate-900 w-4 h-4 cursor-pointer" />
-            </td>
-            <td class="p-2 text-center font-bold text-slate-400">#${p.dorsal}</td>
-            <td class="p-2 font-semibold text-slate-200">
-              ${p.name}
-              <span class="text-[9px] text-slate-400 block">${p.pos}</span>
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_min_${p.id}" min="0" max="120" value="${minVal}" ${disabledState} class="w-14 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1.5 py-1 text-center text-white focus:border-red-500 focus:outline-none" />
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_gf_${p.id}" min="0" value="${gfVal}" ${disabledState} class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-400 font-bold focus:border-red-500 focus:outline-none" />
-            </td>
-            <td class="p-2 text-center">
-              ${porter ? `
-                <input type="number" id="mp_gc_${p.id}" min="0" value="${gcVal}" ${disabledState} class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-rose-400 font-bold focus:border-red-500 focus:outline-none" />
-              ` : `<span class="text-slate-600 text-xs">-</span><input type="hidden" id="mp_gc_${p.id}" value="0" />`}
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_as_${p.id}" min="0" value="${asVal}" ${disabledState} class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-indigo-400 font-bold focus:border-red-500 focus:outline-none" />
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_yel_${p.id}" min="0" max="2" value="${yelVal}" ${disabledState} class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-yellow-400 font-bold focus:border-red-500 focus:outline-none" />
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_red_${p.id}" min="0" max="1" value="${redVal}" ${disabledState} class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-500 font-bold focus:border-red-500 focus:outline-none" />
-            </td>
-          </tr>
-        `;
-      }).join('');
-
-      document.getElementById("matchModal").classList.remove("hidden");
-    }
-
     function renderCycleAlerts() {
       const sanctionedContainer = document.getElementById("sanctionedList");
       const warnedContainer = document.getElementById("warnedList");
@@ -1152,14 +760,8 @@
       document.getElementById("badgeWarnedCount").textContent = warned.length;
       document.getElementById("badgeInjuredCount").textContent = injured.length;
 
-      // SANCIONATS
       if (sanctioned.length === 0) {
-        sanctionedContainer.innerHTML = `
-          <div class="p-3 rounded-xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
-            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500/70"></i>
-            Cap jugador sancionat per cicle de grogues.
-          </div>
-        `;
+        sanctionedContainer.innerHTML = `<div class="p-3 rounded-xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-xs text-slate-500">Cap jugador sancionat.</div>`;
       } else {
         sanctionedContainer.innerHTML = sanctioned.map(x => `
           <div class="p-2.5 rounded-xl border border-red-800/80 bg-red-950/40 flex items-center justify-between gap-3 text-xs">
@@ -1171,23 +773,14 @@
               </div>
             </div>
             <div class="text-right shrink-0">
-              <span class="px-2 py-0.5 rounded-md bg-red-900/90 text-red-100 font-black text-xs border border-red-700">
-                ${x.stats.yellow} Grogues (Cicle ${Math.floor(x.stats.yellow / 5)})
-              </span>
-              <span class="text-[9px] text-red-400 block mt-0.5 font-bold">⛔ Suspès 1 partit</span>
+              <span class="px-2 py-0.5 rounded-md bg-red-900/90 text-red-100 font-black text-xs border border-red-700">${x.stats.yellow} Grogues</span>
             </div>
           </div>
         `).join('');
       }
 
-      // APERCEBUTS
       if (warned.length === 0) {
-        warnedContainer.innerHTML = `
-          <div class="p-3 rounded-xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
-            <i data-lucide="shield" class="w-4 h-4 text-amber-500/70"></i>
-            Cap jugador en perill de sanció immediata (a 1 groga).
-          </div>
-        `;
+        warnedContainer.innerHTML = `<div class="p-3 rounded-xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-xs text-slate-500">Cap jugador en perill.</div>`;
       } else {
         warnedContainer.innerHTML = warned.map(x => `
           <div class="p-2.5 rounded-xl border border-amber-800/80 bg-amber-950/40 flex items-center justify-between gap-3 text-xs">
@@ -1199,23 +792,14 @@
               </div>
             </div>
             <div class="text-right shrink-0">
-              <span class="px-2 py-0.5 rounded-md bg-amber-900/90 text-amber-100 font-black text-xs border border-amber-700">
-                ${x.stats.yellow} Grogues (4/5)
-              </span>
-              <span class="text-[9px] text-amber-400 block mt-0.5 font-bold">⚠️ A 1 de suspensió</span>
+              <span class="px-2 py-0.5 rounded-md bg-amber-900/90 text-amber-100 font-black text-xs border border-amber-700">${x.stats.yellow} Grogues (4/5)</span>
             </div>
           </div>
         `).join('');
       }
 
-      // INFERMERIA
       if (injured.length === 0) {
-        injuredContainer.innerHTML = `
-          <div class="p-3 rounded-xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
-            <i data-lucide="activity" class="w-4 h-4 text-blue-500/70"></i>
-            Tota la plantilla està disponible.
-          </div>
-        `;
+        injuredContainer.innerHTML = `<div class="p-3 rounded-xl border border-dashed border-slate-800 bg-slate-950/40 text-center text-xs text-slate-500">Tota la plantilla disponible.</div>`;
       } else {
         injuredContainer.innerHTML = injured.map(p => `
           <div class="p-2.5 rounded-xl border border-blue-800/80 bg-blue-950/40 flex items-center gap-3 text-xs">
@@ -1253,7 +837,7 @@
       document.getElementById('kpiCards').innerHTML = `<span class="text-yellow-400">${totYel}</span> / <span class="text-red-400">${totRed}</span>`;
     }
 
-    function buildPodiumHTML(sortedList, valueKey, suffix, medalCustomClass) {
+    function buildPodiumHTML(sortedList, suffix, medalCustomClass) {
       const medals = [
         { rank: '1r', icon: '🥇', bg: 'bg-amber-950/40 border-amber-800/60 text-amber-300', numColor: 'text-amber-400' },
         { rank: '2n', icon: '🥈', bg: 'bg-slate-800/50 border-slate-700 text-slate-300', numColor: 'text-slate-300' },
@@ -1263,20 +847,14 @@
       return medals.map((m, idx) => {
         const item = sortedList[idx];
         if (!item || (!item.isKeeper && item.val === 0 && idx > 0)) {
-          return `
-            <div class="flex items-center justify-between p-2 rounded-xl border border-slate-800/60 bg-slate-950/40 text-slate-600 text-xs">
-              <span class="font-bold">${m.icon} ${m.rank}</span>
-              <span>-</span>
-              <span>0 ${suffix}</span>
-            </div>
-          `;
+          return `<div class="flex items-center justify-between p-2 rounded-xl border border-slate-800/60 bg-slate-950/40 text-slate-600 text-xs"><span class="font-bold">${m.icon} ${m.rank}</span><span>-</span><span>0 ${suffix}</span></div>`;
         }
         const p = item.player;
         const finalNumColor = medalCustomClass || m.numColor;
         const displayValue = item.displayVal !== undefined ? item.displayVal : item.val;
         
         return `
-          <div class="flex items-center justify-between p-2 rounded-xl border ${m.bg} text-xs transition hover:scale-[1.01]">
+          <div class="flex items-center justify-between p-2 rounded-xl border ${m.bg} text-xs transition">
             <div class="flex items-center gap-1.5 min-w-0">
               <span class="text-sm shrink-0">${m.icon}</span>
               <img src="${getPlayerImg(p)}" class="w-6 h-6 rounded-full object-cover border border-slate-700 shrink-0 bg-slate-800" />
@@ -1302,7 +880,7 @@
 
       const sortedGoals = [...playerStatList].map(x => ({ player: x.player, val: x.stats.goals, min: x.stats.min }))
         .sort((a, b) => (b.val - a.val) || (a.min - b.min));
-      document.getElementById('podiumGoals').innerHTML = buildPodiumHTML(sortedGoals, 'val', 'Gols', 'text-red-400');
+      document.getElementById('podiumGoals').innerHTML = buildPodiumHTML(sortedGoals, 'Gols', 'text-red-400');
 
       const allKeepers = playerStatList.filter(x => isPorter(x.player.pos));
       const keepersSorted = allKeepers.map(x => {
@@ -1318,51 +896,33 @@
       }).sort((a, b) => {
         if (a.pj > 0 && b.pj === 0) return -1;
         if (a.pj === 0 && b.pj > 0) return 1;
-        if (a.val !== b.val) return a.val - b.val; // Menos es millor (Pocs GC per 90m)
+        if (a.val !== b.val) return a.val - b.val;
         return b.min - a.min;
       });
 
-      if (keepersSorted.length === 0) {
-        document.getElementById('podiumKeepers').innerHTML = `
-          <div class="p-3 text-center text-[10px] text-slate-500 italic">Sense porters a la plantilla</div>
-        `;
-      } else {
-        document.getElementById('podiumKeepers').innerHTML = buildPodiumHTML(keepersSorted, 'val', 'GC', 'text-cyan-400');
-      }
+      document.getElementById('podiumKeepers').innerHTML = keepersSorted.length === 0 ? `<div class="p-3 text-center text-[10px] text-slate-500 italic">Sense porters</div>` : buildPodiumHTML(keepersSorted, 'GC', 'text-cyan-400');
 
       const sortedAssists = [...playerStatList].map(x => ({ player: x.player, val: x.stats.assists, min: x.stats.min }))
         .sort((a, b) => (b.val - a.val) || (a.min - b.min));
-      document.getElementById('podiumAssists').innerHTML = buildPodiumHTML(sortedAssists, 'val', 'Assist.', 'text-indigo-400');
+      document.getElementById('podiumAssists').innerHTML = buildPodiumHTML(sortedAssists, 'Assist.', 'text-indigo-400');
 
       const sortedMin = [...playerStatList].map(x => ({ player: x.player, val: x.stats.min }))
         .sort((a, b) => (b.val - a.val));
-      document.getElementById('podiumMinutes').innerHTML = buildPodiumHTML(sortedMin, 'val', 'Min.', 'text-amber-400');
+      document.getElementById('podiumMinutes').innerHTML = buildPodiumHTML(sortedMin, 'Min.', 'text-amber-400');
 
-      const sortedYellows = [...playerStatList].map(x => ({ player: x.player, val: x.stats.yellow, red: x.stats.red, min: x.stats.min }))
+      const sortedYellows = [...playerStatList].map(x => ({ player: x.player, val: x.stats.yellow, min: x.stats.min }))
         .sort((a, b) => (b.val - a.val) || (a.min - b.min));
-      document.getElementById('podiumYellows').innerHTML = buildPodiumHTML(sortedYellows, 'val', 'Grogues', 'text-yellow-400');
+      document.getElementById('podiumYellows').innerHTML = buildPodiumHTML(sortedYellows, 'Grogues', 'text-yellow-400');
 
       const sortedReds = [...playerStatList].map(x => ({ player: x.player, val: x.stats.red, yellow: x.stats.yellow, min: x.stats.min }))
         .sort((a, b) => (b.val - a.val) || (b.yellow - a.yellow) || (a.min - b.min));
-      document.getElementById('podiumReds').innerHTML = buildPodiumHTML(sortedReds, 'val', 'Vermelles', 'text-rose-400');
+      document.getElementById('podiumReds').innerHTML = buildPodiumHTML(sortedReds, 'Vermelles', 'text-rose-400');
     }
 
     function renderTable() {
       const search = (document.getElementById('searchInput').value || '').toLowerCase();
       const pos = document.getElementById('posFilter').value;
       const tbody = document.getElementById('playerTableBody');
-      const adminTh = document.getElementById('adminHeaderCol');
-      const addBtn = document.getElementById('addPlayerBtn');
-
-      if (isAdmin) {
-        adminTh.classList.remove('hidden');
-        addBtn.classList.remove('hidden');
-        addBtn.classList.add('flex');
-      } else {
-        adminTh.classList.add('hidden');
-        addBtn.classList.add('hidden');
-        addBtn.classList.remove('flex');
-      }
 
       const filtered = players.filter(p => {
         const matchesSearch = p.name.toLowerCase().includes(search) || p.dorsal.toString().includes(search);
@@ -1377,7 +937,6 @@
         const s = getPlayerStats(p, activeCompId);
         const porter = isPorter(p.pos);
         
-        // CÀLCULS PER 90 MINUTS
         const gol90 = s.min > 0 ? ((s.goals / s.min) * 90).toFixed(2) : "0.00";
         const assist90 = s.min > 0 ? ((s.assists / s.min) * 90).toFixed(2) : "0.00";
         
@@ -1386,8 +945,6 @@
         if(p.pos === 'Migcampista') posBadge = "bg-indigo-950/70 text-indigo-300 border border-indigo-800/40";
         if(p.pos === 'Defensa') posBadge = "bg-emerald-950/70 text-emerald-300 border border-emerald-800/40";
         if(porter) posBadge = "bg-amber-950/70 text-amber-300 border border-amber-800/40";
-
-        const editableClass = isAdmin ? "bg-slate-950 border border-slate-700 rounded px-1 py-0.5 w-12 text-center text-white focus:border-red-500 focus:outline-none" : "";
 
         const currentInCycle = s.yellow % 5;
         const isSanctioned = s.yellow > 0 && currentInCycle === 0;
@@ -1399,7 +956,7 @@
           const boxColor = isSanctioned 
             ? 'bg-red-500 border-red-400' 
             : (filled ? (isWarned ? 'bg-amber-400 border-amber-300' : 'bg-yellow-400 border-yellow-300') : 'bg-slate-800 border-slate-700');
-          cycleBoxesHTML += `<span class="w-2.5 h-3.5 rounded-sm border ${boxColor} inline-block" title="${i}/5"></span>`;
+          cycleBoxesHTML += `<span class="w-2.5 h-3.5 rounded-sm border ${boxColor} inline-block"></span>`;
         }
 
         let cycleStatusBadge = '';
@@ -1411,95 +968,40 @@
           cycleStatusBadge = `<span class="text-[9px] text-slate-500">${currentInCycle}/5</span>`;
         }
 
-        const injuryOverlay = (p.injury && p.injury.isInjured) ? `<div class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-blue-500 rounded-full border border-slate-900 flex items-center justify-center" title="Lesionat"><i data-lucide="stethoscope" class="w-2 h-2 text-white"></i></div>` : "";
+        const injuryOverlay = (p.injury && p.injury.isInjured) ? `<div class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-blue-500 rounded-full border border-slate-900 flex items-center justify-center" title="Lesionat"></div>` : "";
         const imgFilter = (p.injury && p.injury.isInjured) ? "grayscale brightness-75 opacity-70" : "";
 
         return `
           <tr class="hover:bg-slate-800/40 transition border-b border-slate-800/50">
-            <td class="py-2.5 px-3 text-center text-slate-400 font-bold">
-              ${isAdmin ? `
-                <input type="number" value="${p.dorsal}" onchange="updatePlayerDetails(${p.id}, 'dorsal', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-center text-xs text-slate-200 w-10 font-bold" />
-              ` : p.dorsal}
-            </td>
+            <td class="py-2.5 px-3 text-center text-slate-400 font-bold">${p.dorsal}</td>
             <td class="py-2.5 px-3 text-center">
-              <div class="relative inline-block group">
+              <div class="relative inline-block">
                 <img src="${getPlayerImg(p)}" class="w-8 h-8 rounded-full object-cover border border-slate-700 bg-slate-800 shadow mx-auto ${imgFilter}" />
                 ${injuryOverlay}
-                ${isAdmin ? `
-                  <button onclick="openPhotoModal(${p.id})" class="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition" title="Canviar foto">
-                    <i data-lucide="camera" class="w-3.5 h-3.5"></i>
-                  </button>
-                ` : ''}
               </div>
             </td>
             <td class="py-2.5 px-3">
-              ${isAdmin ? `
-                <input type="text" value="${p.name}" onchange="updatePlayerDetails(${p.id}, 'name', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white w-full" />
-              ` : `
-                <span class="font-bold text-slate-100">${p.name}</span>
-                ${(p.injury && p.injury.isInjured) ? `<span class="block text-[9px] text-blue-400 italic">Baixa</span>` : ''}
-              `}
+              <span class="font-bold text-slate-100">${p.name}</span>
+              ${(p.injury && p.injury.isInjured) ? `<span class="block text-[9px] text-blue-400 italic">Baixa</span>` : ''}
             </td>
             <td class="py-2.5 px-3 text-center">
-              ${isAdmin ? `
-                <select onchange="updatePlayerDetails(${p.id}, 'pos', this.value)" class="bg-slate-950 border border-slate-700 text-xs rounded px-1 py-0.5 text-slate-200">
-                  <option value="Porter" ${porter?'selected':''}>Porter</option>
-                  <option value="Defensa" ${p.pos==='Defensa'?'selected':''}>Defensa</option>
-                  <option value="Migcampista" ${p.pos==='Migcampista'?'selected':''}>Migcampista</option>
-                  <option value="Davanter" ${p.pos==='Davanter'?'selected':''}>Davanter</option>
-                </select>
-              ` : `
-                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${posBadge}">${p.pos}</span>
-              `}
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${posBadge}">${p.pos}</span>
             </td>
-            <td class="py-2.5 px-3 text-center">
-              ${isAdmin ? `<input type="number" min="0" value="${s.pj}" onchange="setPlayerStat(${p.id}, 'pj', this.value)" class="${editableClass}" />` : s.pj}
-            </td>
-            <td class="py-2.5 px-3 text-center text-slate-300">
-              ${isAdmin ? `<input type="number" min="0" value="${s.min}" onchange="setPlayerStat(${p.id}, 'min', this.value)" class="${editableClass} w-14" />` : s.min + "'"}
-            </td>
-            <td class="py-2.5 px-3 text-center font-bold text-red-400 bg-red-950/10">
-              ${isAdmin ? `<input type="number" min="0" value="${s.goals}" onchange="setPlayerStat(${p.id}, 'goals', this.value)" class="${editableClass} text-red-400 font-bold" />` : s.goals}
-            </td>
-            <td class="py-2.5 px-3 text-center font-bold ${porter ? 'text-rose-400 bg-rose-950/20' : 'text-slate-600'}">
-              ${isAdmin ? `
-                <input type="number" min="0" value="${s.goalsAgainst}" onchange="setPlayerStat(${p.id}, 'goalsAgainst', this.value)" class="${editableClass} text-rose-400 font-bold" />
-              ` : (porter ? s.goalsAgainst : (s.goalsAgainst > 0 ? s.goalsAgainst : '-'))}
-            </td>
-            <td class="py-2.5 px-3 text-center font-bold text-indigo-400 bg-indigo-950/10">
-              ${isAdmin ? `<input type="number" min="0" value="${s.assists}" onchange="setPlayerStat(${p.id}, 'assists', this.value)" class="${editableClass} text-indigo-400 font-bold" />` : s.assists}
-            </td>
-            
+            <td class="py-2.5 px-3 text-center">${s.pj}</td>
+            <td class="py-2.5 px-3 text-center text-slate-300">${s.min}'</td>
+            <td class="py-2.5 px-3 text-center font-bold text-red-400 bg-red-950/10">${s.goals}</td>
+            <td class="py-2.5 px-3 text-center font-bold ${porter ? 'text-rose-400 bg-rose-950/20' : 'text-slate-600'}">${porter ? s.goalsAgainst : '-'}</td>
+            <td class="py-2.5 px-3 text-center font-bold text-indigo-400 bg-indigo-950/10">${s.assists}</td>
             <td class="py-2.5 px-3 text-center text-emerald-400 font-medium">${gol90 !== "0.00" ? gol90 : "-"}</td>
             <td class="py-2.5 px-3 text-center text-sky-400 font-medium">${assist90 !== "0.00" ? assist90 : "-"}</td>
-            
-            <td class="py-2.5 px-3 text-center text-yellow-400 font-bold">
-              ${isAdmin ? `<input type="number" min="0" value="${s.yellow}" onchange="setPlayerStat(${p.id}, 'yellow', this.value)" class="${editableClass}" />` : s.yellow}
-            </td>
+            <td class="py-2.5 px-3 text-center text-yellow-400 font-bold">${s.yellow}</td>
             <td class="py-2.5 px-3 text-center">
               <div class="flex items-center justify-center gap-1">
-                <div class="flex items-center gap-0.5">
-                  ${cycleBoxesHTML}
-                </div>
+                <div class="flex items-center gap-0.5">${cycleBoxesHTML}</div>
                 ${cycleStatusBadge}
               </div>
             </td>
-            <td class="py-2.5 px-3 text-center text-red-500 font-bold">
-              ${isAdmin ? `<input type="number" min="0" value="${s.red}" onchange="setPlayerStat(${p.id}, 'red', this.value)" class="${editableClass}" />` : s.red}
-            </td>
-            ${isAdmin ? `
-              <td class="py-2.5 px-3 text-center">
-                <div class="flex items-center justify-center gap-1">
-                  <!-- Botó Infermeria -->
-                  <button onclick="openInjuryModal(${p.id})" title="Gestionar Infermeria" class="p-1 bg-slate-800 hover:bg-blue-900/80 text-slate-400 hover:text-blue-200 rounded text-[10px] border border-slate-700 transition">
-                    <i data-lucide="stethoscope" class="w-3.5 h-3.5"></i>
-                  </button>
-                  <button onclick="deletePlayer(${p.id})" title="Eliminar Jugador" class="p-1 bg-slate-800 hover:bg-rose-900/80 text-slate-400 hover:text-rose-200 rounded text-[10px] border border-slate-700 transition">
-                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                  </button>
-                </div>
-              </td>
-            ` : ''}
+            <td class="py-2.5 px-3 text-center text-red-500 font-bold">${s.red}</td>
           </tr>
         `;
       }).join('');
@@ -1516,375 +1018,7 @@
       lucide.createIcons();
     }
 
-    function updatePlayerDetails(id, key, val) {
-      const idx = players.findIndex(p => p.id === id);
-      if (idx !== -1) {
-        if (key === 'dorsal') players[idx].dorsal = Number(val) || 0;
-        else players[idx][key] = val;
-        saveData();
-      }
-    }
-
-    // MODAL D'ACTA DE PARTIT AMB PLANTILLA COMPLETA
-    function openAddMatchModal() {
-      editingMatchId = null; // Ens assegurem que estem en mode crear
-      document.getElementById("modalMatchTitle").textContent = "Formulari de Partit";
-
-      const select = document.getElementById("matchCompSelect");
-      select.innerHTML = competitions.map(c => `
-        <option value="${c.id}">${c.name}</option>
-      `).join('');
-
-      document.getElementById("rivalNameInput").value = '';
-      document.getElementById("matchDateInput").value = '';
-      document.getElementById("rivalLogoInput").value = '';
-      document.getElementById("matchConditionSelect").value = 'Casa';
-      document.getElementById("matchGFTerrassa").value = 0;
-      document.getElementById("matchGCRival").value = 0;
-      document.getElementById("matchNotesInput").value = '';
-
-      // Render de la llista de jugadors per posar minuts i dades
-      const tbody = document.getElementById("matchPlayersListBody");
-      tbody.innerHTML = players.map(p => {
-        const porter = isPorter(p.pos);
-        // Si està lesionat, ho marquem i el desactivem per defecte (però l'Admin ho pot canviar si s'ha recuperat d'urgència)
-        const injuryWarning = (p.injury && p.injury.isInjured) ? `<span class="text-[9px] text-blue-400 italic block">Infermeria</span>` : '';
-        
-        return `
-          <tr class="hover:bg-slate-900/60 transition border-b border-slate-800/40">
-            <td class="p-2 text-center">
-              <input type="checkbox" id="mp_pj_${p.id}" onchange="togglePlayerMatchRow(${p.id})" class="rounded border-slate-700 text-rose-600 focus:ring-0 bg-slate-900 w-4 h-4 cursor-pointer" />
-            </td>
-            <td class="p-2 text-center font-bold text-slate-400">#${p.dorsal}</td>
-            <td class="p-2 font-semibold text-slate-200">
-              ${p.name}
-              <span class="text-[9px] text-slate-400 block">${p.pos}</span>
-              ${injuryWarning}
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_min_${p.id}" min="0" max="120" value="0" disabled class="w-14 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1.5 py-1 text-center text-white focus:border-red-500 focus:outline-none" />
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_gf_${p.id}" min="0" value="0" disabled class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-400 font-bold focus:border-red-500 focus:outline-none" />
-            </td>
-            <td class="p-2 text-center">
-              ${porter ? `
-                <input type="number" id="mp_gc_${p.id}" min="0" value="0" disabled class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-rose-400 font-bold focus:border-red-500 focus:outline-none" />
-              ` : `<span class="text-slate-600 text-xs">-</span><input type="hidden" id="mp_gc_${p.id}" value="0" />`}
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_as_${p.id}" min="0" value="0" disabled class="w-12 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-indigo-400 font-bold focus:border-red-500 focus:outline-none" />
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_yel_${p.id}" min="0" max="2" value="0" disabled class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-yellow-400 font-bold focus:border-red-500 focus:outline-none" />
-            </td>
-            <td class="p-2 text-center">
-              <input type="number" id="mp_red_${p.id}" min="0" max="1" value="0" disabled class="w-10 bg-slate-900 disabled:opacity-30 border border-slate-700 rounded px-1 py-1 text-center text-red-500 font-bold focus:border-red-500 focus:outline-none" />
-            </td>
-          </tr>
-        `;
-      }).join('');
-
-      document.getElementById("matchModal").classList.remove("hidden");
-    }
-
-    function togglePlayerMatchRow(playerId) {
-      const isChecked = document.getElementById(`mp_pj_${playerId}`).checked;
-      const minInput = document.getElementById(`mp_min_${playerId}`);
-      const gfInput = document.getElementById(`mp_gf_${playerId}`);
-      const gcInput = document.getElementById(`mp_gc_${playerId}`);
-      const asInput = document.getElementById(`mp_as_${playerId}`);
-      const yelInput = document.getElementById(`mp_yel_${playerId}`);
-      const redInput = document.getElementById(`mp_red_${playerId}`);
-
-      minInput.disabled = !isChecked;
-      gfInput.disabled = !isChecked;
-      if (gcInput) gcInput.disabled = !isChecked;
-      asInput.disabled = !isChecked;
-      yelInput.disabled = !isChecked;
-      redInput.disabled = !isChecked;
-
-      if (isChecked) {
-        if (Number(minInput.value) === 0) minInput.value = 90; // Default titular 90'
-      } else {
-        minInput.value = 0;
-        gfInput.value = 0;
-        if (gcInput) gcInput.value = 0;
-        asInput.value = 0;
-        yelInput.value = 0;
-        redInput.value = 0;
-      }
-    }
-
-    function closeAddMatchModal() {
-      document.getElementById("matchModal").classList.add("hidden");
-    }
-
-    function submitNewMatch(e) {
-      e.preventDefault();
-      const rival = document.getElementById("rivalNameInput").value.trim();
-      const date = document.getElementById("matchDateInput").value.trim();
-      const compId = document.getElementById("matchCompSelect").value;
-      const condition = document.getElementById("matchConditionSelect").value;
-      const logo = document.getElementById("rivalLogoInput").value.trim();
-      const gf = Number(document.getElementById("matchGFTerrassa").value) || 0;
-      const gc = Number(document.getElementById("matchGCRival").value) || 0;
-      const notes = document.getElementById("matchNotesInput").value.trim();
-
-      if (!rival) return;
-
-      let scorersList = [];
-      let yellowsList = [];
-      let redsList = [];
-      let matchPlayers = []; // Aquí guardem tot el que ha fet cadascú en AQUEST partit
-
-      // Si estem editant, primer restem les dades velles als jugadors
-      if (editingMatchId) {
-        const oldMatch = matches.find(m => m.id === editingMatchId);
-        removeMatchStatsFromPlayers(oldMatch);
-      }
-
-      // Bolcat automàtic als jugadors i guardat de dades locals del partit
-      players.forEach(p => {
-        const pjChecked = document.getElementById(`mp_pj_${p.id}`)?.checked;
-        if (pjChecked) {
-          const mMin = Number(document.getElementById(`mp_min_${p.id}`).value) || 0;
-          const mGf = Number(document.getElementById(`mp_gf_${p.id}`).value) || 0;
-          const mGc = Number(document.getElementById(`mp_gc_${p.id}`)?.value) || 0;
-          const mAs = Number(document.getElementById(`mp_as_${p.id}`).value) || 0;
-          const mYel = Number(document.getElementById(`mp_yel_${p.id}`).value) || 0;
-          const mRed = Number(document.getElementById(`mp_red_${p.id}`).value) || 0;
-
-          // Guardem per a l'historial intern d'aquest partit
-          matchPlayers.push({ id: p.id, min: mMin, gf: mGf, gc: mGc, as: mAs, yel: mYel, red: mRed });
-
-          // Assegurar estructura d'stats
-          if (!p.stats) p.stats = {};
-          if (!p.stats[compId]) {
-            p.stats[compId] = { pj: 0, min: 0, goals: 0, goalsAgainst: 0, assists: 0, yellow: 0, red: 0 };
-          }
-
-          // Suma acumulativa directa al torneig seleccionat
-          p.stats[compId].pj = (p.stats[compId].pj || 0) + 1;
-          p.stats[compId].min = (p.stats[compId].min || 0) + mMin;
-          p.stats[compId].goals = (p.stats[compId].goals || 0) + mGf;
-          p.stats[compId].goalsAgainst = (p.stats[compId].goalsAgainst || 0) + mGc;
-          p.stats[compId].assists = (p.stats[compId].assists || 0) + mAs;
-          p.stats[compId].yellow = (p.stats[compId].yellow || 0) + mYel;
-          p.stats[compId].red = (p.stats[compId].red || 0) + mRed;
-
-          // Construcció de text resum per a l'acta
-          if (mGf > 0) scorersList.push(`${p.name}${mGf > 1 ? ` (x${mGf})` : ''}`);
-          if (mYel > 0) yellowsList.push(`${p.name}${mYel > 1 ? ` (x${mYel})` : ''}`);
-          if (mRed > 0) redsList.push(p.name);
-        }
-      });
-
-      const matchData = {
-        rival, date, compId, condition, logo, gf, gc,
-        scorers: scorersList.join(', '),
-        yellows: yellowsList.join(', '),
-        reds: redsList.join(', '),
-        notes,
-        matchPlayers
-      };
-
-      if (editingMatchId) {
-        const idx = matches.findIndex(m => m.id === editingMatchId);
-        matches[idx] = { id: editingMatchId, ...matchData };
-        editingMatchId = null; // Tanquem el mode edició
-      } else {
-        const nextId = matches.length > 0 ? (Math.max(...matches.map(m => m.id)) + 1) : 1;
-        matches.push({ id: nextId, ...matchData });
-      }
-
-      saveData();
-      closeAddMatchModal();
-    }
-
-    // MODALS INFERMERIA
-    function openInjuryModal(id) {
-      selectedPlayerForInjury = players.find(p => p.id === id);
-      if (!selectedPlayerForInjury) return;
-
-      document.getElementById('injuryModalName').textContent = `#${selectedPlayerForInjury.dorsal} - ${selectedPlayerForInjury.name}`;
-      document.getElementById('injuryModalImg').src = getPlayerImg(selectedPlayerForInjury);
-      
-      const isInjured = selectedPlayerForInjury.injury && selectedPlayerForInjury.injury.isInjured;
-      document.getElementById('injuryStatusSelect').value = isInjured ? 'Lesionat' : 'Disponible';
-      
-      if (isInjured) {
-        document.getElementById('injuryNotesDiv').classList.remove('hidden');
-        document.getElementById('injuryNotesInput').value = selectedPlayerForInjury.injury.notes || '';
-      } else {
-        document.getElementById('injuryNotesDiv').classList.add('hidden');
-        document.getElementById('injuryNotesInput').value = '';
-      }
-
-      document.getElementById('injuryModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function closeInjuryModal() {
-      document.getElementById('injuryModal').classList.add('hidden');
-      selectedPlayerForInjury = null;
-    }
-
-    function saveInjuryStatus() {
-      if (!selectedPlayerForInjury) return;
-      const status = document.getElementById('injuryStatusSelect').value;
-      const notes = document.getElementById('injuryNotesInput').value.trim();
-
-      if (!selectedPlayerForInjury.injury) selectedPlayerForInjury.injury = {};
-
-      if (status === 'Lesionat') {
-        selectedPlayerForInjury.injury.isInjured = true;
-        selectedPlayerForInjury.injury.notes = notes;
-      } else {
-        selectedPlayerForInjury.injury.isInjured = false;
-        selectedPlayerForInjury.injury.notes = "";
-      }
-
-      saveData();
-      closeInjuryModal();
-    }
-
-    // GESTIÓ DE COMPETICIONS
-    function openManageCompsModal() {
-      const list = document.getElementById("compsEditList");
-      list.innerHTML = competitions.map(c => `
-        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between gap-3 text-xs">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <img src="${c.logo || 'https://via.placeholder.com/40'}" class="w-7 h-7 object-contain rounded bg-slate-900 p-0.5 border border-slate-800 shrink-0" />
-            <div class="truncate">
-              <p class="font-bold text-white truncate">${c.name}</p>
-              <p class="text-[10px] text-slate-400 truncate">Logo: ${c.logo ? 'Configurat' : 'Sense logo'}</p>
-            </div>
-          </div>
-          <button onclick="removeCompetition('${c.id}')" class="p-1.5 bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-800/40 rounded-lg shrink-0">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-          </button>
-        </div>
-      `).join('');
-      document.getElementById("compsModal").classList.remove("hidden");
-      lucide.createIcons();
-    }
-
-    function closeManageCompsModal() {
-      document.getElementById("compsModal").classList.add("hidden");
-    }
-
-    function addNewCompetition() {
-      const name = document.getElementById("newCompName").value.trim();
-      const logo = document.getElementById("newCompLogo").value.trim();
-      if (!name) return;
-
-      const id = "comp_" + Date.now();
-      competitions.push({ id, name, short: name.substring(0, 16), logo });
-      document.getElementById("newCompName").value = '';
-      document.getElementById("newCompLogo").value = '';
-      saveData();
-      openManageCompsModal();
-    }
-
-    function removeCompetition(id) {
-      if (competitions.length <= 1) {
-        alert("Has de mantenir com a mínim una competició.");
-        return;
-      }
-      if (confirm("Segur que vols eliminar aquest torneig?")) {
-        competitions = competitions.filter(c => c.id !== id);
-        if (activeCompId === id) activeCompId = "ALL";
-        saveData();
-        openManageCompsModal();
-      }
-    }
-
-    // AFEGIR JUGADOR
-    function openAddPlayerModal() {
-      document.getElementById('newDorsal').value = players.length > 0 ? (Math.max(...players.map(p => p.dorsal)) + 1) : 1;
-      document.getElementById('newName').value = '';
-      document.getElementById('newPos').value = 'Davanter';
-      document.getElementById('newPhoto').value = '';
-      document.getElementById('addPlayerModal').classList.remove('hidden');
-    }
-
-    function closeAddPlayerModal() {
-      document.getElementById('addPlayerModal').classList.add('hidden');
-    }
-
-    function submitNewPlayer(e) {
-      e.preventDefault();
-      const newDorsal = Number(document.getElementById('newDorsal').value) || (players.length + 1);
-      const newName = document.getElementById('newName').value.trim();
-      const newPos = document.getElementById('newPos').value;
-      const newPhoto = document.getElementById('newPhoto').value.trim();
-
-      if (!newName) return;
-      const nextId = players.length > 0 ? (Math.max(...players.map(p => p.id)) + 1) : 1;
-
-      players.push({
-        id: nextId,
-        dorsal: newDorsal,
-        name: newName,
-        pos: newPos,
-        photo: newPhoto,
-        stats: {},
-        injury: { isInjured: false, notes: "" }
-      });
-
-      saveData();
-      closeAddPlayerModal();
-    }
-
-    function deletePlayer(id) {
-      const p = players.find(x => x.id === id);
-      if (!p) return;
-      if (confirm(`Vols eliminar a #${p.dorsal} ${p.name}?`)) {
-        players = players.filter(x => x.id !== id);
-        saveData();
-      }
-    }
-
-    // FOTOS
-    function openPhotoModal(id) {
-      selectedPlayerForPhoto = players.find(p => p.id === id);
-      if (!selectedPlayerForPhoto) return;
-      tempUploadedBase64 = null;
-
-      document.getElementById('modalPlayerName').textContent = `#${selectedPlayerForPhoto.dorsal} - ${selectedPlayerForPhoto.name}`;
-      document.getElementById('modalPreviewImg').src = getPlayerImg(selectedPlayerForPhoto);
-      document.getElementById('photoUrlInput').value = selectedPlayerForPhoto.photo || '';
-      document.getElementById('fileInput').value = '';
-      document.getElementById('photoModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function closePhotoModal() {
-      document.getElementById('photoModal').classList.add('hidden');
-      selectedPlayerForPhoto = null;
-    }
-
-    function handleFileUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        tempUploadedBase64 = evt.target.result;
-        document.getElementById('modalPreviewImg').src = tempUploadedBase64;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function savePlayerPhoto() {
-      if (!selectedPlayerForPhoto) return;
-      const urlInput = document.getElementById('photoUrlInput').value.trim();
-      selectedPlayerForPhoto.photo = tempUploadedBase64 || urlInput || "";
-      saveData();
-      closePhotoModal();
-    }
-
-    // AUTH
+    // LOGIN D'ADMINISTRADOR AMB SUPABASE AUTH
     function toggleAdminModal() {
       if (isAdmin) { lockAdmin(); return; }
       document.getElementById('loginModal').classList.toggle('hidden');
@@ -1892,22 +1026,30 @@
       document.getElementById('adminPasswordInput').value = '';
     }
 
-    function verifyAdminPassword() {
+    async function verifyAdminPassword() {
+      const email = document.getElementById('adminEmailInput').value.trim();
       const pass = document.getElementById('adminPasswordInput').value;
-      if (pass === ADMIN_PASS) {
+      
+      if (!email || !pass) return;
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+
+      if (error) {
+        console.error(error);
+        document.getElementById('loginError').classList.remove('hidden');
+      } else {
         isAdmin = true;
         document.getElementById('loginModal').classList.add('hidden');
         document.getElementById('adminNotice').classList.remove('hidden');
-        document.getElementById('modeBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span><span class="text-amber-400 font-bold">Mode Administrador</span>`;
+        document.getElementById('modeBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span><span class="text-amber-400 font-bold">Admin Activat</span>`;
         document.getElementById('modeBadge').className = "flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-950/60 border border-amber-800/50 text-amber-400";
-        document.getElementById('adminBtnText').textContent = "Bloquejar";
+        document.getElementById('adminBtnText').textContent = "Tancar Sessió";
         renderDashboard();
-      } else {
-        document.getElementById('loginError').classList.remove('hidden');
       }
     }
 
-    function lockAdmin() {
+    async function lockAdmin() {
+      await supabase.auth.signOut();
       isAdmin = false;
       document.getElementById('adminNotice').classList.add('hidden');
       document.getElementById('modeBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Mode Públic</span>`;
@@ -1916,18 +1058,7 @@
       renderDashboard();
     }
 
-    function exportDataJSON() {
-      const data = { competitions, players, matches };
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-      const a = document.createElement('a');
-      a.setAttribute("href", dataStr);
-      a.setAttribute("download", "dades.json");
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    }
-
-    // Iniciar carregant dades.json
+    // Inicialitzar la càrrega de dades en obrir la pàgina
     loadData();
   </script>
 </body>

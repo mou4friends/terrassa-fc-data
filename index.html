@@ -352,7 +352,7 @@
 
   </main>
 
-  <!-- MODAL: DETALL DE L'ACTA DE PARTIT -->
+  <!-- MODAL: DETALL DE L'ACTA DE PARTIT AMB VOTACIÓ MVP -->
   <div id="matchDetailModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto custom-scroll">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -399,32 +399,34 @@
       </div>
 
       <form onsubmit="submitNewMatch(event)" class="space-y-4 text-xs">
+        <!-- DETALLS BÀSICS DEL PARTIT -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
           <div class="sm:col-span-2">
             <label class="block font-semibold text-slate-300 mb-1">Equip Rival</label>
-            <input type="text" id="rivalNameInput" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+            <input type="text" id="rivalNameInput" required placeholder="Ex. CE Sabadell, UE Sant Andreu..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
           </div>
           <div>
             <label class="block font-semibold text-slate-300 mb-1">Data / Jornada</label>
-            <input type="text" id="matchDateInput" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+            <input type="text" id="matchDateInput" placeholder="Ex. Jornada 1 (06/09/2026)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
           </div>
           <div>
             <label class="block font-semibold text-amber-300 mb-1">Competició Destí</label>
-            <select id="matchCompSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold"></select>
+            <select id="matchCompSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500 font-bold"></select>
           </div>
           <div>
             <label class="block font-semibold text-slate-300 mb-1">Condició</label>
-            <select id="matchConditionSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-bold">
+            <select id="matchConditionSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500 font-bold">
               <option value="Casa">🏠 Casa (Estadi Olímpic)</option>
               <option value="Fora">✈️ Fora (Visitant)</option>
             </select>
           </div>
           <div>
             <label class="block font-semibold text-slate-300 mb-1">Escut Rival (URL)</label>
-            <input type="text" id="rivalLogoInput" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+            <input type="text" id="rivalLogoInput" placeholder="https://.../escut.png" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
           </div>
         </div>
 
+        <!-- MARCADOR -->
         <div class="grid grid-cols-2 gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
           <div>
             <label class="block font-bold text-emerald-400 mb-1 text-center">Gols Terrassa FC (GF)</label>
@@ -436,12 +438,15 @@
           </div>
         </div>
 
+        <!-- SELECCIÓ I REGISTRE DE JUGADORS PER AQUEST PARTIT -->
         <div class="space-y-2 bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
           <div class="flex items-center justify-between border-b border-slate-800 pb-2">
             <h4 class="font-black text-slate-200 uppercase tracking-wider text-xs flex items-center gap-1.5">
               <i data-lucide="users" class="w-4 h-4 text-red-500"></i> Alineació, Minuts & Estadístiques del Partit
             </h4>
+            <span class="text-[10px] text-slate-400 italic">Marca els jugadors que han participat</span>
           </div>
+
           <div class="overflow-x-auto custom-scroll max-h-[300px] border border-slate-800 rounded-lg">
             <table class="w-full text-left text-[11px]">
               <thead class="bg-slate-900 sticky top-0 text-slate-400 font-bold border-b border-slate-800">
@@ -462,22 +467,23 @@
           </div>
         </div>
 
+        <!-- OBSERVACIONS / NOTES -->
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Observacions Arbitrals / Notes de l'Acta</label>
-          <textarea id="matchNotesInput" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white"></textarea>
+          <textarea id="matchNotesInput" rows="2" placeholder="Incidències de l'acta, penals xiulats, canvis destacats..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
           <button type="button" onclick="closeAddMatchModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Cancel·lar</button>
           <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-rose-700 hover:bg-rose-600 text-white shadow-lg flex items-center gap-1.5">
-            <i data-lucide="check" class="w-4 h-4"></i> Desar Partit
+            <i data-lucide="check" class="w-4 h-4"></i> Desar Partit & Bolcar Estadístiques
           </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: INFERMERIA -->
+  <!-- MODAL: INFERMERIA (DONAR D'ALTA / BAIXA MÈDICA) -->
   <div id="injuryModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
       <div class="flex items-center justify-between">
@@ -500,14 +506,14 @@
       <div class="space-y-3 text-xs">
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Estat del jugador</label>
-          <select id="injuryStatusSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white">
+          <select id="injuryStatusSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500">
             <option value="Disponible">Disponible (Alta mèdica)</option>
             <option value="Lesionat">Lesionat / Baixa (Infermeria)</option>
           </select>
         </div>
         <div id="injuryNotesDiv" class="hidden">
           <label class="block font-semibold text-slate-300 mb-1">Motiu / Temps estimat de baixa</label>
-          <input type="text" id="injuryNotesInput" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+          <input type="text" id="injuryNotesInput" placeholder="Ex. Trencament isquiotibials (3 setmanes)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500" />
         </div>
       </div>
 
@@ -526,7 +532,7 @@
           <div class="w-8 h-8 rounded-lg bg-indigo-950 border border-indigo-800 flex items-center justify-center text-indigo-400">
             <i data-lucide="trophy" class="w-4 h-4"></i>
           </div>
-          <h3 class="font-bold text-white text-base">Gestionar Competicions</h3>
+          <h3 class="font-bold text-white text-base">Gestionar Competicions & Logos</h3>
         </div>
         <button onclick="closeManageCompsModal()" class="text-slate-400 hover:text-white">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -538,7 +544,7 @@
       <div class="border-t border-slate-800 pt-3 space-y-2 text-xs">
         <h4 class="font-bold text-slate-200 flex items-center gap-1.5"><i data-lucide="plus" class="w-3.5 h-3.5 text-emerald-400"></i> Afegir Nova competició</h4>
         <div class="grid grid-cols-2 gap-2">
-          <input type="text" id="newCompName" placeholder="Nom (ex. Copa RFEF)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+          <input type="text" id="newCompName" placeholder="Nom (ex. Copa RFEF Fase Nacional)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
           <input type="text" id="newCompLogo" placeholder="URL Logo (opcional)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
         </div>
         <button onclick="addNewCompetition()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow transition">Afegir Competició</button>
@@ -569,17 +575,17 @@
         <div class="grid grid-cols-3 gap-3">
           <div>
             <label class="block font-semibold text-slate-300 mb-1">Dorsal (#)</label>
-            <input type="number" id="newDorsal" required min="1" max="99" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+            <input type="number" id="newDorsal" required min="1" max="99" placeholder="9" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
           </div>
           <div class="col-span-2">
             <label class="block font-semibold text-slate-300 mb-1">Nom Complet</label>
-            <input type="text" id="newName" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+            <input type="text" id="newName" required placeholder="Ex. Fitxatge Nou" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
           </div>
         </div>
 
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Posició</label>
-          <select id="newPos" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white">
+          <select id="newPos" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
             <option value="Davanter">Davanter</option>
             <option value="Migcampista">Migcampista</option>
             <option value="Defensa">Defensa</option>
@@ -589,7 +595,7 @@
 
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Foto (URL opcional)</label>
-          <input type="text" id="newPhoto" placeholder="https://..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+          <input type="text" id="newPhoto" placeholder="https://... (o puja fitxer després)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
@@ -621,11 +627,13 @@
           <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-slate-300 text-xs file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-red-950 file:text-red-300 hover:file:bg-red-900" />
         </div>
         <div class="flex items-center gap-2 text-slate-500">
-          <div class="h-px bg-slate-800 flex-1"></div><span>o</span><div class="h-px bg-slate-800 flex-1"></div>
+          <div class="h-px bg-slate-800 flex-1"></div>
+          <span>o</span>
+          <div class="h-px bg-slate-800 flex-1"></div>
         </div>
         <div>
           <label class="block font-semibold text-slate-300 mb-1">Opció B: Enllaç URL</label>
-          <input type="text" id="photoUrlInput" placeholder="https://exemple.cat/foto.jpg" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white" />
+          <input type="text" id="photoUrlInput" placeholder="https://exemple.cat/foto.jpg" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500" />
         </div>
       </div>
 
@@ -668,11 +676,22 @@
     </div>
   </div>
 
+  <!-- JAVASCRIPT AMB SUPABASE INTEGRAT I VOTACIÓ MVP -->
   <script>
     // --- CONNEXIÓ A SUPABASE ---
     const SUPABASE_URL = "https://qxsixyqgqccigljotoqe.supabase.co";
     const SUPABASE_KEY = "sb_publishable_-87VGu5FS4hW3HK7uy-gmA_5iwJXfrI";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Identificador únic per controlar els vots
+    function getDeviceId() {
+      let deviceId = localStorage.getItem('ue_device_id');
+      if (!deviceId) {
+        deviceId = 'device_' + Math.random().toString(36).substring(2, 15) + Date.now();
+        localStorage.setItem('ue_device_id', deviceId);
+      }
+      return deviceId;
+    }
 
     const getInitialsAvatar = (name) => {
       return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1e293b&color=cbd5e1&bold=true&size=128`;
@@ -761,7 +780,6 @@
         if (key === 'dorsal') players[idx].dorsal = Number(val) || 0;
         else players[idx][key] = val;
         
-        // Ho enviem a Supabase silenciosament
         let dbKey = key;
         if (key === 'dorsal') dbKey = 'dorsal';
         
@@ -957,7 +975,7 @@
 
       html += `
         <button onclick="switchComp('RIVALS_TAB')" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black transition ${
-          rivalsTabActive ? 'bg-rose-600 text-white shadow-lg shadow-rose-950 border border-rose-400 scale-105' : 'bg-slate-950 text-rose-300 hover:bg-rose-950/40 border border-rose-900/60'
+          rivalsTabActive ? 'bg-rose-600 text-white shadow-lg shadow-rose-950 border border-rose-400 scale-105' : 'bg-slate-950 text-rose-300 hover:bg-slate-800 border border-slate-800'
         }">
           <span class="text-sm">📋</span><span>Actes de Partit & Rivals</span>
         </button>
@@ -1082,7 +1100,7 @@
       }).join('');
     }
 
-    function openMatchDetailModal(matchId) {
+    async function openMatchDetailModal(matchId) {
       const match = matches.find(m => m.id === matchId);
       if (!match) return;
 
@@ -1093,6 +1111,53 @@
       document.getElementById('detailModalComp').textContent = `${compObj ? compObj.name : 'Torneig'} • ${match.date || 'Sense data'} • ${isHome ? 'Estadi Olímpic de Terrassa' : 'Camp Rival'}`;
 
       const content = document.getElementById('detailModalContent');
+      content.innerHTML = `<div class="p-8 text-center text-slate-400 animate-pulse">Carregant dades del partit i vots...</div>`;
+      document.getElementById('matchDetailModal').classList.remove('hidden');
+
+      // 1. Carregar els vots
+      const { data: votesData } = await supabaseClient.from('mvp_votes').select('player_id, user_identifier').eq('match_id', matchId);
+      const votes = votesData || [];
+      const deviceId = getDeviceId();
+      const hasVoted = votes.some(v => v.user_identifier === deviceId);
+      const totalVotes = votes.length;
+
+      // 2. Llistar els jugadors que han jugat (min > 0)
+      const playedPlayers = (match.matchPlayers || []).filter(mp => mp.min > 0).map(mp => {
+          const p = players.find(x => x.id === mp.id);
+          const playerVotes = votes.filter(v => v.player_id === p.id).length;
+          const votePercentage = totalVotes > 0 ? Math.round((playerVotes / totalVotes) * 100) : 0;
+          return { ...p, playerVotes, votePercentage };
+      }).sort((a, b) => b.playerVotes - a.playerVotes || a.name.localeCompare(b.name));
+
+      let mvpHTML = '';
+      if (hasVoted || isAdmin) {
+          mvpHTML = `<div class="space-y-2 max-h-48 overflow-y-auto custom-scroll pr-1">
+            <p class="text-[10px] text-slate-400 mb-2">Resultats de la votació (${totalVotes} vots totals) ${isAdmin && !hasVoted ? '(Mode Admin)' : ''}</p>
+            ${playedPlayers.length > 0 ? playedPlayers.map(p => `
+                <div class="relative w-full bg-slate-900/80 rounded-lg overflow-hidden border border-slate-800 p-2 flex items-center justify-between z-10">
+                    <div class="absolute top-0 left-0 h-full bg-amber-600/20 z-0 transition-all duration-1000" style="width: ${p.votePercentage}%"></div>
+                    <div class="relative z-10 flex items-center gap-2 min-w-0">
+                        <img src="${getPlayerImg(p)}" class="w-6 h-6 rounded-full object-cover border border-slate-700 bg-slate-800 shrink-0" />
+                        <span class="text-xs font-bold text-slate-200 truncate">${p.name}</span>
+                    </div>
+                    <span class="relative z-10 text-[10px] font-black text-amber-400 shrink-0 ml-2">${p.votePercentage}% (${p.playerVotes})</span>
+                </div>
+            `).join('') : '<p class="text-xs text-slate-500">Sense jugadors registrats en aquest partit.</p>'}
+          </div>`;
+      } else {
+          mvpHTML = `<div class="space-y-2">
+            <p class="text-[10px] text-slate-400 mb-2">Tria el millor jugador del partit:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto custom-scroll pr-1">
+            ${playedPlayers.length > 0 ? playedPlayers.map(p => `
+                <button onclick="submitMVPVote(${matchId}, ${p.id})" class="flex items-center gap-2 p-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/50 rounded-lg transition text-left group">
+                    <img src="${getPlayerImg(p)}" class="w-6 h-6 rounded-full object-cover border border-slate-700 bg-slate-800 shrink-0 group-hover:border-amber-500/50" />
+                    <span class="text-xs font-bold text-slate-300 group-hover:text-amber-400 truncate">${p.name}</span>
+                </button>
+            `).join('') : '<p class="text-xs text-slate-500">Sense jugadors registrats en aquest partit.</p>'}
+            </div>
+          </div>`;
+      }
+
       content.innerHTML = `
         <div class="flex items-center justify-center gap-6 bg-slate-950 p-4 rounded-2xl border border-slate-800">
           <div class="text-center">
@@ -1140,9 +1205,14 @@
             </div>
           </div>
         ` : ''}
-      `;
 
-      document.getElementById('matchDetailModal').classList.remove('hidden');
+        <!-- NOU: SECCIÓ MVP -->
+        <div class="mt-4 pt-4 border-t border-slate-800">
+          <h4 class="font-bold text-amber-400 flex items-center gap-1.5 mb-3"><i data-lucide="star" class="w-4 h-4 text-amber-400"></i> MVP del Partit</h4>
+          ${mvpHTML}
+        </div>
+      `;
+      
       lucide.createIcons();
     }
 
@@ -1150,69 +1220,26 @@
       document.getElementById('matchDetailModal').classList.add('hidden');
     }
 
-    function editMatch(matchId) {
-      const match = matches.find(m => m.id === matchId);
-      if (!match) return;
+    async function submitMVPVote(matchId, playerId) {
+      const userId = getDeviceId();
+      const content = document.getElementById('detailModalContent');
+      content.style.opacity = '0.5';
 
-      editingMatchId = matchId; 
-      document.getElementById("modalMatchTitle").textContent = "Editar Acta de Partit";
+      const { error } = await supabaseClient.from('mvp_votes').insert([{
+          match_id: matchId,
+          player_id: playerId,
+          user_identifier: userId
+      }]);
 
-      const select = document.getElementById("matchCompSelect");
-      select.innerHTML = competitions.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-      select.value = match.compId;
-
-      document.getElementById("rivalNameInput").value = match.rival || '';
-      document.getElementById("matchDateInput").value = match.date || '';
-      document.getElementById("rivalLogoInput").value = match.logo || '';
-      document.getElementById("matchConditionSelect").value = match.condition || 'Casa';
-      document.getElementById("matchGFTerrassa").value = match.gf || 0;
-      document.getElementById("matchGCRival").value = match.gc || 0;
-      document.getElementById("matchNotesInput").value = match.notes || '';
-
-      const tbody = document.getElementById("matchPlayersListBody");
-      tbody.innerHTML = players.map(p => {
-        const porter = isPorter(p.pos);
-        const savedMp = (match.matchPlayers || []).find(x => x.id === p.id);
-        const isChecked = savedMp ? 'checked' : '';
-        const minVal = savedMp ? savedMp.min : 0;
-        const gfVal = savedMp ? savedMp.gf : 0;
-        const gcVal = savedMp ? savedMp.gc : 0;
-        const asVal = savedMp ? savedMp.as : 0;
-        const yelVal = savedMp ? savedMp.yel : 0;
-        const redVal = savedMp ? savedMp.red : 0;
-        const disabledState = savedMp ? '' : 'disabled';
-
-        return `
-          <tr class="hover:bg-slate-900/60 transition border-b border-slate-800/40">
-            <td class="p-2 text-center">
-              <input type="checkbox" id="mp_pj_${p.id}" ${isChecked} onchange="togglePlayerMatchRow(${p.id})" class="rounded border-slate-700 text-rose-600 focus:ring-0 bg-slate-900 w-4 h-4 cursor-pointer" />
-            </td>
-            <td class="p-2 text-center font-bold text-slate-400">#${p.dorsal}</td>
-            <td class="p-2 font-semibold text-slate-200">${p.name}<span class="text-[9px] text-slate-400 block">${p.pos}</span></td>
-            <td class="p-2 text-center"><input type="number" id="mp_min_${p.id}" min="0" max="120" value="${minVal}" ${disabledState} class="w-14 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-center text-white" /></td>
-            <td class="p-2 text-center"><input type="number" id="mp_gf_${p.id}" min="0" value="${gfVal}" ${disabledState} class="w-12 bg-slate-900 border border-slate-700 rounded px-1 py-1 text-center text-red-400 font-bold" /></td>
-            <td class="p-2 text-center">${porter ? `<input type="number" id="mp_gc_${p.id}" min="0" value="${gcVal}" ${disabledState} class="w-12 bg-slate-900 border border-slate-700 rounded px-1 py-1 text-center text-rose-400 font-bold" />` : `<span class="text-slate-600 text-xs">-</span><input type="hidden" id="mp_gc_${p.id}" value="0" />`}</td>
-            <td class="p-2 text-center"><input type="number" id="mp_as_${p.id}" min="0" value="${asVal}" ${disabledState} class="w-12 bg-slate-900 border border-slate-700 rounded px-1 py-1 text-center text-indigo-400 font-bold" /></td>
-            <td class="p-2 text-center"><input type="number" id="mp_yel_${p.id}" min="0" max="2" value="${yelVal}" ${disabledState} class="w-10 bg-slate-900 border border-slate-700 rounded px-1 py-1 text-center text-yellow-400 font-bold" /></td>
-            <td class="p-2 text-center"><input type="number" id="mp_red_${p.id}" min="0" max="1" value="${redVal}" ${disabledState} class="w-10 bg-slate-900 border border-slate-700 rounded px-1 py-1 text-center text-red-500 font-bold" /></td>
-          </tr>
-        `;
-      }).join('');
-
-      document.getElementById("matchModal").classList.remove("hidden");
+      content.style.opacity = '1';
+      
+      if (error) {
+          console.error(error);
+          alert("Error al registrar el vot. Potser ja has votat en aquest partit?");
+      } else {
+          openMatchDetailModal(matchId); 
+      }
     }
-
-    function togglePlayerMatchRow(playerId) {
-      const isChecked = document.getElementById(`mp_pj_${playerId}`).checked;
-      const inputs = ['min', 'gf', 'gc', 'as', 'yel', 'red'].map(k => document.getElementById(`mp_${k}_${playerId}`));
-      inputs.forEach(input => {
-        if (input) input.disabled = !isChecked;
-      });
-      if (isChecked && Number(inputs[0].value) === 0) inputs[0].value = 90;
-      else if (!isChecked) inputs.forEach(input => { if (input) input.value = 0; });
-    }
-
-    function closeAddMatchModal() { document.getElementById("matchModal").classList.add("hidden"); }
 
     function renderCycleAlerts() {
       const sanctionedContainer = document.getElementById("sanctionedList");
@@ -1448,7 +1475,9 @@
         return `
           <tr class="hover:bg-slate-800/40 transition border-b border-slate-800/50">
             <td class="py-2.5 px-3 text-center text-slate-400 font-bold">
-              ${isAdmin ? `<input type="number" value="${p.dorsal}" onchange="updatePlayerDetails(${p.id}, 'dorsal', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-center text-xs text-slate-200 w-10 font-bold" />` : p.dorsal}
+              ${isAdmin ? `
+                <input type="number" value="${p.dorsal}" onchange="updatePlayerDetails(${p.id}, 'dorsal', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-center text-xs text-slate-200 w-10 font-bold" />
+              ` : p.dorsal}
             </td>
             <td class="py-2.5 px-3 text-center">
               <div class="relative inline-block group">
@@ -1462,7 +1491,9 @@
               </div>
             </td>
             <td class="py-2.5 px-3">
-              ${isAdmin ? `<input type="text" value="${p.name}" onchange="updatePlayerDetails(${p.id}, 'name', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white w-full" />` : `
+              ${isAdmin ? `
+                <input type="text" value="${p.name}" onchange="updatePlayerDetails(${p.id}, 'name', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white w-full" />
+              ` : `
                 <span class="font-bold text-slate-100">${p.name}</span>
                 ${(p.injury && p.injury.isInjured) ? `<span class="block text-[9px] text-blue-400 italic">Baixa</span>` : ''}
               `}
@@ -1475,7 +1506,9 @@
                   <option value="Migcampista" ${p.pos==='Migcampista'?'selected':''}>Migcampista</option>
                   <option value="Davanter" ${p.pos==='Davanter'?'selected':''}>Davanter</option>
                 </select>
-              ` : `<span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${posBadge}">${p.pos}</span>`}
+              ` : `
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${posBadge}">${p.pos}</span>
+              `}
             </td>
             <td class="py-2.5 px-3 text-center">${s.pj}</td>
             <td class="py-2.5 px-3 text-center text-slate-300">${s.min}'</td>
@@ -1551,7 +1584,7 @@
       renderDashboard();
     }
 
-    // Inicialitzar la càrrega de dades en obrir la pàgina
+    // INICIAR CÀRREGA DE DADES
     loadData();
   </script>
 </body>

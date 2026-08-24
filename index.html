@@ -899,7 +899,6 @@
           const { error: err2 } = await supabaseClient.from('match_players').delete().eq('match_id', editingMatchId);
           if (err2) throw err2;
         } else {
-          // INSERT de Supabase (sense ID forçat)
           const { data: newMatch, error: err3 } = await supabaseClient.from('matches').insert([matchData]).select();
           if (err3) throw err3;
           currentMatchId = newMatch[0].id;
@@ -914,6 +913,7 @@
         editingMatchId = null;
         closeAddMatchModal();
         await loadData();
+        alert("Partit desat correctament a Supabase!");
         
       } catch (err) {
         console.error("Error complet:", err);
@@ -987,7 +987,7 @@
                 </button>
             `).join('') : '<p class="text-xs text-slate-500">Sense jugadors registrats en aquest partit.</p>'}
             </div>
-          </div>`;
+          `;
       }
 
       content.innerHTML = `
@@ -1675,9 +1675,7 @@
         return `
           <tr class="hover:bg-slate-800/40 transition border-b border-slate-800/50">
             <td class="py-2.5 px-3 text-center text-slate-400 font-bold">
-              ${isAdmin ? `
-                <input type="number" value="${p.dorsal}" onchange="updatePlayerDetails(${p.id}, 'dorsal', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-center text-xs text-slate-200 w-10 font-bold" />
-              ` : p.dorsal}
+              ${isAdmin ? `<input type="number" value="${p.dorsal}" class="bg-slate-950 border border-slate-700 rounded px-1 py-0.5 text-center text-xs text-slate-200 w-10 font-bold" />` : p.dorsal}
             </td>
             <td class="py-2.5 px-3 text-center">
               <div class="relative inline-block group">
@@ -1691,24 +1689,20 @@
               </div>
             </td>
             <td class="py-2.5 px-3">
-              ${isAdmin ? `
-                <input type="text" value="${p.name}" onchange="updatePlayerDetails(${p.id}, 'name', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white w-full" />
-              ` : `
+              ${isAdmin ? `<input type="text" value="${p.name}" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white w-full" />` : `
                 <span class="font-bold text-slate-100">${p.name}</span>
                 ${(p.injury && p.injury.isInjured) ? `<span class="block text-[9px] text-blue-400 italic">Baixa</span>` : ''}
               `}
             </td>
             <td class="py-2.5 px-3 text-center">
               ${isAdmin ? `
-                <select onchange="updatePlayerDetails(${p.id}, 'pos', this.value)" class="bg-slate-950 border border-slate-700 text-xs rounded px-1 py-0.5 text-slate-200">
+                <select class="bg-slate-950 border border-slate-700 text-xs rounded px-1 py-0.5 text-slate-200">
                   <option value="Porter" ${porter?'selected':''}>Porter</option>
                   <option value="Defensa" ${p.pos==='Defensa'?'selected':''}>Defensa</option>
                   <option value="Migcampista" ${p.pos==='Migcampista'?'selected':''}>Migcampista</option>
                   <option value="Davanter" ${p.pos==='Davanter'?'selected':''}>Davanter</option>
                 </select>
-              ` : `
-                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${posBadge}">${p.pos}</span>
-              `}
+              ` : `<span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${posBadge}">${p.pos}</span>`}
             </td>
             <td class="py-2.5 px-3 text-center">${s.pj}</td>
             <td class="py-2.5 px-3 text-center text-slate-300">${s.min}'</td>
@@ -1723,7 +1717,6 @@
             ${isAdmin ? `
               <td class="py-2.5 px-3 text-center">
                 <div class="flex items-center justify-center gap-1">
-                  <!-- Botó Infermeria -->
                   <button onclick="openInjuryModal(${p.id})" title="Gestionar Infermeria" class="p-1 bg-slate-800 hover:bg-blue-900/80 text-slate-400 hover:text-blue-200 rounded text-[10px] border border-slate-700 transition"><i data-lucide="stethoscope" class="w-3.5 h-3.5"></i></button>
                   <button onclick="deletePlayer(${p.id})" title="Eliminar Jugador" class="p-1 bg-slate-800 hover:bg-rose-900/80 text-slate-400 hover:text-rose-200 rounded text-[10px] border border-slate-700 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                 </div>

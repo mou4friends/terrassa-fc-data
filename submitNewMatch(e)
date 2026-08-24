@@ -846,7 +846,7 @@
       document.getElementById("matchModal").classList.add("hidden"); 
     }
 
-    async function submitNewMatch(e) {
+   async function submitNewMatch(e) {
       e.preventDefault();
       try {
         const rival = document.getElementById("rivalNameInput").value.trim();
@@ -894,15 +894,19 @@
         let currentMatchId = editingMatchId;
 
         if (editingMatchId) {
+          // MODE EDITAR
           const { error: err1 } = await supabaseClient.from('matches').update(matchData).eq('id', editingMatchId);
           if (err1) throw err1;
           const { error: err2 } = await supabaseClient.from('match_players').delete().eq('match_id', editingMatchId);
           if (err2) throw err2;
         } else {
-          // INSERT de Supabase (sense ID forçat)
-          const { data: newMatch, error: err3 } = await supabaseClient.from('matches').insert([matchData]).select();
+          // MODE CREAR NOU PARTIT - AQUÍ ESTÀ LA SOLUCIÓ (Calculem l'ID manualment)
+          const nextId = matches.length > 0 ? (Math.max(...matches.map(m => m.id)) + 1) : 1;
+          matchData.id = nextId;
+          currentMatchId = nextId;
+          
+          const { error: err3 } = await supabaseClient.from('matches').insert([matchData]);
           if (err3) throw err3;
-          currentMatchId = newMatch[0].id;
         }
 
         if (matchPlayers.length > 0) {
@@ -914,6 +918,7 @@
         editingMatchId = null;
         closeAddMatchModal();
         await loadData();
+        alert("Partit desat correctament!");
         
       } catch (err) {
         console.error("Error complet:", err);

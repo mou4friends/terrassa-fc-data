@@ -40,6 +40,7 @@
   <header class="bg-brand-navy border-b border-slate-800 sticky top-0 z-40 shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
       
+      <!-- Contenedor flex para alinear el logo y el texto horizontalmente -->
       <div class="flex items-center gap-3">
         <img src="img/escut.png" alt="Escut Terrassa FC" class="w-10 h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
         <div class="w-10 h-10 rounded-xl bg-brand-red hidden items-center justify-center font-black text-white text-xl shadow-md border border-red-400/30">T</div>
@@ -74,7 +75,7 @@
     <div id="adminNotice" class="hidden p-4 rounded-xl bg-amber-950/50 border border-amber-800/60 flex flex-wrap items-center justify-between gap-3 text-amber-200 text-sm shadow-md">
       <div class="flex items-center gap-2">
         <i data-lucide="shield-check" class="w-5 h-5 text-amber-400 shrink-0"></i>
-        <span><strong>Mode Administrador Activat:</strong> Estàs editant les dades de la pestanya activa (<span id="adminActiveCompName" class="font-bold text-amber-300 underline">Totes</span>).</span>
+        <span><strong>Mode Administrador Activat:</strong> Estàs veient i editant dades reals a Supabase.</span>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
         <button onclick="lockAdmin()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold transition">
@@ -142,6 +143,7 @@
 
       <!-- 2. SUSPENSIONS, AVISOS I INFERMERIA -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- SANCIONATS -->
         <div class="bg-gradient-to-r from-red-950/70 via-slate-900 to-slate-900 border border-red-800/60 rounded-2xl p-4 shadow-xl">
           <div class="flex items-center justify-between mb-3 border-b border-red-900/40 pb-2">
             <div class="flex items-center gap-2">
@@ -158,6 +160,7 @@
           <div id="sanctionedList" class="space-y-2"></div>
         </div>
 
+        <!-- APERCEBUTS -->
         <div class="bg-gradient-to-r from-amber-950/60 via-slate-900 to-slate-900 border border-amber-800/60 rounded-2xl p-4 shadow-xl">
           <div class="flex items-center justify-between mb-3 border-b border-amber-900/40 pb-2">
             <div class="flex items-center gap-2">
@@ -174,6 +177,7 @@
           <div id="warnedList" class="space-y-2"></div>
         </div>
 
+        <!-- INFERMERIA -->
         <div class="bg-gradient-to-r from-blue-950/70 via-slate-900 to-slate-900 border border-blue-800/60 rounded-2xl p-4 shadow-xl">
           <div class="flex items-center justify-between mb-3 border-b border-blue-900/40 pb-2">
             <div class="flex items-center gap-2">
@@ -241,7 +245,7 @@
           <div class="flex items-center justify-between mb-2.5 border-b border-slate-800 pb-2">
             <div class="flex items-center gap-1.5">
               <span class="text-yellow-400 font-bold">🟨</span>
-              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Amonestats</h2>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Amonestats </h2>
             </div>
             <span class="text-[9px] font-bold text-yellow-400 bg-yellow-950/60 px-1.5 py-0.5 rounded-full border border-yellow-900/60">Grogues</span>
           </div>
@@ -252,7 +256,7 @@
           <div class="flex items-center justify-between mb-2.5 border-b border-slate-800 pb-2">
             <div class="flex items-center gap-1.5">
               <span class="text-red-500 font-bold">🟥</span>
-              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Expulsats</h2>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">Expulsats </h2>
             </div>
             <span class="text-[9px] font-bold text-red-500 bg-red-950/60 px-1.5 py-0.5 rounded-full border border-red-900/60">Vermelles</span>
           </div>
@@ -303,6 +307,7 @@
                 <th class="py-3 px-3 text-center w-16 text-red-400 font-bold">GF ⚽</th>
                 <th class="py-3 px-3 text-center w-16 text-rose-400 font-bold">GC 🧤</th>
                 <th class="py-3 px-3 text-center w-16 text-indigo-400 font-bold">Assist. 🎯</th>
+                <!-- NOVES COLUMNES PER 90 MINUTS -->
                 <th class="py-3 px-3 text-center w-20 text-emerald-400 font-bold">Gol/90m</th>
                 <th class="py-3 px-3 text-center w-20 text-sky-400 font-bold">Assist/90m</th>
                 <th class="py-3 px-3 text-center w-14 text-yellow-400 font-bold">🟨</th>
@@ -358,7 +363,9 @@
         </button>
       </div>
 
-      <div id="detailModalContent" class="space-y-4 text-xs"></div>
+      <div id="detailModalContent" class="space-y-4 text-xs">
+        <!-- Rendered via JS -->
+      </div>
 
       <div class="flex justify-end pt-3 border-t border-slate-800">
         <button onclick="closeMatchDetailModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300">Tancar Acta</button>
@@ -380,7 +387,7 @@
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-      <p class="text-xs text-slate-400">Introdueix les teves credencials de Supabase.</p>
+      <p class="text-xs text-slate-400">Introdueix les teves credencials de Supabase per gestionar les dades.</p>
       
       <div class="space-y-3">
         <div>
@@ -406,7 +413,9 @@
     // --- CONFIGURACIÓ DE SUPABASE ---
     const SUPABASE_URL = "https://qxsixyqgqccigljotoqe.supabase.co";
     const SUPABASE_KEY = "sb_publishable_-87VGu5FS4hW3HK7uy-gmA_5iwJXfrI";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    // Utilitzem supabaseClient per evitar conflictes
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const getInitialsAvatar = (name) => {
       return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1e293b&color=cbd5e1&bold=true&size=128`;
@@ -428,12 +437,12 @@
     async function loadData() {
       try {
         // 1. Carregar competicions
-        const { data: compData, error: compErr } = await supabase.from('competitions').select('*');
+        const { data: compData, error: compErr } = await supabaseClient.from('competitions').select('*');
         if (compErr) throw compErr;
         competitions = compData || [];
 
         // 2. Carregar jugadors
-        const { data: playerData, error: playerErr } = await supabase.from('players').select('*');
+        const { data: playerData, error: playerErr } = await supabaseClient.from('players').select('*');
         if (playerErr) throw playerErr;
         
         players = (playerData || []).map(p => ({
@@ -443,17 +452,18 @@
         }));
 
         // 3. Carregar partits
-        const { data: matchData, error: matchErr } = await supabase.from('matches').select('*');
+        const { data: matchData, error: matchErr } = await supabaseClient.from('matches').select('*');
         if (matchErr) throw matchErr;
         
         matches = (matchData || []).map(m => ({
           ...m,
+          compId: m.comp_id, // Mapeig clau del ID
           date: m.match_date,
           condition: m.condition || "Casa"
         }));
 
-        // 4. Carregar estadístiques de partits (match_players) i calcular acumulats
-        const { data: mpData, error: mpErr } = await supabase.from('match_players').select('*');
+        // 4. Carregar estadístiques de partits i calcular acumulats
+        const { data: mpData, error: mpErr } = await supabaseClient.from('match_players').select('*');
         if (mpErr) throw mpErr;
 
         players.forEach(p => { p.stats = {}; });
@@ -618,7 +628,7 @@
         return;
       }
 
-      const sortedMatches = [...matches].reverse();
+      const sortedMatches = [...matches].sort((a, b) => b.id - a.id);
 
       grid.innerHTML = sortedMatches.map(m => {
         const compObj = competitions.find(c => c.id === m.compId);
@@ -1032,7 +1042,7 @@
       
       if (!email || !pass) return;
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: pass });
 
       if (error) {
         console.error(error);
@@ -1049,7 +1059,7 @@
     }
 
     async function lockAdmin() {
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
       isAdmin = false;
       document.getElementById('adminNotice').classList.add('hidden');
       document.getElementById('modeBadge').innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Mode Públic</span>`;

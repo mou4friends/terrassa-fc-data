@@ -686,11 +686,11 @@
         const { data: playerData } = await supabaseClient
           .from('players')
           .select('*')
-          .order('sort_order', { ascending: true });
+          .order('sort_order', { ascending: true }); // Llegim ordenat per defecte
 
         players = (playerData || []).map(p => ({
           id: p.id, dorsal: p.dorsal, name: p.name, pos: p.pos, photo: p.photo,
-          sort_order: p.sort_order ?? p.id,
+          sort_order: p.sort_order ?? p.id, // Assegurem que agafi la dada
           stats: {},
           injury: { isInjured: p.is_injured || false, notes: p.injury_notes || "" }
         }));
@@ -1202,8 +1202,11 @@ async function submitNewMatch(e) {
         const pos = document.getElementById('newPos').value;
         const photo = document.getElementById('newPhoto').value.trim();
         if (!name) return;
+
+        // Calculem automàticament el proper número d'ordre (per posar-lo al final)
+        const nextOrder = players.length > 0 ? Math.max(...players.map(p => p.sort_order || 0)) + 1 : 1;
         
-        const { error } = await supabaseClient.from('players').insert([{ dorsal, name, pos, photo, is_injured: false, injury_notes: '' }]);
+        const { error } = await supabaseClient.from('players').insert([{ dorsal, name, pos, photo, is_injured: false, injury_notes: '', sort_order: nextOrder }]);
         if (error) throw error;
         
         closeAddPlayerModal();
@@ -1224,6 +1227,34 @@ async function submitNewMatch(e) {
         } catch(err) {
           alert("Error esborrant jugador: " + err.message);
         }
+      }
+    }
+
+    // --- FUNCIÓ PER MOURE JUGADORS AMB LES FLETXES ---
+    async function movePlayer(id, direction) {
+      players.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+      const index = players.findIndex(p => p.id === id);
+      const targetIndex = index + direction;
+
+      if (index === -1 || targetIndex < 0 || targetIndex >= players.length) return;
+
+      const currentPlayer = players[index];
+      const targetPlayer = players[targetIndex];
+
+      const tempOrder = currentPlayer.sort_order;
+      currentPlayer.sort_order = targetPlayer.sort_order;
+      targetPlayer.sort_order = tempOrder;
+
+      players.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+      renderDashboard();
+
+      try {
+        await Promise.all([
+          supabaseClient.from('players').update({ sort_order: currentPlayer.sort_order }).eq('id', currentPlayer.id),
+          supabaseClient.from('players').update({ sort_order: targetPlayer.sort_order }).eq('id', targetPlayer.id)
+        ]);
+      } catch (err) {
+        console.error("Error desant l'ordre:", err);
       }
     }
 
@@ -1639,7 +1670,7 @@ async function submitNewMatch(e) {
         else if (pos === 'Porter') matchesPos = isPorter(p.pos);
         else matchesPos = (p.pos === pos);
         return matchesSearch && matchesPos;
-      });
+      }).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
 
       tbody.innerHTML = filtered.map((p) => {
         const s = getPlayerStats(p, activeCompId);
@@ -1726,6 +1757,8 @@ async function submitNewMatch(e) {
             ${isAdmin ? `
               <td class="py-2.5 px-3 text-center">
                 <div class="flex items-center justify-center gap-1">
+                  <button onclick="movePlayer(${p.id}, -1)" title="Pujar" class="p-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] border border-slate-700 transition"><i data-lucide="arrow-up" class="w-3.5 h-3.5"></i></button>
+                  <button onclick="movePlayer(${p.id}, 1)" title="Baixar" class="p-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] border border-slate-700 transition"><i data-lucide="arrow-down" class="w-3.5 h-3.5"></i></button>
                   <button onclick="openInjuryModal(${p.id})" title="Gestionar Infermeria" class="p-1 bg-slate-800 hover:bg-blue-900/80 text-slate-400 hover:text-blue-200 rounded text-[10px] border border-slate-700 transition"><i data-lucide="stethoscope" class="w-3.5 h-3.5"></i></button>
                   <button onclick="deletePlayer(${p.id})" title="Eliminar Jugador" class="p-1 bg-slate-800 hover:bg-rose-900/80 text-slate-400 hover:text-rose-200 rounded text-[10px] border border-slate-700 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                 </div>

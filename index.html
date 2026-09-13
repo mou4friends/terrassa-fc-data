@@ -683,9 +683,14 @@
         const { data: compData } = await supabaseClient.from('competitions').select('*');
         competitions = (compData || []).map(c => ({ id: c.id, name: c.name, short: c.short_name, logo: c.logo }));
 
-        const { data: playerData } = await supabaseClient.from('players').select('*');
+        const { data: playerData } = await supabaseClient
+          .from('players')
+          .select('*')
+          .order('sort_order', { ascending: true });
+
         players = (playerData || []).map(p => ({
           id: p.id, dorsal: p.dorsal, name: p.name, pos: p.pos, photo: p.photo,
+          sort_order: p.sort_order ?? p.id,
           stats: {},
           injury: { isInjured: p.is_injured || false, notes: p.injury_notes || "" }
         }));
